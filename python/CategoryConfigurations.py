@@ -1,12 +1,11 @@
 #Brief configuration file for creating categories in the models
 print("Loading Categories...")
 
-
-tt_Categories = {'cat0':'cat0',
-                 'cat1':'cat1',
-                 'cat2':'cat2',
-                 'cat3':'cat3',
-                 'cat4':'cat4'}
+tt_Categories = {'cat0':'tt_0jet',
+                 'cat1':'tt_boosted_onejet',
+                 'cat2':'tt_boosted_multijet',
+                 'cat3':'tt_vbf_lowHpT',
+                 'cat4':'tt_vbf_highHpT'}
 mt_Categories = {'mt_0jet_PTH_0_10':'mt_0jet_PTH_0_10',
                  'mt_0jet_PTH_GE10':'mt_0jet_PTH_GE10',
                  'mt_vbf_PTH_0_200':'mt_vbf_PTH_0_200',
