@@ -38,6 +38,7 @@ parser.add_argument('--DecorrelateForMe',help="Run the decorrelator as part of t
 parser.add_argument('--StoreShapes', help = "Store pre and post-fit shapes for use later",action = "store_true")
 parser.add_argument('--RunKappaVKappaF',help="Runs kappa_V and kappa_F scan",action="store_true")
 parser.add_argument('--Asimov',help="Use the Asimov dataset in the limit calculation - only available for kappa_V and kappa_F scan at the moment",action="store_true")
+
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
