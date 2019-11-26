@@ -98,12 +98,15 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     theLegend.Draw()                
                     plotModules.lumiText.CreateLumiText(year)
                     #Titles                    
-                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)
+                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)                    
 
                     ratioPad.cd()
                     ratioPlot.Draw('ex0')
                     ratioErrors.Draw('SAME e2')
                     ratioPlot.Draw('SAME ex0')
+                    #axes
+                    prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
+                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())
                     
 
                     raw_input("Press enter to continue...")

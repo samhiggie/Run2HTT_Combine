@@ -13,6 +13,6 @@ def CreatePads(theCanvas):
     plotPad.SetPad(0.,0.2,1.,1.)
     #RatioPad = ROOT.TPad("RatioPad","RatioPad",0.,0.,1.,0.25)    
     ratioPad = theCanvas.GetPrimitive(theCanvas.GetName()+'_2')
-    ratioPad.SetPad(0.,0.,1.,0.25)
+    ratioPad.SetPad(0.,0.0,1.,0.30)
 
     return plotPad,ratioPad
