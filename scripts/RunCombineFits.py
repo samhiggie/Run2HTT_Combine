@@ -36,6 +36,8 @@ parser.add_argument('--RunParallel',help='Run all fits in parallel using threads
 parser.add_argument('--numthreads',nargs='?',help='Number of threads to use to run fits in parallel',type=int,default=12)
 parser.add_argument('--DecorrelateForMe',help="Run the decorrelator as part of the overall run. Looks for a datacard named smh<year><channel>_nocorrelation.root",action="store_true")
 parser.add_argument('--StoreShapes', help = "Store pre and post-fit shapes for use later",action = "store_true")
+parser.add_argument('--RunKappaVKappaF',help="Runs kappa_V and kappa_F scan",action="store_true")
+parser.add_argument('--RealData',help="Use the RealData dataset in the limit calculation - only available for kappa_V and kappa_F scan at the moment",action="store_true")
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
@@ -384,6 +386,70 @@ if args.ComputeGOF:
                  CardNum+=1
 
     os.chdir("../../")
+#Run kappaV kappaF scan using the Asimov dataset please see below for details
+if (args.RunKappaVKappaF and not args.RealData):
+    os.chdir(OutputDir)
+
+    #Create Workspace
+    KappaVKappaFcmd = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+OutputDir+"FinalCard_"+DateTag+".txt"+"-o comb_htt_kvkf.root"
+    logging.info("Text to workspace kappaV kappaF:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+    #using kappav kappaf physics parameters here:/HiggsAnalysis/CombinedLimit/python/HiggsCouplings.py (and LHCHCGModels line 385 etc) 
+    #the multidim fit fines the best fit value at a single point using 1000 toys spanning ranges of the coupling (k_v 0 to 5 k_f 0 to 5) - SM physics>0!
+    KappaVKappaFcmd = "combine -M MultiDimFit -m 125 -n htt -t -1000 --setParameterRanges kappa_V=0.0,5.0:kappa_F=0.0,5.0 comb_htt_kvkf.root --algo=singles --robustFit=1" 
+    logging.info("MultiDim Fit for kappaV kappaF central value:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+    
+    #Now that we have the best fit point we should draw a grid that represents the 1 sigma (standard deviation) around the best fit point. 
+    #Here we use 1000 point to set up the grid with a kappa range  coupling (k_v 0 to 5 k_f 0 to 2) - SM physics>0!
+    KappaVKappaFcmd = "combine -n KvKfgrid_tt -M MultiDimFit -m 125 -t -1000 --setParameterRanges kappa_V=0.0,5.0:kappa_F=0.0,2.0 comb_htt_kvkf.root --algo=grid --points=1000"   #  now dance around the central point - change the points for granularity
+    logging.info("MultiDim Fit for Grid in the kappaV kappaF scan:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+
+    #Plot the result -f points to the workspace file, order is just the order of computation for more than one input file 
+    #- for example want to do Higgs gamma gamma and Higgs tau tau 
+    #Layout is the location of the legend and with x and y ranges the range on the plot (similar to the scan above please) 
+    #the axis hist is the same, it inherits from TH2D so this should be compatible with the number of points that we used to make the grid
+    KappaVKappaFcmd = "plotKVKF.py -o plot_kVkF -f tau=higgsCombineKvKfgrid_tt.MultiDimFit.mH125.root --order=\"tau\" --legend-order=\"tau\" --layout 1 --x-range 0.0,5.0 --y-range 0.0,3.0 --axis-hist 200,0.0,5.0,200,0.0,3.0"
+    logging.info("Plotting for kappaV kappaF scan:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+
+#Run kappaV kappaF scan using the Real dataset please see below for details
+if (args.RunKappaVKappaF and args.RealData):
+    os.chdir(OutputDir)
+
+    #Create Workspace
+    KappaVKappaFcmd = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+OutputDir+"FinalCard_"+DateTag+".txt"+"-o comb_htt_kvkf.root"
+    logging.info("Text to workspace kappaV kappaF:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+
+    #using kappav kappaf physics parameters here:/HiggsAnalysis/CombinedLimit/python/HiggsCouplings.py (and LHCHCGModels line 385 etc) 
+    #the multidim fit fines the best fit value at a single point using 1000 toys spanning ranges of the coupling (k_v 0 to 5 k_f 0 to 5) - SM physics>0!
+    KappaVKappaFcmd = "combine -M MultiDimFit -m 125 -n htt --setParameterRanges kappa_V=0.0,5.0:kappa_F=0.0,5.0 comb_htt_kvkf.root --algo=singles --robustFit=1" # get the central point!  
+    logging.info("MultiDim Fit for kappaV kappaF central value:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+    
+    #Now that we have the best fit point we should draw a grid that represents the 1 sigma (standard deviation) around the best fit point. 
+    #Here we use 1000 point to set up the grid with a kappa range  coupling (k_v 0 to 5 k_f 0 to 2) - SM physics>0!
+    KappaVKappaFcmd = "combine -n KvKfgrid_tt -M MultiDimFit -m 125 --setParameterRanges kappa_V=0.0,5.0:kappa_F=0.0,2.0 comb_htt_kvkf.root --algo=grid --points=1000"   #  now dance around the central point
+    logging.info("MultiDim Fit for Grid in the kappaV kappaF scan:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
+
+    #Plot the result -f points to the workspace file, order is just the order of computation for more than one input file 
+    #- for example want to do Higgs gamma gamma and Higgs tau tau 
+    #Layout is the location of the legend and with x and y ranges the range on the plot (similar to the scan above please) 
+    #the axis hist is the same, it inherits from TH2D so this should be compatible with the number of points that we used to make the grid
+    KappaVKappaFcmd = "plotKVKF.py -o plot_kVkF -f tau=higgsCombineKvKfgrid_tt.MultiDimFit.mH125.root --order=\"tau\" --legend-order=\"tau\" --layout 1 --x-range 0.0,5.0 --y-range 0.0,3.0 --axis-hist 200,0.0,5.0,200,0.0,3.0"
+    logging.info("Plotting for kappaV kappaF scan:")
+    logging.info('\n\n'+KappaVKappaFcmd+'\n')
+    os.system(KappaVKappaFcmd)
 
 if args.RunParallel:
     ThreadHandler.BeginFits()
