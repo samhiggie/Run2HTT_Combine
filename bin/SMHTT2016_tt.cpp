@@ -275,6 +275,11 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong1pizero_2016", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_3prong_2016", "shape", SystMap<>::init(0.500));
 
+      //Trigger Uncertainty
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_doubletautrg_emb_2016","shape",SystMap<>::init(0.866));
+
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_doubletautrg_2016","shape",SystMap<>::init(0.500));
+
     }
 
   //********************************************************************************************************************************                          
