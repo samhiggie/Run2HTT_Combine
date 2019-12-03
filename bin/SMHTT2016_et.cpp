@@ -182,12 +182,100 @@ int main(int argc, char **argv)
 			  TheFile,CategoryArgs);
       
       //Fake Factors
+      /*
       std::cout<<"Fake Factors"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_rawFF_et_qcd_0jet_unc1_2016","CMS_rawFF_et_qcd_0jet_unc2_2016","CMS_rawFF_et_qcd_1jet_unc1_2016","CMS_rawFF_et_qcd_1jet_unc2_2016","CMS_rawFF_et_w_0jet_unc1_2016","CMS_rawFF_et_w_0jet_unc2_2016","CMS_rawFF_et_w_1jet_unc1_2016","CMS_rawFF_et_w_1jet_unc2_2016","CMS_rawFF_et_tt_unc1_2016","CMS_rawFF_et_tt_unc2_2016","CMS_FF_closure_mvis_et_qcd_unc1_2016","CMS_FF_closure_mvis_et_qcd_unc2_2016","CMS_FF_closure_mvis_et_w_unc1_2016","CMS_FF_closure_mvis_et_w_unc2_2016","CMS_FF_closure_mvis_et_tt_unc1_2016","CMS_FF_closure_mvis_et_tt_unc2_2016","CMS_FF_closure_OSSS_mvis_et_qcd_unc1_2016","CMS_FF_closure_OSSS_mvis_et_qcd_unc2_2016","CMS_FF_closure_mt_et_w_unc1_2016","CMS_FF_closure_mt_et_w_unc2_2016"},
-                          {"jetFakes"},
-                          &cb,
-                          1.00,
-                          TheFile,CategoryArgs);
+      AddShapesIfNotEmpty({
+	  "CMS_rawFF_et_qcd_0jet_unc1_2016",
+            "CMS_rawFF_et_qcd_0jet_unc2_2016",
+            "CMS_rawFF_et_qcd_1jet_unc1_2016",
+            "CMS_rawFF_et_qcd_1jet_unc2_2016",
+            "CMS_rawFF_et_qcd_2jet_unc1_2016",
+            "CMS_rawFF_et_qcd_2jet_unc2_2016",
+            "CMS_rawFF_et_w_0jet_unc1_2016",
+            "CMS_rawFF_et_w_0jet_unc2_2016",
+            "CMS_rawFF_et_w_1jet_unc1_2016",
+            "CMS_rawFF_et_w_1jet_unc2_2016",
+            "CMS_rawFF_et_w_2jet_unc1_2016",
+            "CMS_rawFF_et_w_2jet_unc2_2016",
+            "CMS_rawFF_et_tt_unc1_2016",
+            "CMS_rawFF_et_tt_unc2_2016",
+            "CMS_FF_closure_mvis_et_qcd_0jet_2016",
+            "CMS_FF_closure_mvis_et_qcd_1jet_2016",
+            "CMS_FF_closure_mvis_et_qcd_2jet_2016",
+            "CMS_FF_closure_mvis_et_w_0jet_2016",            
+            "CMS_FF_closure_mvis_et_w_1jet_2016",
+            "CMS_FF_closure_mvis_et_w_2jet_2016",
+            "CMS_FF_closure_mvis_et_tt_0jet_2016",            
+            "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+            "CMS_FF_closure_et_mt_w_unc1_2016",
+            "CMS_FF_closure_et_mt_w_unc2_2016"
+	    },
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,CategoryArgs);
+      */
+            //some of the uncerts are only relevant in certain categories. 
+      //and missing in all the others
+      //so the names have been explicitly hacked in
+      // we need a better way to handle uncertainties that may be explicit to certain categories only
+      AddShapesIfNotEmpty({
+	  "CMS_rawFF_et_qcd_0jet_unc1_2016",
+	    "CMS_rawFF_et_qcd_0jet_unc2_2016",
+	    "CMS_rawFF_et_w_0jet_unc1_2016",
+	    "CMS_rawFF_et_w_0jet_unc2_2016",
+       	    "CMS_rawFF_et_tt_unc1_2016",
+	    "CMS_rawFF_et_tt_unc2_2016",
+	    "CMS_FF_closure_mvis_et_qcd_0jet_2016",
+       	    "CMS_FF_closure_mvis_et_w_0jet_2016",
+       	    "CMS_FF_closure_mvis_et_tt_0jet_2016",            
+       	    "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+	    "CMS_FF_closure_mt_et_w_unc1_2016",
+	    "CMS_FF_closure_mt_et_w_unc2_2016"},
+       	{"jetFakes"},
+       	&cb,
+       	1.00,
+       	TheFile,
+       	{"et_0jetlow","et_0jethigh"});
+
+      AddShapesIfNotEmpty({
+       	  "CMS_rawFF_et_qcd_1jet_unc1_2016",
+	    "CMS_rawFF_et_qcd_1jet_unc2_2016",
+       	    "CMS_rawFF_et_w_1jet_unc1_2016",
+	    "CMS_rawFF_et_w_1jet_unc2_2016",
+       	    "CMS_rawFF_et_tt_unc1_2016",
+	    "CMS_rawFF_et_tt_unc2_2016",
+       	    "CMS_FF_closure_mvis_et_qcd_1jet_2016",
+       	    "CMS_FF_closure_mvis_et_w_1jet_2016",
+	    "CMS_FF_closure_mvis_et_tt_1jet_2016",            
+	    "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+	    "CMS_FF_closure_mt_et_w_unc1_2016",
+	    "CMS_FF_closure_mt_et_w_unc2_2016"},
+       	{"jetFakes"},
+       	&cb,
+       	1.00,
+       	TheFile,
+       	{"et_boosted1"});
+
+      AddShapesIfNotEmpty({
+       	  "CMS_rawFF_et_qcd_2jet_unc1_2016",
+	    "CMS_rawFF_et_qcd_2jet_unc2_2016",
+       	    "CMS_rawFF_et_w_2jet_unc1_2016",
+	    "CMS_rawFF_et_w_2jet_unc2_2016",
+       	    "CMS_rawFF_et_tt_unc1_2016",
+	    "CMS_rawFF_et_tt_unc2_2016",
+       	    "CMS_FF_closure_mvis_et_qcd_2jet_2016",
+       	    "CMS_FF_closure_mvis_et_w_2jet_2016",	    
+	    "CMS_FF_closure_mvis_et_tt_2jet_2016",            
+	    "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+	    "CMS_FF_closure_mt_et_w_unc1_2016",
+	    "CMS_FF_closure_mt_et_w_unc2_2016"
+       	    },
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,
+	{"et_boosted2","et_vbflow","et_vbfhigh"});
       
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
@@ -301,6 +389,11 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong_2016", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong1pizero_2016", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_3prong_2016", "shape", SystMap<>::init(0.500));
+
+      //electron energy scale
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_e_2016","shape",SystMap<>::init(0.866));      
+
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_e_2016","shape",SystMap<>::init(0.500));      
 
     }
   //*************************************************************                          

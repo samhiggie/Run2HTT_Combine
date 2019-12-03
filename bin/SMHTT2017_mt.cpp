@@ -222,31 +222,97 @@ int main(int argc, char **argv)
       
       
       //Fake factors
+      /*
       std::cout<<"Fake Factors"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_rawFF_mt_qcd_0jet_unc1_2017",
+      AddShapesIfNotEmpty({
+	  "CMS_rawFF_mt_qcd_0jet_unc1_2017",
+            "CMS_rawFF_mt_qcd_0jet_unc2_2017",
+            "CMS_rawFF_mt_qcd_1jet_unc1_2017",
+            "CMS_rawFF_mt_qcd_1jet_unc2_2017",
+            "CMS_rawFF_mt_qcd_2jet_unc1_2017",
+            "CMS_rawFF_mt_qcd_2jet_unc2_2017",
+            "CMS_rawFF_mt_w_0jet_unc1_2017",
+            "CMS_rawFF_mt_w_0jet_unc2_2017",
+            "CMS_rawFF_mt_w_1jet_unc1_2017",
+            "CMS_rawFF_mt_w_1jet_unc2_2017",
+            "CMS_rawFF_mt_w_2jet_unc1_2017",
+            "CMS_rawFF_mt_w_2jet_unc2_2017",
+            "CMS_rawFF_mt_tt_unc1_2017",
+            "CMS_rawFF_mt_tt_unc2_2017",
+            "CMS_FF_closure_mvis_mt_qcd_0jet_2017",
+            "CMS_FF_closure_mvis_mt_qcd_1jet_2017",
+            "CMS_FF_closure_mvis_mt_qcd_2jet_2017",
+            "CMS_FF_closure_mvis_mt_w_0jet_2017",            
+            "CMS_FF_closure_mvis_mt_w_1jet_2017",
+            "CMS_FF_closure_mvis_mt_w_2jet_2017",
+            "CMS_FF_closure_mvis_mt_tt_0jet_2017",            
+            "CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
+            "CMS_FF_closure_mt_mt_w_unc1_2017",
+            "CMS_FF_closure_mt_mt_w_unc2_2017"
+	    },
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,CategoryArgs);
+      */
+
+      AddShapesIfNotEmpty({
+	  "CMS_rawFF_mt_qcd_0jet_unc1_2017",
 	    "CMS_rawFF_mt_qcd_0jet_unc2_2017",
-	    "CMS_rawFF_mt_qcd_1jet_unc1_2017",
-	    "CMS_rawFF_mt_qcd_1jet_unc2_2017",
 	    "CMS_rawFF_mt_w_0jet_unc1_2017",
 	    "CMS_rawFF_mt_w_0jet_unc2_2017",
-	    "CMS_rawFF_mt_w_1jet_unc1_2017",
-	    "CMS_rawFF_mt_w_1jet_unc2_2017",
-	    "CMS_rawFF_mt_tt_unc1_2017",
+       	    "CMS_rawFF_mt_tt_unc1_2017",
 	    "CMS_rawFF_mt_tt_unc2_2017",
-	    "CMS_FF_closure_mvis_mt_qcd_unc1_2017",
-	    "CMS_FF_closure_mvis_mt_qcd_unc2_2017",
-	    "CMS_FF_closure_mvis_mt_w_unc1_2017",
-	    //"CMS_FF_closure_mvis_mt_w_unc2_2017",
-	    "CMS_FF_closure_mvis_mt_tt_unc1_2017",
-	    "CMS_FF_closure_mvis_mt_tt_unc2_2017",
-	    "CMS_FF_closure_OSSS_mvis_mt_qcd_unc1_2017",
-	    //"CMS_FF_closure_OSSS_mvis_mt_qcd_unc2_2017",
+	    "CMS_FF_closure_mvis_mt_qcd_0jet_2017",
+       	    "CMS_FF_closure_mvis_mt_w_0jet_2017",
+       	    "CMS_FF_closure_mvis_mt_tt_0jet_2017",            
+       	    "CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 	    "CMS_FF_closure_mt_mt_w_unc1_2017",
 	    "CMS_FF_closure_mt_mt_w_unc2_2017"},
-                          {"jetFakes"},
-                          &cb,
-                          1.00,
-                          TheFile,CategoryArgs);
+       	{"jetFakes"},
+       	&cb,
+       	1.00,
+       	TheFile,
+       	{"mt_0jet_PTH_0_10","mt_0jet_PTH_GE10"});
+
+      AddShapesIfNotEmpty({
+       	  "CMS_rawFF_mt_qcd_1jet_unc1_2017",
+	    "CMS_rawFF_mt_qcd_1jet_unc2_2017",
+       	    "CMS_rawFF_mt_w_1jet_unc1_2017",
+	    "CMS_rawFF_mt_w_1jet_unc2_2017",
+       	    "CMS_rawFF_mt_tt_unc1_2017",
+	    "CMS_rawFF_mt_tt_unc2_2017",
+       	    "CMS_FF_closure_mvis_mt_qcd_1jet_2017",
+       	    "CMS_FF_closure_mvis_mt_w_1jet_2017",
+	    "CMS_FF_closure_mvis_mt_tt_0jet_2017",            
+	    "CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
+	    "CMS_FF_closure_mt_mt_w_unc1_2017",
+	    "CMS_FF_closure_mt_mt_w_unc2_2017"},
+       	{"jetFakes"},
+       	&cb,
+       	1.00,
+       	TheFile,
+       	{"mt_boosted_1J"});
+
+      AddShapesIfNotEmpty({
+       	  "CMS_rawFF_mt_qcd_2jet_unc1_2017",
+	    "CMS_rawFF_mt_qcd_2jet_unc2_2017",
+       	    "CMS_rawFF_mt_w_2jet_unc1_2017",
+	    "CMS_rawFF_mt_w_2jet_unc2_2017",
+       	    "CMS_rawFF_mt_tt_unc1_2017",
+	    "CMS_rawFF_mt_tt_unc2_2017",
+       	    "CMS_FF_closure_mvis_mt_qcd_2jet_2017",
+       	    "CMS_FF_closure_mvis_mt_w_2jet_2017",	    
+	    "CMS_FF_closure_mvis_mt_tt_0jet_2017",            
+	    "CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
+	    "CMS_FF_closure_mt_mt_w_unc1_2017",
+	    "CMS_FF_closure_mt_mt_w_unc2_2017"
+       	    },
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,
+	{"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
 
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
@@ -363,6 +429,26 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong_2017", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong1pizero_2017", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_3prong_2017", "shape", SystMap<>::init(0.500));
+
+      //Trigger uncertainty
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_singlemutrg_emb_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_mutautrg_emb_2017","shape",SystMap<>::init(0.866));
+      
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_singlemutrg_2017","shape",SystMap<>::init(0.500));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_mutautrg_2017","shape",SystMap<>::init(0.500));
+
+      //MuonES uncertaity
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam2p4tom2p1_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam2p1tom1p2_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam1p2to1p2_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_eta1p2to2p1_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_eta2p1to2p4_2017","shape",SystMap<>::init(0.866));
+
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam2p4tom2p1_2017","shape",SystMap<>::init(0.500));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam2p1tom1p2_2017","shape",SystMap<>::init(0.500));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam1p2to1p2_2017","shape",SystMap<>::init(0.500));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_eta1p2to2p1_2017","shape",SystMap<>::init(0.500));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_eta2p1to2p4_2017","shape",SystMap<>::init(0.500));
     }
 
   //********************************************************************************************************************************                          
