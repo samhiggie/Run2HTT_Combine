@@ -17,6 +17,10 @@ lineColoringScheme = {
         'Other':ROOT.kBlack,
         }
 
+lineWidthScheme = {
+    'Higgs':2
+    }
+
 def ColorizePrefitDistribution(histogramDictionary):            
     for entry in histogramDictionary:
         try:
@@ -32,3 +36,11 @@ def ColorizePrefitDistribution(histogramDictionary):
             print("Failed to colorize the line of distribution: "+str(entry))
         except AttributeError:
             print("Histogram does not seem to properly exist: "+str(entry))
+
+    for entry in histogramDictionary:
+        try:
+            histogramDictionary[entry].SetLineWidth(lineWidthScheme[entry])
+        except KeyError:
+            print("Failed to set line width of distribution "+str(entry))
+        except AttributeError:
+            print("Histogram does no exist: "+str(entry))

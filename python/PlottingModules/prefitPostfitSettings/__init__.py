@@ -10,3 +10,4 @@ import ratioPad
 import title
 import axis
 import sliceLines
+import stack

@@ -5,9 +5,9 @@ from array import array
 YBounds = (0.7,1.3)
 
 ratioMarkerStyle = 20
-ratioYAxisTitle = 'Data/Predicted'
+ratioYAxisTitle = 'Obs / H#rightarrow#tau#tau + Bkg.'
 ratioYAxisTitleSize = 0.1
-ratioYAxisTitleOffset = 0.38
+ratioYAxisTitleOffset = 0.62
 ratioYAxisLabelSize = 0.10
 ratioYAxisNDivisions = (6,0,0)
 

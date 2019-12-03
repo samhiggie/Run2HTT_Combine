@@ -152,6 +152,6 @@ def RetrievePlotsFromAllDirectories(channels,location,years,withYears = True):
                         print("Could not load all histograms from the files because it was missing a directory: "+directoryName)
                         continue
                     else:
-                        print("loading plots from : "+directoryName)
+                        print("loading category: "+categoryName+" plots from : "+directoryName)
                         histograms[channel][year][categoryName][prefitOrPostfit] = RetrievePlotsFromDirectory(candidateDirectory)                    
     return histograms
