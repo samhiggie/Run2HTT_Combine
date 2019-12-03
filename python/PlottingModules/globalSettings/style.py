@@ -1,123 +1,126 @@
 import ROOT
 
-tdrStyle = ROOT.TStyle('tdrStyle','Style for P-TDR')
+pasStyle = ROOT.TStyle('pasStyle','Style for PAS plots')
 
-def tdrGrid(gridOn):
-    tdrStyle.SetPadGridX(gridOn)
-    tdrStyle.SetPadGridY(gridOn)
+def pasGrid(gridOn):
+    pasStyle.SetPadGridX(gridOn)
+    pasStyle.SetPadGridY(gridOn)
 
 def fixOverlay():
     ROOT>gPad.RedrawAxis()
 
-def setTDRStyle():
+def setPASStyle():
     #Canvas Settings
-    tdrStyle.SetCanvasBorderMode(0)
-    tdrStyle.SetCanvasDefH(600)
-    tdrStyle.SetCanvasDefW(600)
-    tdrStyle.SetCanvasDefX(0)
-    tdrStyle.SetCanvasDefY(0)
+    pasStyle.SetCanvasBorderMode(0)
+    pasStyle.SetCanvasDefH(600)
+    pasStyle.SetCanvasDefW(600)
+    pasStyle.SetCanvasDefX(0)
+    pasStyle.SetCanvasDefY(0)
 
     #Pad Settings
-    tdrStyle.SetPadBorderMode(0)
+    pasStyle.SetPadBorderMode(0)
     
-    tdrStyle.SetPadColor(ROOT.kWhite)
-    tdrStyle.SetPadGridX(False)
-    tdrStyle.SetPadGridY(False)
-    tdrStyle.SetGridColor(0)
-    tdrStyle.SetGridStyle(3)
-    tdrStyle.SetGridWidth(1)
+    pasStyle.SetPadColor(ROOT.kWhite)
+    pasStyle.SetPadGridX(False)
+    pasStyle.SetPadGridY(False)
+    pasStyle.SetGridColor(0)
+    pasStyle.SetGridStyle(3)
+    pasStyle.SetGridWidth(1)
 
     #Frame Settings
-    tdrStyle.SetFrameBorderMode(0)
-    tdrStyle.SetFrameBorderSize(1)
-    tdrStyle.SetFrameFillColor(0)
-    tdrStyle.SetFrameFillStyle(0)
-    tdrStyle.SetFrameLineColor(1)
-    tdrStyle.SetFrameLineStyle(1)
-    tdrStyle.SetFrameLineWidth(1)
+    pasStyle.SetFrameBorderMode(0)
+    pasStyle.SetFrameBorderSize(1)
+    pasStyle.SetFrameFillColor(0)
+    pasStyle.SetFrameFillStyle(0)
+    pasStyle.SetFrameLineColor(1)
+    pasStyle.SetFrameLineStyle(1)
+    pasStyle.SetFrameLineWidth(1)
 
     #Histogram Settings
-    tdrStyle.SetHistLineColor(1)
-    tdrStyle.SetHistLineStyle(0)
-    tdrStyle.SetHistLineWidth(1)
+    pasStyle.SetHistLineColor(ROOT.kBlack)
+    pasStyle.SetHistLineStyle(0)
+    pasStyle.SetHistLineWidth(1)
 
-    tdrStyle.SetEndErrorSize(2)
+    pasStyle.SetEndErrorSize(2)
 
-    tdrStyle.SetMarkerStyle(20)
+    pasStyle.SetMarkerStyle(20)
+
+    #fix data error line colors
+    #pasStyle.SetLineColor(ROOT.kBlack)
 
     #Fit Settings
-    tdrStyle.SetOptFit(1)
-    tdrStyle.SetFitFormat("5.4g")
-    tdrStyle.SetFuncColor(2)
-    tdrStyle.SetFuncStyle(1)
-    tdrStyle.SetFuncWidth(1)
+    pasStyle.SetOptFit(1)
+    pasStyle.SetFitFormat("5.4g")
+    pasStyle.SetFuncColor(2)
+    pasStyle.SetFuncStyle(1)
+    pasStyle.SetFuncWidth(1)
 
     #For the date:
-    tdrStyle.SetOptDate(0)
+    pasStyle.SetOptDate(0)
 
     #For the statistics box:
-    tdrStyle.SetOptFile(0)
-    tdrStyle.SetOptStat(0) # To display the mean and RMS:   SetOptStat("mr")
-    tdrStyle.SetStatColor(ROOT.kWhite)
-    tdrStyle.SetStatFont(42)
-    tdrStyle.SetStatFontSize(0.025)
-    tdrStyle.SetStatTextColor(1)
-    tdrStyle.SetStatFormat("6.4g")
-    tdrStyle.SetStatBorderSize(1)
-    tdrStyle.SetStatH(0.1)
-    tdrStyle.SetStatW(0.15)
+    pasStyle.SetOptFile(0)
+    pasStyle.SetOptStat(0) # To display the mean and RMS:   SetOptStat("mr")
+    pasStyle.SetStatColor(ROOT.kWhite)
+    pasStyle.SetStatFont(42)
+    pasStyle.SetStatFontSize(0.025)
+    pasStyle.SetStatTextColor(1)
+    pasStyle.SetStatFormat("6.4g")
+    pasStyle.SetStatBorderSize(1)
+    pasStyle.SetStatH(0.1)
+    pasStyle.SetStatW(0.15)
 
     # Margins:
-    tdrStyle.SetPadTopMargin(0.05)
-    tdrStyle.SetPadBottomMargin(0.13)
-    tdrStyle.SetPadLeftMargin(0.16)
-    tdrStyle.SetPadRightMargin(0.02)
+    pasStyle.SetPadTopMargin(0.05)
+    pasStyle.SetPadBottomMargin(0.13)
+    pasStyle.SetPadLeftMargin(0.16)
+    pasStyle.SetPadRightMargin(0.02)
 
     # For the Global title:
-    tdrStyle.SetOptTitle(0)
-    tdrStyle.SetTitleFont(42)
-    tdrStyle.SetTitleColor(1)
-    tdrStyle.SetTitleTextColor(1)
-    tdrStyle.SetTitleFillColor(10)
-    tdrStyle.SetTitleFontSize(0.05)
-    # tdrStyle.SetTitleH(0) # Set the height of the title box
-    # tdrStyle.SetTitleW(0) # Set the width of the title box
-    # tdrStyle.SetTitleX(0) # Set the position of the title box
-    # tdrStyle.SetTitleY(0.985) # Set the position of the title box
-    # tdrStyle.SetTitleStyle(Style_t style = 1001)
-    # tdrStyle.SetTitleBorderSize(2)
+    pasStyle.SetOptTitle(0)
+    pasStyle.SetTitleFont(42)
+    pasStyle.SetTitleColor(1)
+    pasStyle.SetTitleTextColor(1)
+    pasStyle.SetTitleFillColor(10)
+    pasStyle.SetTitleFontSize(0.05)
+    # pasStyle.SetTitleH(0) # Set the height of the title box
+    # pasStyle.SetTitleW(0) # Set the width of the title box
+    # pasStyle.SetTitleX(0) # Set the position of the title box
+    # pasStyle.SetTitleY(0.985) # Set the position of the title box
+    # pasStyle.SetTitleStyle(Style_t style = 1001)
+    # pasStyle.SetTitleBorderSize(2)
 
     # For the axis titles:
     
-    tdrStyle.SetTitleColor(1, "XYZ")
-    tdrStyle.SetTitleFont(42, "XYZ")
-    tdrStyle.SetTitleSize(0.06, "XYZ")
-    # tdrStyle.SetTitleXSize(Float_t size = 0.02) # Another way to set the size?
-    # tdrStyle.SetTitleYSize(Float_t size = 0.02)
-    tdrStyle.SetTitleXOffset(0.9)
-    tdrStyle.SetTitleYOffset(1.25)
-    # tdrStyle.SetTitleOffset(1.1, "Y") # Another way to set the Offset
+    pasStyle.SetTitleColor(1, "XYZ")
+    pasStyle.SetTitleFont(42, "XYZ")
+    pasStyle.SetTitleSize(0.06, "XYZ")
+    # pasStyle.SetTitleXSize(Float_t size = 0.02) # Another way to set the size?
+    # pasStyle.SetTitleYSize(Float_t size = 0.02)
+    pasStyle.SetTitleXOffset(0.9)
+    pasStyle.SetTitleYOffset(1.25)
+    # pasStyle.SetTitleOffset(1.1, "Y") # Another way to set the Offset
     
     # For the axis labels:
     
-    tdrStyle.SetLabelColor(1, "XYZ")
-    tdrStyle.SetLabelFont(42, "XYZ")
-    tdrStyle.SetLabelOffset(0.007, "XYZ")
-    tdrStyle.SetLabelSize(0.05, "XYZ")
+    pasStyle.SetLabelColor(1, "XYZ")
+    pasStyle.SetLabelFont(42, "XYZ")
+    pasStyle.SetLabelOffset(0.007, "XYZ")
+    pasStyle.SetLabelSize(0.05, "XYZ")
     
     # For the axis:
     
-    tdrStyle.SetAxisColor(1, "XYZ")
-    tdrStyle.SetStripDecimals(True)
-    tdrStyle.SetTickLength(0.03, "XYZ")
-    tdrStyle.SetNdivisions(510, "XYZ")
-    tdrStyle.SetPadTickX(1)  # To get tick marks on the opposite side of the frame
-    tdrStyle.SetPadTickY(1)
+    pasStyle.SetAxisColor(1, "XYZ")
+    pasStyle.SetStripDecimals(True)
+    pasStyle.SetTickLength(0.03, "XYZ")
+    pasStyle.SetNdivisions(510, "XYZ")
+    pasStyle.SetPadTickX(1)  # To get tick marks on the opposite side of the frame
+    pasStyle.SetPadTickY(1)
     
     # Change for log plots:
-    tdrStyle.SetOptLogx(0)
-    tdrStyle.SetOptLogy(0)
-    tdrStyle.SetOptLogz(0)
+    pasStyle.SetOptLogx(0)
+    pasStyle.SetOptLogy(0)
+    pasStyle.SetOptLogz(0)
     
     # Postscript options:
-    tdrStyle.SetPaperSize(20.,20.)
+    pasStyle.SetPaperSize(20.,20.)

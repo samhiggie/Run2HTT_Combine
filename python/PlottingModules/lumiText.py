@@ -4,11 +4,11 @@ lumiTextColor = ROOT.kBlack
 lumiTextFont = 42
 lumiTextAlignment = 31
 lumiTextSize = 0.04
-lumiTextPosition = (0.415,0.96)
-lumi2016Text = '#sqrt{S}=13 TeV, 35.9 fb^{-1}'
-lumi2017Text = '#sqrt{S}=13 TeV, 41.5 fb^{-1}'
-lumi2018Text = '#sqrt{S}=13 TeV, 59.7 fb^{-1}'
-lumiRun2Text = '#sqrt{S}=13 TeV, 137.1 fb^{-1}'
+lumiTextPosition = (0.98,0.96)
+lumi2016Text = '#sqrt{s}=13 TeV, 35.9 fb^{-1}'
+lumi2017Text = '#sqrt{s}=13 TeV, 41.5 fb^{-1}'
+lumi2018Text = '#sqrt{s}=13 TeV, 59.7 fb^{-1}'
+lumiRun2Text = '#sqrt{s}=13 TeV, 137.1 fb^{-1}'
 
 def CreateLumiText(year):
     lumiText = ROOT.TLatex()

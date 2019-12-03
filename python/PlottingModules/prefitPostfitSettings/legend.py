@@ -2,14 +2,14 @@ import ROOT
 
 legendPosition = (0.7,0.82,0.95,0.97)
 histogramEntries = {
-    'jetFakes':'Jet Fakes',
+    'jetFakes':'Jet mis-ID',
     'ZT':'Z #rightarrow #tau#tau',
-    'ZL':'Z #rightarrow ll',
-    'Top':'t#bar{t}',
+    'ZL':'Z #rightarrow ee/#mu#mu',
+    'Top':'t#bar{t} + Jets',
     'Other':'Others',
-    'Higgs':'Higgs Signal (#times 20)',
+    'Higgs':'Higgs #rightarrow #tau#tau (#times 20)',
     'data_obs':'Data',
-    'background_error':'Prediction uncertainty',
+    'background_error':'Bkg. uncertainty',
     }
 histogramFormats = {
     'jetFakes':'f',
@@ -24,6 +24,8 @@ histogramFormats = {
 nLegendColumns = 2
 
 def CreateLegend(histogramDictionary):
+    pass
+    """
     theLegend = ROOT.TLegend(legendPosition[0],legendPosition[1],legendPosition[2],legendPosition[3])
     
     theLegend.SetNColumns(nLegendColumns)
@@ -31,9 +33,13 @@ def CreateLegend(histogramDictionary):
     for entry in histogramDictionary:
         AppendToLegend(theLegend,histogramDictionary[entry],entry)
     return theLegend
+    """
 
 def AppendToLegend(theLegend,histogram,entry):
+    pass
+    """
     try:
         theLegend.AddEntry(histogram,histogramEntries[entry],histogramFormats[entry])
     except KeyError:
         print("Failed to properly make entry for: "+str(entry))
+    """

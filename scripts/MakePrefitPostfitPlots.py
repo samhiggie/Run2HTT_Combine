@@ -8,8 +8,9 @@ import CombineHarvester.Run2HTT_Combine.PlottingModules.globalSettings as global
 import CombineHarvester.Run2HTT_Combine.PlottingModules as plotModules
 
 def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
-    globalSettings.style.setTDRStyle()
-    ROOT.gROOT.SetStyle('tdrStyle')
+    globalSettings.style.setPASStyle()    
+    ROOT.gROOT.SetStyle('pasStyle')
+    
 
     theDirectory = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+tag+"/"
     if not os.path.isdir(theDirectory):
@@ -78,10 +79,10 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     
                     #create the legend
                     print("Creating legend...")
-                    theLegend = prefitPostfitSettings.legend.CreateLegend(histograms[channel][year][category][prefitOrPostfit]['Slimmed'])
-                    prefitPostfitSettings.legend.AppendToLegend(theLegend,histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'],'Higgs')
-                    prefitPostfitSettings.legend.AppendToLegend(theLegend,histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'],'data_obs')
-                    prefitPostfitSettings.legend.AppendToLegend(theLegend,backgroundStackErrors,'background_error')
+                    #theLegend = prefitPostfitSettings.legend.CreateLegend(histograms[channel][year][category][prefitOrPostfit]['Slimmed'])
+                    #prefitPostfitSettings.legend.AppendToLegend(theLegend,histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'],'Higgs')
+                    #prefitPostfitSettings.legend.AppendToLegend(theLegend,histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'],'data_obs')
+                    #prefitPostfitSettings.legend.AppendToLegend(theLegend,backgroundStackErrors,'background_error')
 
                     #make the ratio plots
                     ratioPlot, ratioErrors = prefitPostfitSettings.ratioPlot.MakeRatioPlot(backgroundStack,
@@ -95,19 +96,26 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     backgroundStackErrors.Draw("SAME e2")
                     histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Draw("SAME HIST")
                     histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'].Draw("SAME e1")
-                    theLegend.Draw()                
+                    #slice lines                   
+                    prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram())
+                    
+                    #other text
                     plotModules.lumiText.CreateLumiText(year)
+                    plotModules.CMStext.DrawCMSText()
                     #Titles                    
-                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)                    
-
+                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)                                        
+                    #ratio plot
                     ratioPad.cd()
                     ratioPlot.Draw('ex0')
                     ratioErrors.Draw('SAME e2')
                     ratioPlot.Draw('SAME ex0')
                     #axes
                     prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
-                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())
+                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())                    
+                    #slice lines
+                    prefitPostfitSettings.sliceLines.CreateSliceLines(category,ratioPlot)
                     
+                    plotPad.RedrawAxis()
 
                     raw_input("Press enter to continue...")
                     
