@@ -18,29 +18,6 @@ def RetrievePlotsFromDirectory(directory):
     qqH = directory.Get("qqH_htt125")
     WH = directory.Get("WH_htt125")
     ZH = directory.Get("ZH_htt125")
-    ggH_PTH_0_200_0J_PTH_0_10_htt125 = directory.Get('ggH_PTH_0_200_0J_PTH_0_10_htt125')
-    ggH_PTH_0_200_0J_PTH_10_200_htt125 = directory.Get('ggH_PTH_0_200_0J_PTH_10_200_htt125')
-    ggH_PTH_0_200_1J_PTH_0_60_htt125 = directory.Get('ggH_PTH_0_200_1J_PTH_0_60_htt125')
-    ggH_PTH_0_200_1J_PTH_120_200_htt125 = directory.Get('ggH_PTH_0_200_1J_PTH_120_200_htt125')
-    ggH_PTH_0_200_1J_PTH_60_120_htt125 = directory.Get('ggH_PTH_0_200_1J_PTH_60_120_htt125')
-    ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125')
-    ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125')
-    ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125')    
-    ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125')
-    ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125')
-    ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125')
-    ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125 = directory.Get('ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125')
-    ggH_PTH_GE200_htt125 = directory.Get('ggH_PTH_GE200_htt125')
-    qqH_0J_htt125 = directory.Get('qqH_0J_htt125')
-    qqH_1J_htt125 = directory.Get('qqH_1J_htt125')
-    qqH_GE2J_MJJ_0_60_htt125 = directory.Get('qqH_GE2J_MJJ_0_60_htt125')
-    qqH_GE2J_MJJ_120_350_htt125 = directory.Get('qqH_GE2J_MJJ_120_350_htt125')
-    qqH_GE2J_MJJ_60_120_htt125 = directory.Get('qqH_GE2J_MJJ_60_120_htt125')
-    qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125 = directory.Get('qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125')
-    qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125 = directory.Get('qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125')
-    qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125 = directory.Get('qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125')
-    qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125 = directory.Get('qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125')
-    qqH_GE2J_MJJ_GE350_PTH_GE200_htt125 = directory.Get('qqH_GE2J_MJJ_GE350_PTH_GE200_htt125')
 
     TT = TTL.Clone()
     TT.SetNameTitle("TT","TT")
@@ -97,31 +74,7 @@ def RetrievePlotsFromDirectory(directory):
         'ggH':ggH,
         'qqH':qqH,
         'WH':WH,
-        'ZH':ZH,
-        'ggH_PTH_0_200_0J_PTH_0_10_htt125':ggH_PTH_0_200_0J_PTH_0_10_htt125,
-        'ggH_PTH_0_200_0J_PTH_10_200_htt125':ggH_PTH_0_200_0J_PTH_10_200_htt125,
-        'ggH_PTH_0_200_1J_PTH_0_60_htt125':ggH_PTH_0_200_1J_PTH_0_60_htt125,
-        'ggH_PTH_0_200_1J_PTH_120_200_htt125':ggH_PTH_0_200_1J_PTH_120_200_htt125,
-        'ggH_PTH_0_200_1J_PTH_60_120_htt125':ggH_PTH_0_200_1J_PTH_60_120_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125':ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125':ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125':ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125': ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125': ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125':ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125,
-        'ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125':ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125,
-        'ggH_PTH_GE200_htt125':ggH_PTH_GE200_htt125,
-        'qqH_0J_htt125':qqH_0J_htt125,
-        'qqH_1J_htt125':qqH_1J_htt125,
-        'qqH_GE2J_MJJ_0_60_htt125':qqH_GE2J_MJJ_0_60_htt125,
-        'qqH_GE2J_MJJ_120_350_htt125':qqH_GE2J_MJJ_120_350_htt125,
-        'qqH_GE2J_MJJ_60_120_htt125': qqH_GE2J_MJJ_60_120_htt125,
-        'qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125':qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125,
-        'qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125':qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125,
-        'qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125':qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125,
-        'qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125':qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125,
-        'qqH_GE2J_MJJ_GE350_PTH_GE200_htt125':qqH_GE2J_MJJ_GE350_PTH_GE200_htt125,
-        
+        'ZH':ZH,        
     }
 
     #create the slimmed histogram list with the plots common to most plotting schemes

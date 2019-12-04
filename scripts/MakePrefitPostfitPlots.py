@@ -44,18 +44,30 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
     plotFile = ROOT.TFile(prefitPostfitFile)    
     histograms = prefitPostfitSettings.RetrievePlots.RetrievePlotsFromAllDirectories(channels,plotFile,years)
 
+    dataCards = []
     for channel in channels:
         for year in years:
+            dataCard = ROOT.TFile.Open(prefitPostfitSettings.RetrievePlots.RetrieveOriginalDatacardPath(channel,year))
+            dataCards.append(dataCard)
             for category in histograms[channel][year]:
+                dataHistogram = dataCard.Get(category).Get("data_obs")
                 for prefitOrPostfit in ['prefit','postfit']:
-                    #retrieve original data
-                    print("Retrieving data")
-                    dataCard = ROOT.TFile(prefitPostfitSettings.RetrievePlots.RetrieveOriginalDatacardPath(channel,year))
-                    dataHistogram = dataCard.Get(category).Get("data_obs")
-                    outputRootFile.cd()
+                    #retrieve original data                    
+                    print(dataHistogram)
                     histograms[channel][year][category][prefitOrPostfit]['Data']={'data_obs':dataHistogram}
                     prefitPostfitSettings.dataSettings.ApplyDataSettings(histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'])
-                    
+    outputRootFile.cd()                                        
+    #let's add all the histograms together and get a run 2 collection as well now.
+    #PROVIDED we have all the years present and accounted for
+    if ('2016' in years
+        and '2017' in years
+        and '2018' in years):
+        prefitPostfitSettings.histogramAddition.PerformAllAdditions(histograms)
+
+    for channel in channels:
+        for year in histograms[channel]:
+            for category in histograms[channel][year]:
+                for prefitOrPostfit in ['prefit','postfit']:                                        
                     #perform blinding
                     print("blinding...")
                     prefitPostfitSettings.blinding.BlindDataPoints(
@@ -141,11 +153,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                         prefitPostfitSettings.legend.AppendToLegend(backgroundStackErrors,'background_error')
                         prefitPostfitSettings.legend.DrawLegend(outputDir)
                         needALegend = False
-                        
-    if len(years) > 1:
-        print("Make Year Combination Plots Here!")    
-
-    #make the legend
+                                                    
     #write things to the files
     outputRootFile.Write()
     #for year in years:
