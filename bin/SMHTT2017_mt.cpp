@@ -406,8 +406,7 @@ int main(int argc, char **argv)
 
       //Muon Energy scale uncertainties
       std::cout<<"Muon Energy Scale"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_scale_m_etam2p4tom2p1","CMS_scale_m_etam2p1tom1p2",
-	    "CMS_scale_m_etam1p2to1p2","CMS_scale_m_eta1p2to2p1","CMS_scale_m_eta2p1to2p4"},
+      AddShapesIfNotEmpty({"CMS_scale_m_etalt1p2","CMS_scale_m_eta1p2to2p1","CMS_scale_m_eta2p1to2p4"},
 	MuESVector,
 	&cb,
 	1.00,
@@ -455,15 +454,11 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_mutautrg_2017","shape",SystMap<>::init(0.500));
 
       //MuonES uncertaity
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam2p4tom2p1_2017","shape",SystMap<>::init(0.866));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam2p1tom1p2_2017","shape",SystMap<>::init(0.866));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam1p2to1p2_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etalt1p2_2017","shape",SystMap<>::init(0.866));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_eta1p2to2p1_2017","shape",SystMap<>::init(0.866));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_eta2p1to2p4_2017","shape",SystMap<>::init(0.866));
-
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam2p4tom2p1_2017","shape",SystMap<>::init(0.500));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam2p1tom1p2_2017","shape",SystMap<>::init(0.500));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam1p2to1p2_2017","shape",SystMap<>::init(0.500));
+      
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etalt1p2_2017","shape",SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_eta1p2to2p1_2017","shape",SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_eta2p1to2p4_2017","shape",SystMap<>::init(0.500));
     }

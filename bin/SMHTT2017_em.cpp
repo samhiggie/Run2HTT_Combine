@@ -253,8 +253,7 @@ int main(int argc, char **argv)
 
       //Muon Energy scale uncertainties
       std::cout<<"Muon ES"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_scale_m_etam2p4tom2p1","CMS_scale_m_etam2p1tom1p2",
-	    "CMS_scale_m_etam1p2to1p2","CMS_scale_m_eta1p2to2p1","CMS_scale_m_eta2p1to2p4"},
+      AddShapesIfNotEmpty({"CMS_scale_m_etalt1p2","CMS_scale_m_eta1p2to2p1","CMS_scale_m_eta2p1to2p4"},
 	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","WH_htt125","ZH_htt125"}}),
 	&cb,
 	1.00,
@@ -286,15 +285,11 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_htt_emb_ttbar_2017", "shape", SystMap<>::init(1.00));    
 
       //muon energy scale
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam2p4tom2p1_2017","shape",SystMap<>::init(0.866));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam2p1tom1p2_2017","shape",SystMap<>::init(0.866));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etam1p2to1p2_2017","shape",SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_etalt1p2_2017","shape",SystMap<>::init(0.866));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_eta1p2to2p1_2017","shape",SystMap<>::init(0.866));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_m_eta2p1to2p4_2017","shape",SystMap<>::init(0.866));
-
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam2p4tom2p1_2017","shape",SystMap<>::init(0.500));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam2p1tom1p2_2017","shape",SystMap<>::init(0.500));
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etam1p2to1p2_2017","shape",SystMap<>::init(0.500));
+      
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_etalt1p2_2017","shape",SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_eta1p2to2p1_2017","shape",SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_m_eta2p1to2p4_2017","shape",SystMap<>::init(0.500));
 
