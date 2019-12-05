@@ -201,9 +201,16 @@ int main(int argc, char **argv) {
 			  TheFile,CategoryArgs);
   
       // Jet Energy Correction Uncertainties            
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute2018","CMS_JetBBEC1","CMS_JetBBEC12018","CMS_JetEC2","CMS_JetEC22018",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF2018","CMS_JetRelativeSample","CMS_JetRelativeBal"},
+	JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","DYL","TTL","VVT","STL","STT","TTT","W"}}),
+	&cb,
+	1.000,
+	TheFile,CategoryArgs);
+      /*
       AddShapesIfNotEmpty({"CMS_JetEta3to5_2018","CMS_JetEta0to5_2018","CMS_JetRelativeBal_2018",
 	    "CMS_JetEta0to3_2018"},
-	JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","VVT","STL","DYL","TTL","TTT","STT","W"}}),
+	    JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","VVT","STL","DYL","TTL","TTT","STT","W"}}),
 	&cb,
 	0.707,
 	TheFile,CategoryArgs);            
@@ -220,6 +227,7 @@ int main(int argc, char **argv) {
         &cb,
         1.000,
         TheFile,CategoryArgs);
+      */
 
       //JER      
       AddShapesIfNotEmpty({"CMS_JER_2018"},

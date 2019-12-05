@@ -359,6 +359,13 @@ int main(int argc, char **argv)
 
       // Jet Energy Scale Uncertainties  
       std::cout<<"Jet Shapes"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute2017","CMS_JetBBEC1","CMS_JetBBEC12017","CMS_JetEC2","CMS_JetEC22017",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF2017","CMS_JetRelativeSample","CMS_JetRelativeBal"},
+	JESVector,
+	&cb,
+	1.000,
+	TheFile,CategoryArgs);
+      /*
       AddShapesIfNotEmpty({"CMS_JetRelativeBal_2017","CMS_JetEta3to5_2017","CMS_JetEta0to5_2017",
 	    "CMS_JetEta0to3_2017"},
 	JESVector,
@@ -378,6 +385,7 @@ int main(int argc, char **argv)
         &cb,
         1.000,
         TheFile,CategoryArgs);
+      */
 
       //JER      
       AddShapesIfNotEmpty({"CMS_JER_2017"},

@@ -218,22 +218,21 @@ int main(int argc, char **argv)
 
       // JES
       std::cout<<"JES"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute2016","CMS_JetBBEC1","CMS_JetBBEC12016","CMS_JetEC2","CMS_JetEC22016",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF2016","CMS_JetRelativeSample","CMS_JetRelativeBal"},
+	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+	&cb,
+	1.000,
+	TheFile,CategoryArgs);
+      /*
       AddShapesIfNotEmpty({"CMS_JetEta3to5_2016","CMS_JetEta0to5_2016",
-            "CMS_JetEta0to3_2016","CMS_JetRelativeBal_2016"},
-        JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+      "CMS_JetEta0to3_2016","CMS_JetRelativeBal_2016"},
+      JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
         &cb,
         0.707,
         TheFile,CategoryArgs);
 
-      //JER
-      std::cout<<"JER"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_JER_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
-			  &cb,
-			  1.000,
-			  TheFile,CategoryArgs);
-
-      AddShapesIfNotEmpty({"CMS_JetEta3to5","CMS_JetEta0to5",
+	AddShapesIfNotEmpty({"CMS_JetEta3to5","CMS_JetEta0to5",
             "CMS_JetEta0to3","CMS_JetRelativeBal"},
         JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
         &cb,
@@ -245,6 +244,16 @@ int main(int argc, char **argv)
         &cb,
         1.000,
         TheFile,CategoryArgs);
+      */
+
+      //JER
+      std::cout<<"JER"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JER_2016"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+			  &cb,
+			  1.000,
+			  TheFile,CategoryArgs);
+      
 
       //ggH Theory Uncertainties
       std::cout<<"ggH Theory"<<std::endl;

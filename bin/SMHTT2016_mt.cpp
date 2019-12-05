@@ -358,6 +358,13 @@ int main(int argc, char **argv)
 
       // JES
       std::cout<<"JES"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute2016","CMS_JetBBEC1","CMS_JetBBEC12016","CMS_JetEC2","CMS_JetEC22016",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF2016","CMS_JetRelativeSample","CMS_JetRelativeBal"},
+	JESVector,
+	&cb,
+	1.000,
+	TheFile,CategoryArgs);
+      /*
       AddShapesIfNotEmpty({"CMS_JetEta3to5_2016","CMS_JetEta0to5_2016",
 	    "CMS_JetEta0to3_2016","CMS_JetRelativeBal_2016"},
 	JESVector,
@@ -377,6 +384,7 @@ int main(int argc, char **argv)
         &cb,
         1.000,
         TheFile,CategoryArgs);
+      */
 
       //JER
       std::cout<<"JER"<<std::endl;

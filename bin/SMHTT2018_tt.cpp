@@ -215,9 +215,16 @@ int main(int argc, char **argv)
 
       // JES
       std::cout<<"JES"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute2018","CMS_JetBBEC1","CMS_JetBBEC12018","CMS_JetEC2","CMS_JetEC22018",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF2018","CMS_JetRelativeSample","CMS_JetRelativeBal"},
+	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+	&cb,
+	1.000,
+	TheFile,CategoryArgs);
+      /*
       AddShapesIfNotEmpty({"CMS_JetEta3to5_2018","CMS_JetEta0to5_2018",
             "CMS_JetEta0to3_2018","CMS_JetRelativeBal_2018"},
-        JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+	    JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
         &cb,
         0.707,
         TheFile,CategoryArgs);
@@ -234,6 +241,7 @@ int main(int argc, char **argv)
         &cb,
         1.000,
         TheFile,CategoryArgs);
+      */
 
       //JER      
       AddShapesIfNotEmpty({"CMS_JER_2018"},
