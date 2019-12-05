@@ -333,7 +333,7 @@ int main(int argc, char **argv) {
 
       //JER      
       AddShapesIfNotEmpty({"CMS_JER_2018"},
-			  JESVector,
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
 			  &cb,
 			  1.000,
 			  TheFile,CategoryArgs);

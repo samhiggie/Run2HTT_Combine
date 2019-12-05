@@ -339,7 +339,7 @@ int main(int argc, char **argv)
       //JER
       std::cout<<"JER"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JER_2016"},
-			  JESVector,
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
 			  &cb,
 			  1.000,
 			  TheFile,CategoryArgs);

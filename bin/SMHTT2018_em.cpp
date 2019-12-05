@@ -221,6 +221,13 @@ int main(int argc, char **argv) {
         1.000,
         TheFile,CategoryArgs);
 
+      //JER      
+      AddShapesIfNotEmpty({"CMS_JER_2018"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+			  &cb,
+			  1.000,
+			  TheFile,CategoryArgs);
+
       //ggH Theory Uncertainties
       AddShapesIfNotEmpty({"THU_ggH_Mu","THU_ggH_Res","THU_ggH_Mig01","THU_ggH_Mig12","THU_ggH_VBF2j",
 	    "THU_ggH_VBF3j","THU_ggH_qmtop","THU_ggH_PT60","THU_ggH_PT120"},
