@@ -228,15 +228,15 @@ int main(int argc, char **argv)
         TheFile,CategoryArgs);
 
       AddShapesIfNotEmpty({"CMS_JetEC2_2016"},
-        JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","DYL","TTL","VVT","STL","STT","TTT","W"}}),
-        &cb,
-        1.000,
-        TheFile,CategoryArgs);
+			  JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","DYL","TTL","VVT","STL","STT","TTT","W"}}),
+			  &cb,
+			  1.000,
+			  TheFile,CategoryArgs);
 
       //JER
       std::cout<<"JER"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JER_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","DYL","TTL","VVT","STL","STT","TTT","W"}}),
 			  &cb,
 			  1.000,
 			  TheFile,CategoryArgs);

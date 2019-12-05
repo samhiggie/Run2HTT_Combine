@@ -223,7 +223,7 @@ int main(int argc, char **argv) {
 
       //JER      
       AddShapesIfNotEmpty({"CMS_JER_2018"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","DYL","TTL","VVT","STL","STT","TTT","W"}}),
 			  &cb,
 			  1.000,
 			  TheFile,CategoryArgs);
