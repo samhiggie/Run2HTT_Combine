@@ -56,10 +56,10 @@ int main(int argc, char **argv)
   //! [part3]
   cb.AddObservations({"*"}, {"smh2016"}, {"13TeV"}, {"et"}, cats);
 
-  vector<string> bkg_procs = {"VVT","STT","TTT","jetFakes","DYL","VVL","STL","TTL"};
+  vector<string> bkg_procs = {"VVT","STT","TTT","jetFakes","ZL","VVL","STL","TTL"};
   if(Input.OptionExists("-e"))
     {
-      bkg_procs.push_back("DYT");
+      bkg_procs.push_back("ZT");
     }
   else bkg_procs.push_back("embedded");
   cb.AddProcesses({"*"}, {"smh2016"}, {"13TeV"}, {"et"}, bkg_procs, cats, false);
@@ -122,33 +122,33 @@ int main(int argc, char **argv)
   cb.cp().process(qqH_STXS).AddSyst(cb, "pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
   
   //Electron ID efficiency
-  cb.cp().process(JoinStr({{"DYT","TTT","VVT","STT","DYL","TTL","VVL","STL"},sig_procs})).AddSyst(cb,"CMS_eff_e_2016","lnN",SystMap<>::init(1.02));
+  cb.cp().process(JoinStr({{"ZT","TTT","VVT","STT","ZL","TTL","VVL","STL"},sig_procs})).AddSyst(cb,"CMS_eff_e_2016","lnN",SystMap<>::init(1.02));
 
   // Against ele and against mu for real taus
-  cb.cp().process(JoinStr({{"DYT","TTT","VVT","STT"},sig_procs})).AddSyst(cb,"CMS_eff_t_againstemu_et_2016","lnN",SystMap<>::init(1.01));
+  cb.cp().process(JoinStr({{"ZT","TTT","VVT","STT"},sig_procs})).AddSyst(cb,"CMS_eff_t_againstemu_et_2016","lnN",SystMap<>::init(1.01));
 
   // Trg efficiency. Can be a single lnN because only single ele trigger
-  cb.cp().process(JoinStr({{"DYT","TTT","VVT","STT","DYL","TTL","VVL","STL"},sig_procs})).AddSyst(cb,"CMS_singleeletrg_2016","lnN",SystMap<>::init(1.02));
+  cb.cp().process(JoinStr({{"ZT","TTT","VVT","STT","ZL","TTL","VVL","STL"},sig_procs})).AddSyst(cb,"CMS_singleeletrg_2016","lnN",SystMap<>::init(1.02));
 
   // b-tagging efficiency: 5% in ttbar and 0.5% otherwise.
   cb.cp().process({"TTT","TTL","STL","STT"}).AddSyst(cb,"CMS_htt_eff_b_TT_2016","lnN",SystMap<>::init(1.05));
-  cb.cp().process(JoinStr({{"DYT","VVT","DYL","VVL"},sig_procs})).AddSyst(cb,"CMS_htt_eff_b_2016","lnN",SystMap<>::init(1.005));
+  cb.cp().process(JoinStr({{"ZT","VVT","ZL","VVL"},sig_procs})).AddSyst(cb,"CMS_htt_eff_b_2016","lnN",SystMap<>::init(1.005));
 
   // XSection Uncertainties
   cb.cp().process({"TTT","TTL"}).AddSyst(cb,"CMS_htt_tjXsec", "lnN", SystMap<>::init(1.042));
   cb.cp().process({"VVT","VVL"}).AddSyst(cb,"CMS_htt_vvXsec", "lnN", SystMap<>::init(1.05));
   cb.cp().process({"STT","STL"}).AddSyst(cb,"CMS_htt_stXsec", "lnN", SystMap<>::init(1.05));
-  cb.cp().process({"DYT","DYL"}).AddSyst(cb,"CMS_htt_zjXsec", "lnN", SystMap<>::init(1.02));
+  cb.cp().process({"ZT","ZL"}).AddSyst(cb,"CMS_htt_zjXsec", "lnN", SystMap<>::init(1.02));
 
   //Electron Fake Rate Uncertainty
-  cb.cp().process({"DYL","VVL","TTL","STL"}).AddSyst(cb, "CMS_eFakeTau_2016 ", "lnN",SystMap<>::init(1.15));    
+  cb.cp().process({"ZL","VVL","TTL","STL"}).AddSyst(cb, "CMS_eFakeTau_2016 ", "lnN",SystMap<>::init(1.15));    
   
   //Luminosity Uncertainty
-  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","DYL","DYT","TTL","TTT"}})).AddSyst(cb, "lumi_Run2016", "lnN", SystMap<>::init(1.022));
-  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","DYL","DYT","TTL","TTT"}})).AddSyst(cb, "lumi_XYfactorization", "lnN", SystMap<>::init(1.009));
-  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","DYL","DYT","TTL","TTT"}})).AddSyst(cb, "lumi_beamBeamDeflection", "lnN", SystMap<>::init(1.004));
-  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","DYL","DYT","TTL","TTT"}})).AddSyst(cb, "lumi_dynamicBeta", "lnN", SystMap<>::init(1.005));
-  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","DYL","DYT","TTL","TTT"}})).AddSyst(cb, "lumi_ghostsAndSatellites", "lnN", SystMap<>::init(1.004));
+  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}})).AddSyst(cb, "lumi_Run2016", "lnN", SystMap<>::init(1.022));
+  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}})).AddSyst(cb, "lumi_XYfactorization", "lnN", SystMap<>::init(1.009));
+  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}})).AddSyst(cb, "lumi_beamBeamDeflection", "lnN", SystMap<>::init(1.004));
+  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}})).AddSyst(cb, "lumi_dynamicBeta", "lnN", SystMap<>::init(1.005));
+  cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}})).AddSyst(cb, "lumi_ghostsAndSatellites", "lnN", SystMap<>::init(1.004));
 
   //***********************************************************
   //shape uncertainties
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 
       // Prefiring
       AddShapesIfNotEmpty({"CMS_prefiring"},
-                          JoinStr({sig_procs,{"VVL","VVT","STT","STL","DYL","DYT","TTL","TTT"}}),
+                          JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -168,15 +168,15 @@ int main(int argc, char **argv)
       // Tau ID eff in pt bins
       std::cout<<"Tau ID eff"<<std::endl;
       AddShapesIfNotEmpty({"CMS_tauideff_pt30to35_2016","CMS_tauideff_pt35to40_2016","CMS_tauideff_ptgt40_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","DYT","TTT","WH_htt125","ZH_htt125"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
 
       //E to tau fake energy scale and e to tau energy fake scale            
-      std::cout<<"DYLShapes"<<std::endl;
+      std::cout<<"ZLShapes"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_2016","CMS_scale_efaket_1prong1pizero_2016"},
-			  {"DYL"},
+			  {"ZL"},
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
@@ -291,7 +291,7 @@ int main(int argc, char **argv)
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016",
 	    "CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016",
 	    "CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
-	JoinStr({ggH_STXS,qqH_STXS,{"DYT","DYL"}}),
+	JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
 	&cb,
 	1.00,
 	TheFile,CategoryArgs);
@@ -299,7 +299,7 @@ int main(int argc, char **argv)
       //ZPT Reweighting Shapes:      
       std::cout<<"ZPT Reweighting"<<std::endl;
       AddShapesIfNotEmpty({"CMS_htt_dyShape_2016"},
-			  {"DYT","DYL"},
+			  {"ZT","ZL"},
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
@@ -315,7 +315,7 @@ int main(int argc, char **argv)
       //TES Uncertainty                  
       std::cout<<"TES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_t_1prong_2016","CMS_scale_t_3prong_2016","CMS_scale_t_1prong1pizero_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","DYT","TTT","WH_htt125","ZH_htt125"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125"}}),
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
@@ -323,7 +323,7 @@ int main(int argc, char **argv)
       // JES
       AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute2016","CMS_JetBBEC1","CMS_JetBBEC12016","CMS_JetEC2","CMS_JetEC22016",
 	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF2016","CMS_JetRelativeSample","CMS_JetRelativeBal"},
-	JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","STL","DYL","TTL","TTT","VVT","STT"}}),
+	JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
 	&cb,
 	1.000,
 	TheFile,CategoryArgs);
@@ -331,21 +331,21 @@ int main(int argc, char **argv)
       std::cout<<"JES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JetEta3to5_2016","CMS_JetEta0to5_2016","CMS_JetRelativeBal_2016",
 	    "CMS_JetEta0to3_2016"},
-	    JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","STL","DYL","TTL","TTT","VVT","STT"}}),
+	    JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
 	&cb,
 	0.707,
 	TheFile,CategoryArgs);            
 
       AddShapesIfNotEmpty({"CMS_JetEta3to5","CMS_JetEta0to5","CMS_JetRelativeBal",
             "CMS_JetEta0to3"},
-        JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","STL","DYL","TTL","TTT","VVT","STT"}}),
+        JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
         &cb,
         0.707,
         TheFile,CategoryArgs);
 
 	      std::cout<<"JES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JetEC2_2016"},
-        JoinStr({ggH_STXS,qqH_STXS,{"DYT","WH_htt125","ZH_htt125","VVL","STL","DYL","TTL","TTT","VVT","STT"}}),
+        JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
         &cb,
         1.000,
         TheFile,CategoryArgs);
@@ -370,7 +370,7 @@ int main(int argc, char **argv)
 
       //Electron Energy scale uncertainties
       AddShapesIfNotEmpty({"CMS_scale_e"},
-	JoinStr({ggH_STXS,qqH_STXS,{"DYT","VVT","STT","TTT","DYL","VVL","STL","TTL","WH_htt125","ZH_htt125"}}),
+	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","WH_htt125","ZH_htt125"}}),
 	&cb,
 	1.00,
 	TheFile,CategoryArgs);
@@ -448,8 +448,8 @@ int main(int argc, char **argv)
   bbb.AddBinByBin(cb.cp().process({"QCD"}), cb);
   bbb.AddBinByBin(cb.cp().process({"W"}), cb);
   bbb.AddBinByBin(cb.cp().process({"VV"}), cb);
-  bbb.AddBinByBin(cb.cp().process({"DYTT"}), cb);
-  bbb.AddBinByBin(cb.cp().process({"DYLL"}), cb);
+  bbb.AddBinByBin(cb.cp().process({"ZTT"}), cb);
+  bbb.AddBinByBin(cb.cp().process({"ZLL"}), cb);
 */
   // This function modifies every entry to have a standardised bin name of
   // the form: {analysis}_{channel}_{bin_id}_{era}
