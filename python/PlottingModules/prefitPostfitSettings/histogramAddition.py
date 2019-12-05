@@ -1,12 +1,9 @@
 import ROOT
 
 def AddYearsTogether(collection,channel,category,prefitOrPostfit):
-    for dictType in ['Full','Slimmed','Signals','Data']:
-        print dictType
+    for dictType in ['Full','Slimmed','Signals','Data']:        
         collection[channel]['Run2'][category][prefitOrPostfit][dictType] = {}
-        for histogram in collection[channel]['2016'][category][prefitOrPostfit][dictType]:
-            print(histogram)
-            print(collection[channel]['2016'][category][prefitOrPostfit][dictType][histogram])
+        for histogram in collection[channel]['2016'][category][prefitOrPostfit][dictType]:            
             #try:
             Run2Histo = collection[channel]['2016'][category][prefitOrPostfit][dictType][histogram].Clone()
             Run2Histo.Add(collection[channel]['2017'][category][prefitOrPostfit][dictType][histogram])
