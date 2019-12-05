@@ -378,6 +378,14 @@ int main(int argc, char **argv)
         1.000,
         TheFile,CategoryArgs);
 
+      //JER
+      std::cout<<"JER"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JER_2016"},
+			  JESVector,
+			  &cb,
+			  1.000,
+			  TheFile,CategoryArgs);
+
       //ggH Theory Uncertainties
       std::cout<<"ggH Theory"<<std::endl;
       AddShapesIfNotEmpty({"THU_ggH_Mu","THU_ggH_Res","THU_ggH_Mig01","THU_ggH_Mig12","THU_ggH_VBF2j",

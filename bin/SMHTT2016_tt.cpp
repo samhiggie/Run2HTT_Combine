@@ -225,6 +225,14 @@ int main(int argc, char **argv)
         0.707,
         TheFile,CategoryArgs);
 
+      //JER
+      std::cout<<"JER"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_JER_2016"},
+			  JESVector,
+			  &cb,
+			  1.000,
+			  TheFile,CategoryArgs);
+
       AddShapesIfNotEmpty({"CMS_JetEta3to5","CMS_JetEta0to5",
             "CMS_JetEta0to3","CMS_JetRelativeBal"},
         JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
