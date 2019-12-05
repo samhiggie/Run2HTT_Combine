@@ -4,7 +4,7 @@ print("Loading Categories...")
 tt_boosted_1J_category = 'tt_boosted_onejet'
 tt_boosted_GE2J_category = 'tt_boosted_multijet'
 tt_vbf_high_category = 'tt_vbf_highHpT'
-tt_vbf_low_category = 'tt_vbf_highHpT'
+tt_vbf_low_category = 'tt_vbf_lowHpT'
 tt_0jet_category = 'tt_0jet'
 
 mt_boosted_1J_category = 'mt_boosted_1J'
