@@ -324,13 +324,35 @@ int main(int argc, char **argv)
       //Recoil Shapes:                  
       //check which signal processes this should be applied to. If any.
       std::cout<<"Recoil shapes"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016"},
+			  RecoilVector,
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"mt_0jet_PTH_0_10","mt_0jet_PTH_GE10"});
+      
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016"},
+			  RecoilVector,
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"mt_boosted_1J"});
+
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
+			  RecoilVector,
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
+      /*
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016",
 	    "CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016",
 	    "CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
-	RecoilVector,
+	    RecoilVector,
 	&cb,
 	1.00,
 	TheFile,CategoryArgs);
+      */
 
       //ZPT Reweighting Shapes:      
       std::cout<<"ZPT Reweighting"<<std::endl;

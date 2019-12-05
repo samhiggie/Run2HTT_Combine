@@ -281,6 +281,27 @@ int main(int argc, char **argv) {
       
       //Recoil Shapes:                  
       //check which signal processes this should be applied to. If any.
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2018","CMS_htt_boson_scale_met_0jet_2018"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"et_0jetlow","et_0jethigh"});
+      
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2018","CMS_htt_boson_scale_met_1jet_2018"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"et_boosted1"});
+
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2018","CMS_htt_boson_scale_met_2jet_2018"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"et_boosted2","et_vbflow","et_vbfhigh"});
+      /*
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2018","CMS_htt_boson_scale_met_0jet_2018",
 	    "CMS_htt_boson_reso_met_1jet_2018","CMS_htt_boson_scale_met_1jet_2018",
 	    "CMS_htt_boson_reso_met_2jet_2018","CMS_htt_boson_scale_met_2jet_2018"},
@@ -288,6 +309,7 @@ int main(int argc, char **argv) {
 	&cb,
 	1.00,
 	TheFile,CategoryArgs);
+      */
 
       //ZPT Reweighting Shapes:      
       AddShapesIfNotEmpty({"CMS_htt_dyShape"},

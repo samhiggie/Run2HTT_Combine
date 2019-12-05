@@ -182,6 +182,27 @@ int main(int argc, char **argv)
       //Recoil Shapes:                  
       //check which signal processes this should be applied to. If any.
       std::cout<<"MET recoil"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2017","CMS_htt_boson_scale_met_0jet_2017"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"em_0jetlow","em_0jethigh"});
+      
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2017","CMS_htt_boson_scale_met_1jet_2017"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"em_boosted1"});
+
+      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2017","CMS_htt_boson_scale_met_2jet_2017"},
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"em_boosted2","em_vbflow","em_vbfhigh"});
+      /*
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2017","CMS_htt_boson_scale_met_0jet_2017",
 	    "CMS_htt_boson_reso_met_1jet_2017","CMS_htt_boson_scale_met_1jet_2017",
 	    "CMS_htt_boson_reso_met_2jet_2017","CMS_htt_boson_scale_met_2jet_2017"},
@@ -189,6 +210,7 @@ int main(int argc, char **argv)
 	&cb,
 	1.00,
 	TheFile,CategoryArgs);
+      */
 
       //ZPT Reweighting Shapes:      
       std::cout<<"Z pT"<<std::endl;
