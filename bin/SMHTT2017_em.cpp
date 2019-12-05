@@ -293,7 +293,7 @@ int main(int argc, char **argv)
       //Electron Energy scale uncertainties
       std::cout<<"Electron ES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_e"},
-        JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","TTT","ZL","VVL","TTL","STT","STL","WH_htt125","ZH_htt125"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","TTT","ZL","VVL","TTL","STT","STL","WH_htt125","ZH_htt125","W"}}),
         &cb,
         1.00,
         TheFile,CategoryArgs);

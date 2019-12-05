@@ -284,7 +284,7 @@ int main(int argc, char **argv) {
 
       //Electron Energy scale uncertainties      
       AddShapesIfNotEmpty({"CMS_scale_e"},
-        JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","WH_htt125","ZH_htt125"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","WH_htt125","ZH_htt125","W"}}),
         &cb,
         1.00,
         TheFile,CategoryArgs);
