@@ -266,6 +266,15 @@ int main(int argc, char **argv) {
 	1.00,
 	TheFile,CategoryArgs);            
 
+      //qqH theory uncertainties
+      std::cout<<"qqH Theory"<<std::endl;
+      AddShapesIfNotEmpty({"THU_qqH_yield","THU_qqH_PTH200","THU_qqH_Mjj60","THU_qqH_Mjj120","THU_qqH_Mjj350","THU_qqH_Mjj700",
+	    "THU_qqH_Mjj1000","THU_qqH_Mjj1500","THU_qqH_PTH25","THU_qqH_JET01"},
+	qqH_STXS,
+	&cb,
+	1.00,
+	TheFile,CategoryArgs);
+
       //Muon Energy scale uncertainties      
       AddShapesIfNotEmpty({"CMS_scale_m_etalt1p2","CMS_scale_m_eta1p2to2p1","CMS_scale_m_eta2p1to2p4"},
 	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","WH_htt125","ZH_htt125"}}),
