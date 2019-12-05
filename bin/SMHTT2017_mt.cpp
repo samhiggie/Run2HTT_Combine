@@ -351,7 +351,7 @@ int main(int argc, char **argv)
   
       //TES Uncertainty                 
       std::cout<<"TES shapes"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_scale_t_1prong_2017","CMS_scale_t_3prong_2017","CMS_scale_t_1prong1pizero_2017"},
+      AddShapesIfNotEmpty({"CMS_scale_t_1prong_2017","CMS_scale_t_3prong_2017","CMS_scale_t_1prong1pizero_2017","CMS_scale_t_3prong1pizero_2017"},
 			  TESVector,
 			  &cb,
 			  1.00,
@@ -440,10 +440,12 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_t_1prong_2017", "shape", SystMap<>::init(0.866));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_t_1prong1pizero_2017", "shape", SystMap<>::init(0.866));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_t_3prong_2017", "shape", SystMap<>::init(0.866));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_emb_t_3prong1pizero_2017", "shape", SystMap<>::init(0.866));
 
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong_2017", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_1prong1pizero_2017", "shape", SystMap<>::init(0.500));
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_3prong_2017", "shape", SystMap<>::init(0.500));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_scale_t_3prong1pizero_2017", "shape", SystMap<>::init(0.500));
 
       //Trigger uncertainty
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_singlemutrg_emb_2017","shape",SystMap<>::init(0.866));

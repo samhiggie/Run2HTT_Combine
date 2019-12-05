@@ -304,7 +304,7 @@ int main(int argc, char **argv) {
 			  TheFile,CategoryArgs);
   
       //TES Uncertainty                  
-      AddShapesIfNotEmpty({"CMS_scale_t_1prong_2018","CMS_scale_t_3prong_2018","CMS_scale_t_1prong1pizero_2018"},
+      AddShapesIfNotEmpty({"CMS_scale_t_1prong_2018","CMS_scale_t_3prong_2018","CMS_scale_t_1prong1pizero_2018","CMS_scale_t_3prong1pizero_2016"},
 			  JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125"}}),
 			  &cb,
 			  1.00,
