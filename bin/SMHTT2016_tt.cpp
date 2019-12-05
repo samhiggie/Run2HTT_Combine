@@ -68,19 +68,23 @@ int main(int argc, char **argv)
 
   vector<string> ggH_STXS;
   if (Input.OptionExists("-g")) ggH_STXS = {"ggH_htt125"};
-  else ggH_STXS = {"ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125",
-		   "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125",
-		   "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125",
-		   "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125",
-		   "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125",
-		   "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125",
-		   "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125",
-		   "ggH_PTH_0_200_1J_PTH_120_200_htt125",
-		   "ggH_PTH_0_200_1J_PTH_60_120_htt125",
-		   "ggH_PTH_0_200_1J_PTH_0_60_htt125",
-		   "ggH_PTH_0_200_0J_PTH_10_200_htt125",
+  else ggH_STXS = {"ggH_PTH_0_200_0J_PTH_10_200_htt125",
 		   "ggH_PTH_0_200_0J_PTH_0_10_htt125",
-		   "ggH_PTH_GE200_htt125"};
+		   "ggH_PTH_0_200_1J_PTH_0_60_htt125",
+		   "ggH_PTH_0_200_1J_PTH_60_120_htt125",
+		   "ggH_PTH_0_200_1J_PTH_120_200_htt125",
+		   "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125",		   
+		   "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125",		   
+		   "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125",		   
+		   "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125",		   
+		   "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125",
+		   "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125",		   
+		   "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125",		   
+		   "ggH_PTH_FWDH_htt125",
+		   "ggH_PTH_200_300_htt125",
+		   "ggH_PTH_300_450_htt125",
+		   "ggH_PTH_450_650_htt125",
+		   "ggH_PTH_GE650_htt125"};
   
   vector<string> qqH_STXS; 
   if(Input.OptionExists("-q")) qqH_STXS = {"qqH_htt125"};
@@ -93,7 +97,8 @@ int main(int argc, char **argv)
 		   "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125",
 		   "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125",
 		   "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125",
-		   "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125"};
+		   "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
+		   "qqH_FWDH_htt125"};
 
   vector<string> sig_procs = ch::JoinStr({ggH_STXS,qqH_STXS,{"WH_htt125","ZH_htt125"}});
   cb.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"tt"}, sig_procs, cats, true);
