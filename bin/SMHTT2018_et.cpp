@@ -338,8 +338,8 @@ int main(int argc, char **argv) {
 			  TheFile,CategoryArgs);
 
       // Jet Energy Correction Uncertainties            
-      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute_2016","CMS_JetBBEC1","CMS_JetBBEC1_2016","CMS_JetEC2","CMS_JetEC2_2016",
-	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF_2016","CMS_JetRelativeSample_2016","CMS_JetRelativeBal"},
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute_2018","CMS_JetBBEC1","CMS_JetBBEC1_2018","CMS_JetEC2","CMS_JetEC2_2018",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF_2018","CMS_JetRelativeSample_2018","CMS_JetRelativeBal"},
 	JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
 	&cb,
 	1.000,

@@ -179,7 +179,17 @@ int main(int argc, char **argv)
                           TheFile,CategoryArgs);
 
       //Fake factors
-      // FIXME to be added
+      std::cout<<"Fake factors"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2017",
+	    "CMS_rawFF_tt_qcd_1jet_2017",
+	    "CMS_rawFF_tt_qcd_2jet_2017",
+	    "CMS_FF_closure_tau2pt_tt_qcd",
+	    "CMS_FF_closure_OSSS_mvis_tt_qcd_unc1_2017",
+	    "CMS_FF_closure_OSSS_mvis_tt_qcd_unc2_2017"},
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,CategoryArgs);
 
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
@@ -247,8 +257,8 @@ int main(int argc, char **argv)
 
       // JES
       std::cout<<"JES"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute_2016","CMS_JetBBEC1","CMS_JetBBEC1_2016","CMS_JetEC2","CMS_JetEC2_2016",
-	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF_2016","CMS_JetRelativeSample_2016","CMS_JetRelativeBal"},
+      AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute_2017","CMS_JetBBEC1","CMS_JetBBEC1_2017","CMS_JetEC2","CMS_JetEC2_2017",
+	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF_2017","CMS_JetRelativeSample_2017","CMS_JetRelativeBal"},
 	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
 	&cb,
 	1.000,

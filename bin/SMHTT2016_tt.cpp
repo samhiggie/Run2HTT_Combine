@@ -177,7 +177,17 @@ int main(int argc, char **argv)
                           TheFile,CategoryArgs);
 
       //Fake factors
-      // FIXME to be added
+      std::cout<<"Fake factors"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",
+	    "CMS_rawFF_tt_qcd_1jet_2016",
+	    "CMS_rawFF_tt_qcd_2jet_2016",
+	    "CMS_FF_closure_tau2pt_tt_qcd",
+	    "CMS_FF_closure_OSSS_mvis_tt_qcd_unc1_2016",
+	    "CMS_FF_closure_OSSS_mvis_tt_qcd_unc2_2016"},
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,CategoryArgs);
 
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
