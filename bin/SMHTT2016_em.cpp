@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 		   "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125",
 		   "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125",		   
 		   "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125",		   
-		   "ggH_PTH_FWDH_htt125",
+		   "ggH_FWDH_htt125",
 		   "ggH_PTH_200_300_htt125",
 		   "ggH_PTH_300_450_htt125",
 		   "ggH_PTH_450_650_htt125",
