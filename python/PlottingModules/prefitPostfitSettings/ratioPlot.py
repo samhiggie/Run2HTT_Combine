@@ -39,21 +39,21 @@ def convert(histogram):
 
 def setRatioErrors(ratio,theData):
     output = ROOT.TGraphAsymmErrors(ratio)
-    
     for i in range(1,ratio.GetNbinsX()+1):
         try:
             print ''
             print("bin #"+str(i))
             print("Data: +"+str(theData.GetBinErrorUp(i))+"/-"+str(theData.GetBinErrorLow(i)))
-            print("Ratio: "+str(ratio.GetBinContent(i))+" Error:"+str(theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))+'/-'+str(theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i)))
-            output.SetPointEYlow(i,theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))
-            output.SetPointEYhigh(i,theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))
+            print("Ratio: "+str(ratio.GetBinContent(i))+" Error:"+str(theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))+'/-'+str(theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i)))            
+            output.SetPointEYlow(i-1,theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))
+            output.SetPointEYhigh(i-1,theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))
         except ZeroDivisionError:
             output.SetPointEYlow(i,0)
             output.SetPointEYhigh(i,0)
     return output
 
-def MakeRatioPlot(theStack,theData):
+def MakeRatioPlot(theStack,theData):    
+    
     nBins,binBoundaries = Utilities.GetHistogramAxisInfo(theData)
     binBoundaryArray = array('f',binBoundaries)    
 

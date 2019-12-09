@@ -54,9 +54,11 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                 for prefitOrPostfit in ['prefit','postfit']:
                     #retrieve original data                    
                     #print(dataHistogram)
-                    histograms[channel][year][category][prefitOrPostfit]['Data']={'data_obs':dataHistogram}
-                    prefitPostfitSettings.dataSettings.ApplyDataSettings(histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'])
+                    histograms[channel][year][category][prefitOrPostfit]['Data']={'data_obs':dataHistogram}                    
     outputRootFile.cd()                                        
+    #let's do the rebinning
+    prefitPostfitSettings.rebinning.RebinCollection(histograms)
+    
     #let's add all the histograms together and get a run 2 collection as well now.
     #PROVIDED we have all the years present and accounted for
     if ('2016' in years
@@ -68,13 +70,14 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
         for year in histograms[channel]:
             for category in histograms[channel][year]:
                 for prefitOrPostfit in ['prefit','postfit']:                                                            
-                    #perform blinding
+                    prefitPostfitSettings.dataSettings.ApplyDataSettings(histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'])
+                    #perform blinding                    
                     print("blinding...")
                     prefitPostfitSettings.blinding.BlindDataPoints(
                         histograms[channel][year][category][prefitOrPostfit]['Signals'],
                         histograms[channel][year][category][prefitOrPostfit]['Full'],
                         histograms[channel][year][category][prefitOrPostfit]['Data']
-                    )
+                    )                    
 
                     #Create the canvas and pads needed
                     theCanvas = ROOT.TCanvas(channel+"_"+year+"_"+category+"_"+prefitOrPostfit,channel+"_"+year+"_"+category+"_"+prefitOrPostfit)
@@ -104,7 +107,8 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Scale(20.0)                
                     print("Drawing...")
                     plotPad.cd()
-                    backgroundStack.SetMinimum(0.1)
+                    backgroundStack.SetMinimum(backgroundStack.GetMinimum()*0.9)
+                    backgroundStack.SetMaximum(backgroundStack.GetMaximum()*10)
                     backgroundStack.Draw()
                     backgroundStackErrors.Draw("SAME e2")
                     histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Draw("SAME HIST")
@@ -129,13 +133,13 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     #ratioPlot.Draw("AP")
                     #ratioPlot.Draw('ex0')                    
                     ratioErrors.Draw('e2')
-                    ratioPlot.Draw('P')
+                    ratioPlot.Draw('E0P')
                     
                     #prefitPostfitSettings.sliceLines.CreateRatioSliceLines(category,ratioPlot)
                     ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())
                                         
 
-                    #raw_input("Press enter to continue...")
+                    raw_input("Press enter to continue...")
                     
                     theCanvas.SaveAs(outputDir+theCanvas.GetName()+".png")
                     theCanvas.SaveAs(outputDir+theCanvas.GetName()+".pdf")
