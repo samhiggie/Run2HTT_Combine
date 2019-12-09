@@ -5,7 +5,13 @@ import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as CategoryConfig
 #given the exact directory path we can try to retrive all plots we know and care about.
 #takes as arguments a TDirectory
 def RetrievePlotsFromDirectory(directory):
+    emu = False
     jetFakes = directory.Get("jetFakes")
+    if jetFakes == None:
+        emu = True
+        print("no jet fakes found, assuming this is an e mu channel")
+        W = directory.Get("W")
+        QCD = directory.Get("QCD")
     ZT = directory.Get("embedded")
     ZL = directory.Get("ZL")
     TTL = directory.Get("TTL")
@@ -46,8 +52,7 @@ def RetrievePlotsFromDirectory(directory):
     Other.Add(Higgs)    
 
     #create the Full histogram list
-    fullDictionary = {
-        'jetFakes':jetFakes,
+    fullDictionary = {        
         'ZT':ZT,
         'ZL':ZL,
         'TTL':TTL,
@@ -61,13 +66,20 @@ def RetrievePlotsFromDirectory(directory):
         'WH':WH,
         'ZH':ZH,
         }
-    slimmedDictionary = {
-        'jetFakes':jetFakes,
+    slimmedDictionary = {        
         'ZT':ZT,
         'ZL':ZL,
         'Top':Top,        
         'Other':Other
         }
+    if emu:
+        fullDictionary['W'] = W
+        fullDictionary['QCD'] = QCD
+        slimmedDictionary['W'] = W
+        slimmedDictionary['QCD'] = QCD
+    else:
+        fullDictionary['jetFakes'] = jetFakes
+        slimmedDictionary['jetFakes'] = jetFakes
 
     signalDictionary = {
         'Higgs':Higgs,

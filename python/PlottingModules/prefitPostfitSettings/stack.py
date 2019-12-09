@@ -1,10 +1,15 @@
 import ROOT
 
 stackOrder = ['jetFakes','Other','Top','ZL','ZT']
+emuStackOrder = ['QCD','W','Other','Top','ZL','ZT']
 
-def CreateStack(histogramDictionary):
+def CreateStack(histogramDictionary):    
+    if not 'jetFakes' in histogramDictionary:
+        theStackOrder = emuStackOrder
+    else:
+        theStackOrder = stackOrder
     theStack = ROOT.THStack("Predictions","Predictions")
-    for entry in stackOrder:
+    for entry in theStackOrder:
         try:
             theStack.Add(histogramDictionary[entry],"HIST")
         except KeyError:

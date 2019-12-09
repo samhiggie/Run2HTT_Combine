@@ -107,7 +107,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Scale(20.0)                
                     print("Drawing...")
                     plotPad.cd()
-                    backgroundStack.SetMinimum(backgroundStack.GetMinimum()*0.9)
+                    backgroundStack.SetMinimum(max(backgroundStack.GetMinimum()*0.9,0.1))
                     backgroundStack.SetMaximum(backgroundStack.GetMaximum()*10)
                     backgroundStack.Draw()
                     backgroundStackErrors.Draw("SAME e2")
@@ -126,7 +126,10 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     plotModules.lumiText.CreateLumiText(year)
                     plotModules.CMStext.DrawCMSText()
                     #Titles                    
-                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)                                        
+                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)
+                    plotModules.prefitText.CreatePrefitText()
+                    prefitPostfitSettings.channelText.DrawCategoryName(category)
+                    prefitPostfitSettings.channelText.DrawChannelName(channel)
 
                     #ratio plot
                     ratioPad.cd()
@@ -138,8 +141,8 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     #prefitPostfitSettings.sliceLines.CreateRatioSliceLines(category,ratioPlot)
                     ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())
                                         
-
-                    raw_input("Press enter to continue...")
+                    
+                    #raw_input("Press enter to continue...")
                     
                     theCanvas.SaveAs(outputDir+theCanvas.GetName()+".png")
                     theCanvas.SaveAs(outputDir+theCanvas.GetName()+".pdf")
