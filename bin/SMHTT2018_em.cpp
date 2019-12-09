@@ -56,13 +56,10 @@ int main(int argc, char **argv) {
   //! [part3]
   cb.AddObservations({"*"}, {"smh2018"}, {"13TeV"}, {"em"}, cats);
 
-  vector<string> bkg_procs = {"QCD","ZL","VVL","STL","TTL","W","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"};
+  vector<string> bkg_procs = {"QCD","ZL","VVL","STL","TTL","W","VVT","STT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"};
   if(Input.OptionExists("-e")) 
     {
-      bkg_procs.push_back("ZT");
-      bkg_procs.push_back("VVT");
-      bkg_procs.push_back("STT");
-      bkg_procs.push_back("TTT");
+      bkg_procs.push_back("ZT");      
     }
   else bkg_procs.push_back("embedded");
   cb.AddProcesses({"*"}, {"smh2018"}, {"13TeV"}, {"em"}, bkg_procs, cats, false);
