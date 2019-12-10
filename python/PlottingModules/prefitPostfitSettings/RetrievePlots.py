@@ -4,16 +4,17 @@ import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as CategoryConfig
 
 #given the exact directory path we can try to retrive all plots we know and care about.
 #takes as arguments a TDirectory
-def RetrievePlotsFromDirectory(directory):
-    emu = False
+def RetrievePlotsFromDirectory(channel, directory):    
     jetFakes = directory.Get("jetFakes")
-    if jetFakes == None:
-        emu = True
+    if channel == 'em':        
         print("no jet fakes found, assuming this is an e mu channel")
         W = directory.Get("W")
         QCD = directory.Get("QCD")
     ZT = directory.Get("embedded")
-    ZL = directory.Get("ZL")
+    if channel == 'mt' or channel == 'tt':
+        ZL = directory.Get("ZL")
+    else:
+        ZL = directory.Get("DYL")
     TTL = directory.Get("TTL")
     TTT = directory.Get("TTT")
     VVL = directory.Get("VVL")
@@ -72,7 +73,7 @@ def RetrievePlotsFromDirectory(directory):
         'Top':Top,        
         'Other':Other
         }
-    if emu:
+    if channel == 'em':
         fullDictionary['W'] = W
         fullDictionary['QCD'] = QCD
         slimmedDictionary['W'] = W
@@ -118,5 +119,5 @@ def RetrievePlotsFromAllDirectories(channels,location,years,withYears = True):
                         continue
                     else:
                         print("loading category: "+categoryName+" plots from : "+directoryName)
-                        histograms[channel][year][categoryName][prefitOrPostfit] = RetrievePlotsFromDirectory(candidateDirectory)                    
+                        histograms[channel][year][categoryName][prefitOrPostfit] = RetrievePlotsFromDirectory(channel, candidateDirectory)                    
     return histograms

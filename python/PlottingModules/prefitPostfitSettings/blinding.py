@@ -4,7 +4,11 @@ import math
 #clculate the background content at given point
 #takes the point number, and the full histogram dictionary
 def CalculateB(i,FullDictionary):
-    content = FullDictionary['jetFakes'].GetBinContent(i)
+    try:
+        content = FullDictionary['jetFakes'].GetBinContent(i)
+    except KeyError:
+        content = FullDictionary['QCD'].GetBinContent(i)
+        content += FullDictionary['W'].GetBinContent(i)
     content += FullDictionary['ZT'].GetBinContent(i)
     content += FullDictionary['ZL'].GetBinContent(i)
     content += FullDictionary['TTL'].GetBinContent(i)

@@ -64,7 +64,7 @@ et_0jet_categories.append(et_0jet_low_category)
 et_0jet_categories.append(et_0jet_high_category)
 
 et_Categories = []
-et_Categories = et_boosted_categories + et_vbf_categories + et_0jet_categories
+et_Categories = et_0jet_categories + et_boosted_categories + et_vbf_categories
 
 em_boosted_categories = []
 em_boosted_categories.append(em_boosted_1J_category)
@@ -77,7 +77,7 @@ em_0jet_categories.append(em_0jet_low_category)
 em_0jet_categories.append(em_0jet_high_category)
 
 em_Categories = []
-em_Categories = em_boosted_categories + em_vbf_categories + em_0jet_categories
+em_Categories = em_0jet_categories + em_boosted_categories + em_vbf_categories 
 
 Categories = {'tt':tt_Categories,
               'mt':mt_Categories,
