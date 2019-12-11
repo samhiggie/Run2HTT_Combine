@@ -39,7 +39,7 @@ def setPASStyle():
     #Histogram Settings
     pasStyle.SetHistLineColor(ROOT.kBlack)
     pasStyle.SetHistLineStyle(0)
-    pasStyle.SetHistLineWidth(1)
+    pasStyle.SetHistLineWidth(2)
 
     pasStyle.SetEndErrorSize(2)
 

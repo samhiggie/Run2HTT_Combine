@@ -4,7 +4,11 @@ import math
 #clculate the background content at given point
 #takes the point number, and the full histogram dictionary
 def CalculateB(i,FullDictionary):
-    content = FullDictionary['jetFakes'].GetBinContent(i)
+    try:
+        content = FullDictionary['jetFakes'].GetBinContent(i)
+    except KeyError:
+        content = FullDictionary['QCD'].GetBinContent(i)
+        content += FullDictionary['W'].GetBinContent(i)
     content += FullDictionary['ZT'].GetBinContent(i)
     content += FullDictionary['ZL'].GetBinContent(i)
     content += FullDictionary['TTL'].GetBinContent(i)
@@ -26,6 +30,18 @@ def BlindDataPoints(SignalDictionary,FullDictionary,DataDictionary):
         signalContentAtPoint = SignalDictionary['Higgs'].GetBinContent(i)        
         try:
             if signalContentAtPoint / math.sqrt(backgroundContentAtPoint) > 0.5:
-                DataDictionary['data_obs'].SetBinContent(i,-1.0)
+                DataDictionary['data_obs'].SetBinContent(i,0.0)
+        except ZeroDivisionError:
+            print("Skipping zero prediction bin...")
+
+def BlindRatioPlot(SignalDictionary,FullDictionary,ratioPlot):
+    ratioRangeLow = 1
+    ratioRangeHigh = ratioPlot.GetN()
+    for i in range(ratioRangeLow,ratioRangeHigh):
+        backgroundContentAtPoint = CalculateB(i,FullDictionary)
+        signalContentAtPoint = SignalDictionary['Higgs'].GetBinContent(i)
+        try:
+            if signalContentAtPoint / math.sqrt(backgroundContentAtPoint) > 0.5:
+                ratioPlot.SetPoint(i,-1,-1)
         except ZeroDivisionError:
             print("Skipping zero prediction bin...")

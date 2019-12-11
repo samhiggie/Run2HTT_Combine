@@ -33,100 +33,135 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
         prefitPostfitResult = os.system('PostFitShapesFromWorkspace -o '+prefitPostfitFile+' -m 125 -f '+fileName+':fit_s --postfit --sampling --print -d '+finalTextCardName+' -w '+finalCardName)
         assert prefitPostfitResult == 0, "There was an error while creating the prefits and postfits..."
         
+    outputDir = theDirectory+"HistogramOutput/"
+    if not os.path.isdir(outputDir):
+        os.mkdir(outputDir)
+
+    outputRootFile = ROOT.TFile("prefitHistos.root","RECREATE")
+
+    needALegend = True
+        
     plotFile = ROOT.TFile(prefitPostfitFile)    
     histograms = prefitPostfitSettings.RetrievePlots.RetrievePlotsFromAllDirectories(channels,plotFile,years)
 
+    dataCards = []
     for channel in channels:
         for year in years:
+            dataCard = ROOT.TFile.Open(prefitPostfitSettings.RetrievePlots.RetrieveOriginalDatacardPath(channel,year))
+            dataCards.append(dataCard)
             for category in histograms[channel][year]:
+                dataHistogram = dataCard.Get(category).Get("data_obs")
                 for prefitOrPostfit in ['prefit','postfit']:
-                    #retrieve original data
-                    print("Retrieving data")
-                    dataCard = ROOT.TFile(prefitPostfitSettings.RetrievePlots.RetrieveOriginalDatacardPath(channel,year))
-                    dataHistogram = dataCard.Get(category).Get("data_obs")
-                    histograms[channel][year][category][prefitOrPostfit]['Data']={'data_obs':dataHistogram}
+                    #retrieve original data                    
+                    #print(dataHistogram)
+                    histograms[channel][year][category][prefitOrPostfit]['Data']={'data_obs':dataHistogram}                    
+    outputRootFile.cd()                                        
+    #let's do the rebinning
+    prefitPostfitSettings.rebinning.RebinCollection(histograms)
+    
+    #let's add all the histograms together and get a run 2 collection as well now.
+    #PROVIDED we have all the years present and accounted for
+    if ('2016' in years
+        and '2017' in years
+        and '2018' in years):
+        prefitPostfitSettings.histogramAddition.PerformAllAdditions(histograms)
+
+    for channel in channels:
+        for year in histograms[channel]:
+            for category in histograms[channel][year]:
+                for prefitOrPostfit in ['prefit','postfit']:                                                            
                     prefitPostfitSettings.dataSettings.ApplyDataSettings(histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'])
-                    
-                    #perform blinding
+                    #perform blinding                    
                     print("blinding...")
                     prefitPostfitSettings.blinding.BlindDataPoints(
                         histograms[channel][year][category][prefitOrPostfit]['Signals'],
                         histograms[channel][year][category][prefitOrPostfit]['Full'],
                         histograms[channel][year][category][prefitOrPostfit]['Data']
-                    )
-                    
+                    )                    
+
                     #Create the canvas and pads needed
-                    theCanvas = ROOT.TCanvas(prefitOrPostfit+"_"+category,prefitOrPostfit+"_"+category)
+                    theCanvas = ROOT.TCanvas(channel+"_"+year+"_"+category+"_"+prefitOrPostfit,channel+"_"+year+"_"+category+"_"+prefitOrPostfit)
                     print("Performing pad set-up...")
                     plotPad,ratioPad = prefitPostfitSettings.plotPad.CreatePads(theCanvas)
                     prefitPostfitSettings.plotPad.SetupPad(plotPad)
+                    #make the ratio plots
                     prefitPostfitSettings.ratioPad.SetUpRatioPad(ratioPad)
-                    
                     
                     #color in any distributions
                     print("Creating colors...")
                     prefitPostfitSettings.colors.ColorizePrefitDistribution(histograms[channel][year][category][prefitOrPostfit]['Slimmed'] )
-                    prefitPostfitSettings.colors.ColorizePrefitDistribution(histograms[channel][year][category][prefitOrPostfit]['Signals'])                
-                    
-                    #upscale the higgs distribution
-                    histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Scale(20.0)                
+                    prefitPostfitSettings.colors.ColorizePrefitDistribution(histograms[channel][year][category][prefitOrPostfit]['Signals'])
                     
                     #make the stack and errors
                     print("Making stack...")
-                    backgroundStack = Utils.StackDictionary(histograms[channel][year][category][prefitOrPostfit]['Slimmed'])                
+                    backgroundStack = prefitPostfitSettings.stack.CreateStack(histograms[channel][year][category][prefitOrPostfit]['Slimmed'])
                     print("Making stack errors...")
                     backgroundStackErrors = Utils.MakeStackErrors(backgroundStack)
-                    
-                    #create the legend
-                    print("Creating legend...")
-                    #theLegend = prefitPostfitSettings.legend.CreateLegend(histograms[channel][year][category][prefitOrPostfit]['Slimmed'])
-                    #prefitPostfitSettings.legend.AppendToLegend(theLegend,histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'],'Higgs')
-                    #prefitPostfitSettings.legend.AppendToLegend(theLegend,histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'],'data_obs')
-                    #prefitPostfitSettings.legend.AppendToLegend(theLegend,backgroundStackErrors,'background_error')
-
-                    #make the ratio plots
+                    print("Making ratio...")
                     ratioPlot, ratioErrors = prefitPostfitSettings.ratioPlot.MakeRatioPlot(backgroundStack,
                                                                   histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'])
-                    
+                                        
+
                     #draw everything
+                    #upscale the higgs distribution
+                    histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Scale(20.0)                
                     print("Drawing...")
                     plotPad.cd()
-                    backgroundStack.SetMinimum(0.1)
+                    backgroundStack.SetMinimum(max(backgroundStack.GetMinimum()*0.9,0.1))
+                    backgroundStack.SetMaximum(backgroundStack.GetMaximum()*10)
                     backgroundStack.Draw()
                     backgroundStackErrors.Draw("SAME e2")
                     histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Draw("SAME HIST")
                     histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'].Draw("SAME e1")
-                    #slice lines                   
-                    prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram())
+                    #axes
+                    #prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
+                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())                    
+                    #slice lines
+                    plotSlicePad,plotSlices = prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram(),plotPad)
+                    plotSlicePad.Draw()
+                    plotSlicePad.cd()
+                    plotSlices.Draw()
                     
                     #other text
                     plotModules.lumiText.CreateLumiText(year)
                     plotModules.CMStext.DrawCMSText()
                     #Titles                    
-                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)                                        
+                    prefitPostfitSettings.title.CreateTitle(year,channel,category,backgroundStack)
+                    plotModules.prefitText.CreatePrefitText()
+                    prefitPostfitSettings.channelText.DrawCategoryName(category)
+                    prefitPostfitSettings.channelText.DrawChannelName(channel)
+
                     #ratio plot
                     ratioPad.cd()
-                    ratioPlot.Draw('ex0')
-                    ratioErrors.Draw('SAME e2')
-                    ratioPlot.Draw('SAME ex0')
-                    #axes
-                    prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
-                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())                    
-                    #slice lines
-                    prefitPostfitSettings.sliceLines.CreateSliceLines(category,ratioPlot)
+                    #ratioPlot.Draw("AP")
+                    #ratioPlot.Draw('ex0')                    
+                    ratioErrors.Draw('e2')
+                    ratioPlot.Draw('E0P')
                     
-                    plotPad.RedrawAxis()
-
-                    raw_input("Press enter to continue...")
+                    #prefitPostfitSettings.sliceLines.CreateRatioSliceLines(category,ratioPlot)
+                    ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())
+                                        
                     
-    if len(channels) > 1:
-        print("Make Category Combination Plots Here!")
-    if len(years) > 1:
-        print("Make Year Combination Plots Here!")
-    if len(channels) > 1 and len(years) > 1:
-        print("Make Year and Category Combination Plots Here")
-    
-    
+                    #raw_input("Press enter to continue...")
+                    
+                    theCanvas.SaveAs(outputDir+theCanvas.GetName()+".png")
+                    theCanvas.SaveAs(outputDir+theCanvas.GetName()+".pdf")
+                    theCanvas.Write()
+                    
+                    del theCanvas
+                    
+                    if needALegend:
+                        #create the legend
+                        print("Creating legend...")
+                        prefitPostfitSettings.legend.CreateLegend(histograms[channel][year][category][prefitOrPostfit]['Slimmed'])
+                        prefitPostfitSettings.legend.AppendToLegend(histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'],'Higgs')
+                        prefitPostfitSettings.legend.AppendToLegend(histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'],'data_obs')
+                        prefitPostfitSettings.legend.AppendToLegend(backgroundStackErrors,'background_error')
+                        prefitPostfitSettings.legend.DrawLegend(outputDir)
+                        needALegend = False
+                                                    
+    #write things to the files
+    outputRootFile.Write()
     #for year in years:
     #    for channel in channels
 

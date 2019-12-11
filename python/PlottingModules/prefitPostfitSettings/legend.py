@@ -1,12 +1,13 @@
 import ROOT
-
-legendPosition = (0.7,0.82,0.95,0.97)
+legendPosition = (0,0,1,1)
 histogramEntries = {
     'jetFakes':'Jet mis-ID',
     'ZT':'Z #rightarrow #tau#tau',
     'ZL':'Z #rightarrow ee/#mu#mu',
     'Top':'t#bar{t} + Jets',
     'Other':'Others',
+    'W':'W+Jets',
+    'QCD':'QCD',
     'Higgs':'Higgs #rightarrow #tau#tau (#times 20)',
     'data_obs':'Data',
     'background_error':'Bkg. uncertainty',
@@ -17,29 +18,34 @@ histogramFormats = {
     'ZL':'f',
     'Top':'f',
     'Other':'f',
+    'W':'f',
+    'QCD':'f',
     'Higgs':'l',
     'data_obs':'pe',
     'background_error':'f',
     }
 nLegendColumns = 2
 
-def CreateLegend(histogramDictionary):
-    pass
-    """
-    theLegend = ROOT.TLegend(legendPosition[0],legendPosition[1],legendPosition[2],legendPosition[3])
+theLegend = ROOT.TLegend(legendPosition[0],legendPosition[1],legendPosition[2],legendPosition[3])
+
+def CreateLegend(histogramDictionary):    
     
     theLegend.SetNColumns(nLegendColumns)
 
     for entry in histogramDictionary:
-        AppendToLegend(theLegend,histogramDictionary[entry],entry)
-    return theLegend
-    """
+        AppendToLegend(histogramDictionary[entry],entry)        
+    
 
-def AppendToLegend(theLegend,histogram,entry):
-    pass
-    """
+def AppendToLegend(histogram,entry):    
     try:
         theLegend.AddEntry(histogram,histogramEntries[entry],histogramFormats[entry])
     except KeyError:
         print("Failed to properly make entry for: "+str(entry))
-    """
+
+def DrawLegend(outputDir):
+    legendCanvas = ROOT.TCanvas("legend","legend",300,600)
+    theLegend.Draw()
+    legendCanvas.Draw()
+    legendCanvas.SaveAs(outputDir+"legend.png")
+    legendCanvas.SaveAs(outputDir+"legend.pdf")
+    legendCanvas.Write()
