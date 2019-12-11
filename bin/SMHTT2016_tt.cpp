@@ -178,7 +178,8 @@ int main(int argc, char **argv)
 
       //Fake factors
       std::cout<<"Fake factors"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",
+      /*
+	AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",
 	    "CMS_rawFF_tt_qcd_1jet_2016",
 	    "CMS_rawFF_tt_qcd_2jet_2016",
 	    "CMS_FF_closure_tau2pt_tt_qcd_0jet",
@@ -187,8 +188,33 @@ int main(int argc, char **argv)
 	{"jetFakes"},
 	&cb,
 	1.00,
-	TheFile,CategoryArgs);
+	TheFile,
+	CategoryArgs);
+      */
 
+      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",	    
+	    "CMS_FF_closure_tau2pt_tt_qcd_0jet"},
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,
+	{"tt_0jet"});
+
+      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_1jet_2016",	    
+	    "CMS_FF_closure_tau2pt_tt_qcd_1jet"},
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,
+	{"tt_boosted_onejet"});
+
+      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",	    
+	    "CMS_FF_closure_tau2pt_tt_qcd_0jet"},
+	{"jetFakes"},
+	&cb,
+	1.00,
+	TheFile,
+	{"tt_boosted_multijet","tt_vbf_highHpT","tt_vbf_lowHpT"});
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_met_unclustered_2016"},
