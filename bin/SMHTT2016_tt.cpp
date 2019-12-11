@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 
       // Prefiring
       AddShapesIfNotEmpty({"CMS_prefiring"},
-                          JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT"}}),
+                          JoinStr({sig_procs,{"VVL","STL","ZL","TTL","TTT"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
       // Tau ID eff in DM bins
       std::cout<<"Tau ID eff"<<std::endl;
       AddShapesIfNotEmpty({"CMS_tauideff_dm0_2016","CMS_tauideff_dm1_2016","CMS_tauideff_dm10_2016","CMS_tauideff_dm11_2016"},
-                          JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125"}}),
+                          JoinStr({ggH_STXS,qqH_STXS,{"WH_htt125","ZH_htt125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
       // Trg eff. 
       std::cout<<"Trigger eff"<<std::endl;
       AddShapesIfNotEmpty({"CMS_doubletautrg_2016"},
-                          JoinStr({ggH_STXS,qqH_STXS,{"VVL","STL","TTL","ZL","VVT","STT","ZT","TTT","WH_htt125","ZH_htt125"}}),
+                          JoinStr({ggH_STXS,qqH_STXS,{"VVL","STL","TTL","ZL","WH_htt125","ZH_htt125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -192,7 +192,7 @@ int main(int argc, char **argv)
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_met_unclustered_2016"},
-                          {"TTT","TTL","VVT","VVL","STT","STL"},
+                          {"TTL","VVL","STL"},
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -200,21 +200,21 @@ int main(int argc, char **argv)
       //Recoil Shapes:                  
       std::cout<<"Recoil shapes"<<std::endl;
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZL"}}),
 			  &cb,
 			  1.00,
 			  TheFile,
 			  {"tt_0jet"});
       
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZL"}}),
 			  &cb,
 			  1.00,
 			  TheFile,
 			  {"tt_boosted_onejet"});
 
       AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZL"}}),
 			  &cb,
 			  1.00,
 			  TheFile,
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
       //ZPT Reweighting Shapes:      
       std::cout<<"ZPT Reweighting"<<std::endl;
       AddShapesIfNotEmpty({"CMS_htt_dyShape_2016"},
-                          {"ZT","ZL"},
+                          {"ZL"},
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -240,7 +240,7 @@ int main(int argc, char **argv)
       //Top Pt Reweighting      
       std::cout<<"ttbar shape"<<std::endl;
       AddShapesIfNotEmpty({"CMS_htt_ttbarShape"},
-                          {"TTL","TTT"},
+                          {"TTL"},
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
       //TES Uncertainty                  
       std::cout<<"TES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_t_1prong_2016","CMS_scale_t_3prong_2016","CMS_scale_t_1prong1pizero_2016","CMS_scale_t_3prong1pizero_2016"},
-                          JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125"}}),
+                          JoinStr({ggH_STXS,qqH_STXS,{"WH_htt125","ZH_htt125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
       std::cout<<"JES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute_2016","CMS_JetBBEC1","CMS_JetBBEC1_2016","CMS_JetEC2","CMS_JetEC2_2016",
 	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF_2016","CMS_JetRelativeBal"},
-	JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+	JoinStr({ggH_STXS,qqH_STXS,{"WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
 	&cb,
 	1.000,
 	TheFile,CategoryArgs);
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
       //JER
       std::cout<<"JER"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JER_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"WH_htt125","ZH_htt125","VVL","STL","ZL","TTL"}}),
 			  &cb,
 			  1.000,
 			  TheFile,CategoryArgs);
