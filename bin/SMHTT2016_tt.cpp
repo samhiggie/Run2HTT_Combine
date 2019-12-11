@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 
       // Prefiring
       AddShapesIfNotEmpty({"CMS_prefiring"},
-                          JoinStr({sig_procs,{"VVL","STL","ZL","TTL","TTT"}}),
+                          JoinStr({sig_procs,{"VVL","STL","ZL","TTL"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
