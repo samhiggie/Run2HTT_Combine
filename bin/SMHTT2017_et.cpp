@@ -177,7 +177,7 @@ int main(int argc, char **argv)
       // Trg eff. It is a shape because the 2 triggers affect the ele pT spectrum differently
       std::cout<<"Trigger eff"<<std::endl;
       AddShapesIfNotEmpty({"CMS_singleeletrg_2017","CMS_eletautrg_2017"},
-                          JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
+                          JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","VVL","STL","TTL","ZL","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
