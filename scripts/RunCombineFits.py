@@ -229,10 +229,10 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125:r_ggH_PTH_0_200_GE2J_MJJ_GE350[1,-25,25]' "     
     ##ggH, PTH 200+
     MergedSignalNames.append("ggH_PTH_GE200")
-    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_200_300_htt125:r_ggH_PTH_GE200[1,-25,25]'"
-    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_300_450_htt125:r_ggH_PTH_GE200[1,-25,25]'"
-    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_450_600_htt125:r_ggH_PTH_GE200[1,-25,25]'"
-    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_GE650_htt125:r_ggH_PTH_GE200[1,-25,25]'"
+    PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_200_300_htt125:r_ggH_PTH_GE200[1,-25,25]' "
+    PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_300_450_htt125:r_ggH_PTH_GE200[1,-25,25]' "
+    PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_450_600_htt125:r_ggH_PTH_GE200[1,-25,25]' "
+    PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_GE650_htt125:r_ggH_PTH_GE200[1,-25,25]' "
 
     PerMergedBinWorkSpaceCommand += CombinedCardName+" -o "+PerMergedBinName+" -m 125"
 
@@ -319,7 +319,7 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance
             CombineCommand+=("r_"+BinName+"=1,")
         CombineCommand+=" -P r_"+MergedBin+" --floatOtherPOIs=1"
         if args.Timeout is True:
-            CombineCommand = "timeout 180s " + CombineCommand        
+            CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand        
         logging.info("Merged Bin Combine Command:")
         logging.info('\n\n'+CombineCommand+'\n')
         if args.RunParallel:
