@@ -208,8 +208,8 @@ int main(int argc, char **argv)
 	TheFile,
 	{"tt_boosted_onejet"});
 
-      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2017",	    
-	    "CMS_FF_closure_tau2pt_tt_qcd_0jet"},
+      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_2jet_2017",	    
+	    "CMS_FF_closure_tau2pt_tt_qcd_2jet"},
 	{"jetFakes"},
 	&cb,
 	1.00,
