@@ -163,7 +163,7 @@ int main(int argc, char **argv)
       
       // Prefiring
       AddShapesIfNotEmpty({"CMS_prefiring"},
-                          JoinStr({sig_procs,{"W","VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
+                          JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
@@ -237,7 +237,7 @@ int main(int argc, char **argv)
       std::cout<<"JES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_JetAbsolute","CMS_JetAbsolute_2017","CMS_JetBBEC1","CMS_JetBBEC1_2017","CMS_JetEC2","CMS_JetEC2_2017",
 	    "CMS_JetFlavorQCD","CMS_JetHF","CMS_JetHF_2017","CMS_JetRelativeSample_2017","CMS_JetRelativeBal"},
-	JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","ZL","TTL","VVT","STL","STT","TTT","W","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
+	JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","ZL","TTL","VVT","STL","STT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
 	&cb,
 	1.000,
 	TheFile,CategoryArgs);
@@ -264,7 +264,7 @@ int main(int argc, char **argv)
       */
       //JER      
       AddShapesIfNotEmpty({"CMS_JER_2017"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","ZL","TTL","VVT","STL","STT","TTT","W","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","ZL","TTL","VVT","STL","STT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
 			  &cb,
 			  1.000,
 			  TheFile,CategoryArgs);
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
       //Electron Energy scale uncertainties
       std::cout<<"Electron ES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_e"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","TTT","ZL","VVL","TTL","STT","STL","WH_htt125","ZH_htt125","W","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
+			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","TTT","ZL","VVL","TTL","STT","STL","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
         &cb,
         1.00,
         TheFile,CategoryArgs);
