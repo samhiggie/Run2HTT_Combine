@@ -25,6 +25,7 @@ for line in limits:
 # Bins
 STXSBin_stage0 = ['r_qqH','r_ggH','r_WH','r_ZH']
 singleSTXSBin_ggH = [
+  "r_ggH_FWDH_htt125",
   'r_ggH_PTH_0_200_0J_PTH_0_10_htt125',# 0J
   'r_ggH_PTH_0_200_0J_PTH_10_200_htt125', 
   'r_ggH_PTH_0_200_1J_PTH_60_120_htt125', # 1J
@@ -37,12 +38,18 @@ singleSTXSBin_ggH = [
   'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125',
   'r_ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125', # GE2J_MJJ_GE700
   'r_ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125',
-  'r_ggH_PTH_GE200_htt125', # PTH_GE200
+  #'r_ggH_PTH_GE200_htt125', # PTH_GE200  
+  "r_ggH_PTH_200_300_htt125",
+  "r_ggH_PTH_300_450_htt125",
+  "r_ggH_PTH_450_650_htt125",
+  "r_ggH_PTH_GE650_htt125"
 ]
 mergedSTXSBin_ggH = [
-  'r_ggH_PTH_0_200_GE2J_MJJ_GE350' 
+  'r_ggH_PTH_0_200_GE2J_MJJ_GE350',
+  'r_ggH_PTH_GE200'
 ]
 singleSTXSBin_qqH = [
+  "r_qqH_FWDH_htt125",
   'r_qqH_0J_htt125', # 0J
   'r_qqH_1J_htt125', # 1J
   'r_qqH_GE2J_MJJ_0_60_htt125', # GE2J_MJJ_0_350
@@ -52,7 +59,7 @@ singleSTXSBin_qqH = [
   'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125',
   'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125', # GE2J_MJJ_GE700_PTH_0_200
   'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125',
-  'r_qqH_GE2J_MJJ_GE350_PTH_GE200_htt125'
+  'r_qqH_GE2J_MJJ_GE350_PTH_GE200_htt125',  
 ]
 mergedSTXSBin_qqH = [
   'r_qqH_LT2J',
@@ -93,26 +100,31 @@ for poi in STXSBin_stage0:
   gap = gapComputer(poi,0)
   print (colorCode + poi + '\33[0m \t:\t' + UncertaintiesDic[poi] + gap)
 print ""
-# Stage 1.1 ggH 
+# Stage 1.2 ggH 
 print ""
-print "\t\t\t\t\t\33[1;30;47m<< STXS Stage1.1 >>\33[0m"
+print "\t\t\t\t\t\33[1;30;47m<< STXS Stage1.2 >>\33[0m"
 print ""
 for poi in singleSTXSBin_ggH:
   colorCode = '\33[34m'
-  if poi == 'r_ggH_PTH_0_200_0J_PTH_0_10_htt125' or poi == 'r_ggH_PTH_0_200_1J_PTH_60_120_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125' or poi == 'r_ggH_PTH_GE200_htt125':
+  if poi == 'r_ggH_PTH_0_200_0J_PTH_0_10_htt125' or poi == 'r_ggH_PTH_0_200_1J_PTH_60_120_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125' or poi == "r_ggH_PTH_200_300_htt125" or poi == "r_ggH_FWDH_htt125":
     print dashLine
   gap = gapComputer(poi,30)
   print (colorCode + poi + '\33[0m \t:\t' + UncertaintiesDic[poi] + gap)
 
   # merged bins
+  mergedPOI = ""
   if poi == 'r_ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125':
+    mergedPOI = 'r_ggH_PTH_0_200_GE2J_MJJ_GE350'
+  if poi == "r_ggH_PTH_GE650_htt125":
+    mergedPOI = 'r_ggH_PTH_GE200'
+  if mergedPOI != "":
     colorCode = '\33[1;37;44m'
-    print (colorCode + 'r_ggH_PTH_0_200_GE2J_MJJ_GE350' + '\33[0m \t:\t' + UncertaintiesDic['r_ggH_PTH_0_200_GE2J_MJJ_GE350'])
+    print (colorCode + mergedPOI + '\33[0m \t:\t' + UncertaintiesDic[mergedPOI] + gap)
 
-# Stage 1.1 qqH 
+# Stage 1.2 qqH 
 for poi in singleSTXSBin_qqH:
   colorCode = '\33[91m'
-  if poi == 'r_qqH_0J_htt125' or poi == 'r_qqH_GE2J_MJJ_0_60_htt125' or poi == 'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125' or poi == 'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125' or poi == 'r_qqH_GE2J_MJJ_GE350_PTH_GE200_htt125':
+  if poi == 'r_qqH_0J_htt125' or poi == 'r_qqH_GE2J_MJJ_0_60_htt125' or poi == 'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125' or poi == 'r_qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125' or poi == 'r_qqH_GE2J_MJJ_GE350_PTH_GE200_htt125' or poi == "r_qqH_FWDH_htt125":
     print dashLine
   gap = gapComputer(poi,30)
   print (colorCode + poi + '\33[0m \t:\t' + UncertaintiesDic[poi] + gap)
