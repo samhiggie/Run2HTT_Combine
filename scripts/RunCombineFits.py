@@ -226,7 +226,14 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125:r_ggH_PTH_0_200_GE2J_MJJ_GE350[1,-25,25]' "
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125:r_ggH_PTH_0_200_GE2J_MJJ_GE350[1,-25,25]' " 
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125:r_ggH_PTH_0_200_GE2J_MJJ_GE350[1,-25,25]' "
-    PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125:r_ggH_PTH_0_200_GE2J_MJJ_GE350[1,-25,25]' " 
+    PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125:r_ggH_PTH_0_200_GE2J_MJJ_GE350[1,-25,25]' "     
+    ##ggH, PTH 200+
+    MergedSignalNames.append("ggH_PTH_GE200")
+    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_200_300_htt125:r_ggH_PTH_GE200[1,-25,25]'"
+    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_300_450_htt125:r_ggH_PTH_GE200[1,-25,25]'"
+    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_450_600_htt125:r_ggH_PTH_GE200[1,-25,25]'"
+    PerMergedBinWorkSpaceCommand += "--PO map=.*/ggH_PTH_GE650_htt125:r_ggH_PTH_GE200[1,-25,25]'"
+
     PerMergedBinWorkSpaceCommand += CombinedCardName+" -o "+PerMergedBinName+" -m 125"
 
     logging.info("Per Merged Bin Work Space Command")
