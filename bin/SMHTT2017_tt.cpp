@@ -171,12 +171,14 @@ int main(int argc, char **argv)
                           TheFile,CategoryArgs);
 
       // Trg eff. 
+      /*
       std::cout<<"Trigger eff"<<std::endl;
       AddShapesIfNotEmpty({"CMS_doubletautrg_2017"},
                           JoinStr({ggH_STXS,qqH_STXS,{"VVL","STL","TTL","ZL","WH_htt125","ZH_htt125"}}),
                           &cb,
                           1.00,
                           TheFile,CategoryArgs);
+      */
 
       //Fake factors
       std::cout<<"Fake factors"<<std::endl;
