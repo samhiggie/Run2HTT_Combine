@@ -130,8 +130,8 @@ os.system(CardCombiningCommand)
 print("Setting up per signal workspace")
 PerSignalName = OutputDir+"Workspace_per_signal_breakdown_cmb_"+DateTag+".root"
 PerSignalWorkspaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH_htt125.*:r_ggH[1,-25,25]' "
-PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH_htt125.*:r_qqH[1,-25,25]' "
+PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
+PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/ZH_htt125.*:r_ZH[1,-25,25]' "
 PerSignalWorkspaceCommand+= CombinedCardName +" -o "+PerSignalName+" -m 125"
