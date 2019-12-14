@@ -12,27 +12,32 @@ def CreateSliceLines(category,originalHistogram,pad):
         or category == catConfig.et_boosted_GE2J_category
         or category == catConfig.em_boosted_1J_category
         or category == catConfig.em_boosted_GE2J_category
-        or category == catConfig.tt_vbf_high_category
-        or category == catConfig.tt_vbf_low_category):
+        
+        ):
         nSlices = 6
     elif (category == catConfig.mt_vbf_low_category          
-          or category == catConfig.em_vbf_low_category
-          or category == catConfig.mt_0jet_high_category          
+          or category == catConfig.em_vbf_low_category          
+          or category == catConfig.et_vbf_low_category
+          or category == catConfig.tt_vbf_high_category
+          or category == catConfig.tt_vbf_low_category
           ):
         nSlices = 5
-    elif (category == catConfig.et_vbf_low_category
-    or category == catConfig.et_0jet_high_category):
-        nSlices = 4
+    #elif (
+    #      ):
+    #    nSlices = 4
     elif (category == catConfig.mt_vbf_high_category
           or category == catConfig.et_vbf_high_category
-          or category == catConfig.em_vbf_high_category
+          or category == catConfig.em_vbf_high_category          
+          or category == catConfig.et_0jet_high_category
+          or category == catConfig.mt_0jet_high_category          
           or category == catConfig.mt_0jet_low_category
           or category == catConfig.et_0jet_low_category
           or category == catConfig.em_0jet_high_category
+          or category == catConfig.em_0jet_low_category
           ):
         nSlices = 3    
-    elif (category == catConfig.em_0jet_low_category):
-        nSlices = 2
+    #elif ():
+    #    nSlices = 2
     elif (category == catConfig.tt_0jet_category):
         nSlices = 0    
 
