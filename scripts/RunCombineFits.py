@@ -125,6 +125,9 @@ logging.info("Final Card Combining Command:")
 logging.info('\n\n'+CardCombiningCommand+'\n')
 os.system(CardCombiningCommand)
 
+return 
+exit
+
 
 #per signal card workspace set up
 print("Setting up per signal workspace")

@@ -408,10 +408,13 @@ def reBin(rb,histoDict,category):
 def makePlots(inputfile,rerollfile,recoBins,rollingBins,recobw,rb,category):
 
     histoDict={}
+    histonames = ["data_obs","ggH_htt125","qqH_htt125","embedded","ZL","TTT","TTL","STT","STL","jetFakes","VVT","VVL"]
 
     direct=inputfile.Get(category)
     for key in direct.GetListOfKeys():
-        histoDict[key.GetName()]=key.ReadObj()
+        if key.GetName() in histonames:
+            histoDict[key.GetName()]=key.ReadObj()
+
     #rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
     #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
     #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
@@ -537,9 +540,9 @@ def makePlots(inputfile,rerollfile,recoBins,rollingBins,recobw,rb,category):
 
     
     for histo in rerolledDict.keys():
-        if "ggH" in histo:
+        if "ggH_htt" in histo:
             sigstack.Add(rerolledDict[histo])
-        if "qqH" in histo:
+        if "qqH_htt" in histo:
             sigstack.Add(rerolledDict[histo])
         if "embedded" in histo:
             bkgstack.Add(rerolledDict[histo])
@@ -617,73 +620,108 @@ def makePlots(inputfile,rerollfile,recoBins,rollingBins,recobw,rb,category):
 
 
 
+    try:
+        rerolledRebinned["ggH_htt125"].SetFillStyle(0)
+        rerolledRebinned["ggH_htt125"].SetFillColor(ROOT.kBlue+2)
+        rerolledRebinned["ggH_htt125"].GetXaxis().SetTitle("m_{#tau#tau}")
+        rerolledRebinned["ggH_htt125"].GetYaxis().SetTitle("(Events/(bin width))  #cross S/(S+B)")
+        rerolledRebinned["ggH_htt125"].SetTitle("")
+        leg.AddEntry(rerolledRebinned["ggH_htt125"])
+        sigstack2.Add(rerolledRebinned["ggH_htt125"])
+    except:
+        print "error no ggH"
+    try: 
+        rerolledRebinned["qqH_htt125"].SetFillStyle(0)
+        rerolledRebinned["qqH_htt125"].SetFillColor(ROOT.kRed)
+        leg.AddEntry(rerolledRebinned["qqH_htt125"])
+        sigstack2.Add(rerolledRebinned["qqH_htt125"])
+    except:
+        print "problem with qqH"
 
-    rerolledRebinned["ggH_htt125"].SetFillStyle(0)
-    rerolledRebinned["ggH_htt125"].SetFillColor(ROOT.kBlue+2)
-    rerolledRebinned["ggH_htt125"].GetXaxis().SetTitle("m_{#tau#tau}")
-    rerolledRebinned["ggH_htt125"].GetYaxis().SetTitle("(Events/(bin width))  #cross S/(S+B)")
-    rerolledRebinned["ggH_htt125"].SetTitle("")
-    leg.AddEntry(rerolledRebinned["ggH_htt125"])
-    sigstack2.Add(rerolledRebinned["ggH_htt125"])
+    try: 
+        rerolledRebinned["jetFakes"].SetFillStyle(1001)
+        rerolledRebinned["jetFakes"].SetFillColor(ROOT.kSpring+6)
+        leg.AddEntry(rerolledRebinned["jetFakes"])
+        bkgstack2.Add(rerolledRebinned["jetFakes"])
+    except:
+        print "problem with jetFakes"
+      
+    try:
+        rerolledRebinned["ZL"].SetFillStyle(1001)
+        rerolledRebinned["ZL"].SetFillColor(ROOT.kAzure-9)
+        leg.AddEntry(rerolledRebinned["ZL"])
+        bkgstack2.Add(rerolledRebinned["ZL"])
+    except:
+        print "problem with ZL"
 
-    rerolledRebinned["qqH_htt125"].SetFillStyle(0)
-    rerolledRebinned["qqH_htt125"].SetFillColor(ROOT.kRed)
-    leg.AddEntry(rerolledRebinned["qqH_htt125"])
-    sigstack2.Add(rerolledRebinned["qqH_htt125"])
+    try:
+        rerolledRebinned["TTT"].SetFillStyle(1001)
+        rerolledRebinned["TTT"].SetFillColor(ROOT.kBlue-8)
+        leg.AddEntry(rerolledRebinned["TTT"])
+        bkgstack2.Add(rerolledRebinned["TTT"])
+    except:
+        print "problem with TTT"
+      
+    try:
+        rerolledRebinned["TTL"].SetFillStyle(1001)
+        rerolledRebinned["TTL"].SetFillColor(ROOT.kBlue-8)
+        leg.AddEntry(rerolledRebinned["TTL"])
+        bkgstack2.Add(rerolledRebinned["TTL"])
+    except:
+        print "problem with TTL"
 
-    rerolledRebinned["jetFakes"].SetFillStyle(1001)
-    rerolledRebinned["jetFakes"].SetFillColor(ROOT.kSpring+6)
-    leg.AddEntry(rerolledRebinned["jetFakes"])
-    bkgstack2.Add(rerolledRebinned["jetFakes"])
+    try:
+        rerolledRebinned["STL"].SetFillStyle(1001)
+        rerolledRebinned["STL"].SetFillColor(ROOT.kBlue)
+        leg.AddEntry(rerolledRebinned["STL"])
+        bkgstack2.Add(rerolledRebinned["STL"])
+    except:
+        print "problem with STL"
 
-    rerolledRebinned["ZL"].SetFillStyle(1001)
-    rerolledRebinned["ZL"].SetFillColor(ROOT.kAzure-9)
-    leg.AddEntry(rerolledRebinned["ZL"])
-    bkgstack2.Add(rerolledRebinned["ZL"])
+    try:
+        rerolledRebinned["STT"].SetFillStyle(1001)
+        rerolledRebinned["STT"].SetFillColor(ROOT.kBlue)
+        leg.AddEntry(rerolledRebinned["STT"])
+        bkgstack2.Add(rerolledRebinned["STT"])
+    except:
+        print "problem with STT"
 
-    rerolledRebinned["TTT"].SetFillStyle(1001)
-    rerolledRebinned["TTT"].SetFillColor(ROOT.kBlue-8)
-    leg.AddEntry(rerolledRebinned["TTT"])
-    bkgstack2.Add(rerolledRebinned["TTT"])
+    try:
+        rerolledRebinned["VVL"].SetFillStyle(1001)
+        rerolledRebinned["VVL"].SetFillColor(ROOT.kRed-6)
+        leg.AddEntry(rerolledRebinned["VVL"])
+        bkgstack2.Add(rerolledRebinned["VVL"])
+    except:
+        print "problem with VVL"
 
-    rerolledRebinned["TTL"].SetFillStyle(1001)
-    rerolledRebinned["TTL"].SetFillColor(ROOT.kBlue-8)
-    leg.AddEntry(rerolledRebinned["TTL"])
-    bkgstack2.Add(rerolledRebinned["TTL"])
+    try:
+        rerolledRebinned["VVT"].SetFillStyle(1001)
+        rerolledRebinned["VVT"].SetFillColor(ROOT.kRed-6)
+        leg.AddEntry(rerolledRebinned["VVT"])
+        bkgstack2.Add(rerolledRebinned["VVT"])
+    except:
+        print "problem with VVT"
 
-    rerolledRebinned["STL"].SetFillStyle(1001)
-    rerolledRebinned["STL"].SetFillColor(ROOT.kBlue)
-    leg.AddEntry(rerolledRebinned["STL"])
-    bkgstack2.Add(rerolledRebinned["STL"])
-
-    rerolledRebinned["STT"].SetFillStyle(1001)
-    rerolledRebinned["STT"].SetFillColor(ROOT.kBlue)
-    leg.AddEntry(rerolledRebinned["STT"])
-    bkgstack2.Add(rerolledRebinned["STT"])
-
-    rerolledRebinned["VVL"].SetFillStyle(1001)
-    rerolledRebinned["VVL"].SetFillColor(ROOT.kRed-6)
-    leg.AddEntry(rerolledRebinned["VVL"])
-    bkgstack2.Add(rerolledRebinned["VVL"])
-
-    rerolledRebinned["VVT"].SetFillStyle(1001)
-    rerolledRebinned["VVT"].SetFillColor(ROOT.kRed-6)
-    leg.AddEntry(rerolledRebinned["VVT"])
-    bkgstack2.Add(rerolledRebinned["VVT"])
-
-    rerolledRebinned["embedded"].SetFillStyle(1001)
-    rerolledRebinned["embedded"].SetFillColor(ROOT.kOrange-4)
-    leg.AddEntry(rerolledRebinned["embedded"])
-    bkgstack2.Add(rerolledRebinned["embedded"])
+    try:
+        rerolledRebinned["embedded"].SetFillStyle(1001)
+        rerolledRebinned["embedded"].SetFillColor(ROOT.kOrange-4)
+        leg.AddEntry(rerolledRebinned["embedded"])
+        bkgstack2.Add(rerolledRebinned["embedded"])
+    except:
+        print "problem with embedded"
 
 
-    rerolledRebinned["data_obs"].SetMarkerStyle(20)
-    rerolledRebinned["data_obs"].SetMarkerSize(1)
-    rerolledRebinned["data_obs"].SetLineWidth(2)
-    rerolledRebinned["data_obs"].SetLineColor(ROOT.kBlack)
-    dataclone2 = rerolledRebinned["data_obs"].Clone()
-    leg.AddEntry(rerolledRebinned["data_obs"])
 
+    try:
+        rerolledRebinned["data_obs"].SetMarkerStyle(20)
+        rerolledRebinned["data_obs"].SetMarkerSize(1)
+        rerolledRebinned["data_obs"].SetLineWidth(2)
+        rerolledRebinned["data_obs"].SetLineColor(ROOT.kBlack)
+        dataclone2 = rerolledRebinned["data_obs"].Clone()
+        leg.AddEntry(rerolledRebinned["data_obs"])
+    except:
+        print "problem with data"
+  
     bkgstack2.Print()
     sigstack2.Print()
     c.cd()
@@ -776,8 +814,6 @@ def main():
     fhisto=ROOT.TFile.Open("HaddedFitHisto.root","READ")
 
     rerollfile = ROOT.TFile.Open("rerolled.root","recreate")
-
-    histonames = ["data_obs","ggH_htt","qqH_htt","embedded","ZL","TTT","TTL","STT","STL","jetFakes","VVT","VVL"]
 
     mt_0jet_PTH_0_10_2018_prefit  ={}                                                                             
     mt_0jet_PTH_GE10_2018_prefit  ={}  
@@ -908,16 +944,14 @@ def main():
     mt_vbf_PTH_GE_200_2018_sb = mt_vbf_PTH_GE_200_2018_subplot
     #Merge the categories
     print "merging the categories"
-    
     masterDictionary=mt_0jet_PTH_0_10_2018
     masterDictionary_sb=mt_0jet_PTH_0_10_2018_sb
     #masterDictionary=mt_boosted_GE2J_2018
     #masterDictionary_sb=mt_boosted_GE2J_2018_sb
-    print "all the histos",masterDictionary.keys()
 
     for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
+        print "Working on merging ",histo
+        try: 
             masterDictionary[histo].Add(mt_0jet_PTH_GE10_2018[histo])         
             masterDictionary[histo].Add(mt_boosted_1J_2018[histo])   
             masterDictionary[histo].Add(mt_boosted_GE2J_2018[histo])  
@@ -928,8 +962,464 @@ def main():
             masterDictionary_sb[histo].Add(mt_boosted_GE2J_2018_subplot[histo])  
             masterDictionary_sb[histo].Add(mt_vbf_PTH_0_200_2018_subplot[histo]) 
             masterDictionary_sb[histo].Add(mt_vbf_PTH_GE_200_2018_subplot[histo])
+        except:
+            print "problem with mt merge"
 
 
+    #Double hadronic tau
+    tt_0jet_2018_prefit  ={}  
+    tt_boosted_onejet_2018_prefit     ={}  
+    tt_boosted_multijet_2018_prefit   ={}  
+    tt_vbf_highHpT_2018_prefit  ={}  
+    tt_vbf_lowHpT_2018_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_0jet_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_2018_prefit")                                                             
+
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_onejet_2018_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_onejet_2018_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_multijet_2018_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_multijet_2018_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_highHpT_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_highHpT_2018_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_lowHpT_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_lowHpT_2018_prefit")
+
+    #Rebin the histograms 
+    print "combining bins"
+    #tt_0jet_2018  = reBin(rb,tt_0jet_2018_prefit,"tt_0jet_2018_prefit")
+    #tt_boosted_onejet_2018     = reBin(rb,tt_boosted_onejet_2018_prefit,"tt_boosted_onejet_2018_prefit") 
+    #tt_boosted_multijet_2018   = reBin(rb,tt_boosted_multijet_2018_prefit,"tt_boosted_multijet_2018_prefit")           
+    #tt_vbf_highHpT_2018  = reBin(rb,tt_vbf_highHpT_2018_prefit,"tt_vbf_highHpT_2018_prefit")
+    #tt_vbf_lowHpT_2018 = reBin(rb,tt_vbf_lowHpT_2018_prefit,"tt_vbf_lowHpT_2018_prefit")                                                     
+
+
+    tt_0jet_2018  = tt_0jet_2018_prefit
+    tt_boosted_onejet_2018     = tt_boosted_onejet_2018_prefit
+    tt_boosted_multijet_2018   = tt_boosted_multijet_2018_prefit
+    tt_vbf_highHpT_2018  = tt_vbf_highHpT_2018_prefit
+    tt_vbf_lowHpT_2018 = tt_vbf_lowHpT_2018_prefit
+
+
+
+    tt_0jet_2018_subplot  ={}  
+    tt_boosted_onejet_2018_subplot     ={}  
+    tt_boosted_multijet_2018_subplot   ={}  
+    tt_vbf_highHpT_2018_subplot  ={}  
+    tt_vbf_lowHpT_2018_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_0jet_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_2018_prefit")                                                             
+
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_onejet_2018_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_onejet_2018_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_multijet_2018_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_multijet_2018_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_highHpT_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_highHpT_2018_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_lowHpT_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_lowHpT_2018_prefit")
+
+
+    #Rebin the histograms 
+    print "combining bins"
+    #tt_0jet_PTH_0_10_2018_sb = reBin(rb,tt_0jet_PTH_0_10_2018_subplot,"tt_0jet_PTH_0_10_2018_subplot")       
+    #tt_0jet_2018_sb = reBin(rb,tt_0jet_2018_subplot,"tt_0jet_2018_subplot")
+    #tt_boosted_onejet_2018_sb = reBin(rb,tt_boosted_onejet_2018_subplot,"tt_boosted_onejet_2018_subplot") 
+    #tt_boosted_multijet_2018_sb = reBin(rb,tt_boosted_multijet_2018_subplot,"tt_boosted_multijet_2018_subplot")           
+    #tt_vbf_highHpT_2018_sb = reBin(rb,tt_vbf_highHpT_2018_subplot,"tt_vbf_highHpT_2018_subplot")
+    #tt_vbf_lowHpT_2018_sb = reBin(rb,tt_vbf_lowHpT_2018_subplot,"tt_vbf_lowHpT_2018_subplot")                                                     
+
+    tt_0jet_2018_sb  = tt_0jet_2018_subplot
+    tt_boosted_onejet_2018_sb     = tt_boosted_onejet_2018_subplot
+    tt_boosted_multijet_2018_sb   = tt_boosted_multijet_2018_subplot
+    tt_vbf_highHpT_2018_sb  = tt_vbf_highHpT_2018_subplot
+    tt_vbf_lowHpT_2018_sb = tt_vbf_lowHpT_2018_subplot
+
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(tt_0jet_2018[histo])         
+            masterDictionary[histo].Add(tt_boosted_onejet_2018[histo])   
+            masterDictionary[histo].Add(tt_boosted_multijet_2018[histo])  
+            masterDictionary[histo].Add(tt_vbf_highHpT_2018[histo]) 
+            masterDictionary[histo].Add(tt_vbf_lowHpT_2018[histo])
+            masterDictionary_sb[histo].Add(tt_0jet_2018_subplot[histo])         
+            masterDictionary_sb[histo].Add(tt_boosted_onejet_2018_subplot[histo])   
+            masterDictionary_sb[histo].Add(tt_boosted_multijet_2018_subplot[histo])  
+            masterDictionary_sb[histo].Add(tt_vbf_highHpT_2018_subplot[histo]) 
+            masterDictionary_sb[histo].Add(tt_vbf_lowHpT_2018_subplot[histo])
+        except:
+            print "problem with tt merge"
+        
+    #electron-tau
+    et_0jetlow_2018_prefit  ={}                                                                             
+    et_0jethigh_2018_prefit  ={}  
+    et_boosted1_2018_prefit     ={}  
+    et_boosted2_2018_prefit   ={}  
+    et_vbflow_2018_prefit  ={}  
+    et_vbfhigh_2018_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2018_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2018_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #electron-tau
+    et_0jetlow_2018_prefit  ={}                                                                             
+    et_0jethigh_2018_prefit  ={}  
+    et_boosted1_2018_prefit     ={}  
+    et_boosted2_2018_prefit   ={}  
+    et_vbflow_2018_prefit  ={}  
+    et_vbfhigh_2018_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2018_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2018_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted1_2018_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted1_2018_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted2_2018_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted2_2018_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbflow_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbflow_2018_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbfhigh_2018_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbfhigh_2018_prefit")                                                   
+
+    #Rebin the histograms 
+    print "combining bins"
+    #et_0jetlow_2018  = reBin(rb,et_0jetlow_2018_prefit,"et_0jetlow_2018_prefit")       
+    #et_0jethigh_2018  = reBin(rb,et_0jethigh_2018_prefit,"et_0jethigh_2018_prefit")
+    #et_boosted1_2018     = reBin(rb,et_boosted1_2018_prefit,"et_boosted1_2018_prefit") 
+    #et_boosted2_2018   = reBin(rb,et_boosted2_2018_prefit,"et_boosted2_2018_prefit")           
+    #et_vbflow_2018  = reBin(rb,et_vbflow_2018_prefit,"et_vbflow_2018_prefit")
+    #et_vbfhigh_2018 = reBin(rb,et_vbfhigh_2018_prefit,"et_vbfhigh_2018_prefit")                                                     
+
+
+    et_0jetlow_2018  = et_0jetlow_2018_prefit
+    et_0jethigh_2018  = et_0jethigh_2018_prefit
+    et_boosted1_2018     = et_boosted1_2018_prefit
+    et_boosted2_2018   = et_boosted2_2018_prefit
+    et_vbflow_2018  = et_vbflow_2018_prefit
+    et_vbfhigh_2018 = et_vbfhigh_2018_prefit
+
+
+
+    et_0jetlow_2018_subplot  ={}                                                                             
+    et_0jethigh_2018_subplot  ={}  
+    et_boosted1_2018_subplot     ={}  
+    et_boosted2_2018_subplot   ={}  
+    et_vbflow_2018_subplot  ={}  
+    et_vbfhigh_2018_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2018_prefit")                                                             
+
+    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2018_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted1_2018_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted1_2018_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted2_2018_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted2_2018_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbflow_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbflow_2018_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbfhigh_2018_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbfhigh_2018_prefit")                                                   
+    #Rebin the histograms 
+    print "combining bins"
+    #et_0jetlow_2018_sb = reBin(rb,et_0jetlow_2018_subplot,"et_0jetlow_2018_subplot")       
+    #et_0jethigh_2018_sb = reBin(rb,et_0jethigh_2018_subplot,"et_0jethigh_2018_subplot")
+    #et_boosted1_2018_sb = reBin(rb,et_boosted1_2018_subplot,"et_boosted1_2018_subplot") 
+    #et_boosted2_2018_sb = reBin(rb,et_boosted2_2018_subplot,"et_boosted2_2018_subplot")           
+    #et_vbflow_2018_sb = reBin(rb,et_vbflow_2018_subplot,"et_vbflow_2018_subplot")
+    #et_vbfhigh_2018_sb = reBin(rb,et_vbfhigh_2018_subplot,"et_vbfhigh_2018_subplot")                                                     
+    et_0jetlow_2018_sb  = et_0jetlow_2018_subplot
+    et_0jethigh_2018_sb  = et_0jethigh_2018_subplot
+    et_boosted1_2018_sb     = et_boosted1_2018_subplot
+    et_boosted2_2018_sb   = et_boosted2_2018_subplot
+    et_vbflow_2018_sb  = et_vbflow_2018_subplot
+    et_vbfhigh_2018_sb = et_vbfhigh_2018_subplot
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(et_0jethigh_2018[histo])         
+            masterDictionary[histo].Add(et_boosted1_2018[histo])   
+            masterDictionary[histo].Add(et_boosted2_2018[histo])  
+            masterDictionary[histo].Add(et_vbflow_2018[histo]) 
+            masterDictionary[histo].Add(et_vbfhigh_2018[histo])
+            masterDictionary_sb[histo].Add(et_0jethigh_2018_subplot[histo])         
+            masterDictionary_sb[histo].Add(et_boosted1_2018_subplot[histo])   
+            masterDictionary_sb[histo].Add(et_boosted2_2018_subplot[histo])  
+            masterDictionary_sb[histo].Add(et_vbflow_2018_subplot[histo]) 
+            masterDictionary_sb[histo].Add(et_vbfhigh_2018_subplot[histo])
+        except:
+            print "problem with et merge"
+    
+    #electron-muon
+    em_0jetlow_2018_prefit  ={}                                                                             
+    em_0jethigh_2018_prefit  ={}  
+    em_boosted1_2018_prefit     ={}  
+    em_boosted2_2018_prefit   ={}  
+    em_vbflow_2018_prefit  ={}  
+    em_vbfhigh_2018_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jetlow_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jetlow_2018_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jethigh_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jethigh_2018_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted1_2018_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted1_2018_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted2_2018_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted2_2018_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbflow_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbflow_2018_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbfhigh_2018_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbfhigh_2018_prefit")                                                   
+
+    #Rebin the histograms 
+    print "combining bins"
+    #em_0jetlow_2018  = reBin(rb,em_0jetlow_2018_prefit,"em_0jetlow_2018_prefit")       
+    #em_0jethigh_2018  = reBin(rb,em_0jethigh_2018_prefit,"em_0jethigh_2018_prefit")
+    #em_boosted1_2018     = reBin(rb,em_boosted1_2018_prefit,"em_boosted1_2018_prefit") 
+    #em_boosted2_2018   = reBin(rb,em_boosted2_2018_prefit,"em_boosted2_2018_prefit")           
+    #em_vbflow_2018  = reBin(rb,em_vbflow_2018_prefit,"em_vbflow_2018_prefit")
+    #em_vbfhigh_2018 = reBin(rb,em_vbfhigh_2018_prefit,"em_vbfhigh_2018_prefit")                                                     
+
+
+    em_0jetlow_2018  = em_0jetlow_2018_prefit
+    em_0jethigh_2018  = em_0jethigh_2018_prefit
+    em_boosted1_2018     = em_boosted1_2018_prefit
+    em_boosted2_2018   = em_boosted2_2018_prefit
+    em_vbflow_2018  = em_vbflow_2018_prefit
+    em_vbfhigh_2018 = em_vbfhigh_2018_prefit
+
+
+
+    em_0jetlow_2018_subplot  ={}                                                                             
+    em_0jethigh_2018_subplot  ={}  
+    em_boosted1_2018_subplot     ={}  
+    em_boosted2_2018_subplot   ={}  
+    em_vbflow_2018_subplot  ={}  
+    em_vbfhigh_2018_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jetlow_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jetlow_2018_prefit")                                                             
+
+    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jethigh_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jethigh_2018_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted1_2018_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted1_2018_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted2_2018_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted2_2018_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbflow_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbflow_2018_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbfhigh_2018_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbfhigh_2018_prefit")                                                   
+    #Rebin the histograms 
+    print "combining bins"
+    #em_0jetlow_2018_sb = reBin(rb,em_0jetlow_2018_subplot,"em_0jetlow_2018_subplot")       
+    #em_0jethigh_2018_sb = reBin(rb,em_0jethigh_2018_subplot,"em_0jethigh_2018_subplot")
+    #em_boosted1_2018_sb = reBin(rb,em_boosted1_2018_subplot,"em_boosted1_2018_subplot") 
+    #em_boosted2_2018_sb = reBin(rb,em_boosted2_2018_subplot,"em_boosted2_2018_subplot")           
+    #em_vbflow_2018_sb = reBin(rb,em_vbflow_2018_subplot,"em_vbflow_2018_subplot")
+    #em_vbfhigh_2018_sb = reBin(rb,em_vbfhigh_2018_subplot,"em_vbfhigh_2018_subplot")                                                     
+    em_0jetlow_2018_sb  = em_0jetlow_2018_subplot
+    em_0jethigh_2018_sb  = em_0jethigh_2018_subplot
+    em_boosted1_2018_sb     = em_boosted1_2018_subplot
+    em_boosted2_2018_sb   = em_boosted2_2018_subplot
+    em_vbflow_2018_sb  = em_vbflow_2018_subplot
+    em_vbfhigh_2018_sb = em_vbfhigh_2018_subplot
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(em_0jethigh_2018[histo])         
+            masterDictionary[histo].Add(em_boosted1_2018[histo])   
+            masterDictionary[histo].Add(em_boosted2_2018[histo])  
+            masterDictionary[histo].Add(em_vbflow_2018[histo]) 
+            masterDictionary[histo].Add(em_vbfhigh_2018[histo])
+            masterDictionary_sb[histo].Add(em_0jethigh_2018_subplot[histo])         
+            masterDictionary_sb[histo].Add(em_boosted1_2018_subplot[histo])   
+            masterDictionary_sb[histo].Add(em_boosted2_2018_subplot[histo])  
+            masterDictionary_sb[histo].Add(em_vbflow_2018_subplot[histo]) 
+            masterDictionary_sb[histo].Add(em_vbfhigh_2018_subplot[histo])
+        except:
+            print "problem with em merge"
 
     mt_0jet_PTH_0_10_2017_prefit  ={}                                                                             
     mt_0jet_PTH_GE10_2017_prefit  ={}  
@@ -1062,10 +1552,8 @@ def main():
     print "merging the categories"
 
     for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(mt_0jet_PTH_0_10_2017[histo])         
-            masterDictionary_sb[histo].Add(mt_0jet_PTH_0_10_2017_subplot[histo])         
+        print "Working on merging ",histo
+        try: 
             masterDictionary[histo].Add(mt_0jet_PTH_GE10_2017[histo])         
             masterDictionary[histo].Add(mt_boosted_1J_2017[histo])   
             masterDictionary[histo].Add(mt_boosted_GE2J_2017[histo])  
@@ -1076,6 +1564,464 @@ def main():
             masterDictionary_sb[histo].Add(mt_boosted_GE2J_2017_subplot[histo])  
             masterDictionary_sb[histo].Add(mt_vbf_PTH_0_200_2017_subplot[histo]) 
             masterDictionary_sb[histo].Add(mt_vbf_PTH_GE_200_2017_subplot[histo])
+        except:
+            print "problem with mt merge"
+
+
+    #Double hadronic tau
+    tt_0jet_2017_prefit  ={}  
+    tt_boosted_onejet_2017_prefit     ={}  
+    tt_boosted_multijet_2017_prefit   ={}  
+    tt_vbf_highHpT_2017_prefit  ={}  
+    tt_vbf_lowHpT_2017_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_0jet_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_2017_prefit")                                                             
+
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_onejet_2017_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_onejet_2017_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_multijet_2017_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_multijet_2017_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_highHpT_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_highHpT_2017_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_lowHpT_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_lowHpT_2017_prefit")
+
+    #Rebin the histograms 
+    print "combining bins"
+    #tt_0jet_2017  = reBin(rb,tt_0jet_2017_prefit,"tt_0jet_2017_prefit")
+    #tt_boosted_onejet_2017     = reBin(rb,tt_boosted_onejet_2017_prefit,"tt_boosted_onejet_2017_prefit") 
+    #tt_boosted_multijet_2017   = reBin(rb,tt_boosted_multijet_2017_prefit,"tt_boosted_multijet_2017_prefit")           
+    #tt_vbf_highHpT_2017  = reBin(rb,tt_vbf_highHpT_2017_prefit,"tt_vbf_highHpT_2017_prefit")
+    #tt_vbf_lowHpT_2017 = reBin(rb,tt_vbf_lowHpT_2017_prefit,"tt_vbf_lowHpT_2017_prefit")                                                     
+
+
+    tt_0jet_2017  = tt_0jet_2017_prefit
+    tt_boosted_onejet_2017     = tt_boosted_onejet_2017_prefit
+    tt_boosted_multijet_2017   = tt_boosted_multijet_2017_prefit
+    tt_vbf_highHpT_2017  = tt_vbf_highHpT_2017_prefit
+    tt_vbf_lowHpT_2017 = tt_vbf_lowHpT_2017_prefit
+
+
+
+    tt_0jet_2017_subplot  ={}  
+    tt_boosted_onejet_2017_subplot     ={}  
+    tt_boosted_multijet_2017_subplot   ={}  
+    tt_vbf_highHpT_2017_subplot  ={}  
+    tt_vbf_lowHpT_2017_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_0jet_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_2017_prefit")                                                             
+
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_onejet_2017_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_onejet_2017_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_boosted_multijet_2017_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_multijet_2017_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_highHpT_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_highHpT_2017_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    tt_vbf_lowHpT_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_lowHpT_2017_prefit")
+
+
+    #Rebin the histograms 
+    print "combining bins"
+    #tt_0jet_PTH_0_10_2017_sb = reBin(rb,tt_0jet_PTH_0_10_2017_subplot,"tt_0jet_PTH_0_10_2017_subplot")       
+    #tt_0jet_2017_sb = reBin(rb,tt_0jet_2017_subplot,"tt_0jet_2017_subplot")
+    #tt_boosted_onejet_2017_sb = reBin(rb,tt_boosted_onejet_2017_subplot,"tt_boosted_onejet_2017_subplot") 
+    #tt_boosted_multijet_2017_sb = reBin(rb,tt_boosted_multijet_2017_subplot,"tt_boosted_multijet_2017_subplot")           
+    #tt_vbf_highHpT_2017_sb = reBin(rb,tt_vbf_highHpT_2017_subplot,"tt_vbf_highHpT_2017_subplot")
+    #tt_vbf_lowHpT_2017_sb = reBin(rb,tt_vbf_lowHpT_2017_subplot,"tt_vbf_lowHpT_2017_subplot")                                                     
+
+    tt_0jet_2017_sb  = tt_0jet_2017_subplot
+    tt_boosted_onejet_2017_sb     = tt_boosted_onejet_2017_subplot
+    tt_boosted_multijet_2017_sb   = tt_boosted_multijet_2017_subplot
+    tt_vbf_highHpT_2017_sb  = tt_vbf_highHpT_2017_subplot
+    tt_vbf_lowHpT_2017_sb = tt_vbf_lowHpT_2017_subplot
+
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(tt_0jet_2017[histo])         
+            masterDictionary[histo].Add(tt_boosted_onejet_2017[histo])   
+            masterDictionary[histo].Add(tt_boosted_multijet_2017[histo])  
+            masterDictionary[histo].Add(tt_vbf_highHpT_2017[histo]) 
+            masterDictionary[histo].Add(tt_vbf_lowHpT_2017[histo])
+            masterDictionary_sb[histo].Add(tt_0jet_2017_subplot[histo])         
+            masterDictionary_sb[histo].Add(tt_boosted_onejet_2017_subplot[histo])   
+            masterDictionary_sb[histo].Add(tt_boosted_multijet_2017_subplot[histo])  
+            masterDictionary_sb[histo].Add(tt_vbf_highHpT_2017_subplot[histo]) 
+            masterDictionary_sb[histo].Add(tt_vbf_lowHpT_2017_subplot[histo])
+        except:
+            print "problem with tt merge"
+        
+    #electron-tau
+    et_0jetlow_2017_prefit  ={}                                                                             
+    et_0jethigh_2017_prefit  ={}  
+    et_boosted1_2017_prefit     ={}  
+    et_boosted2_2017_prefit   ={}  
+    et_vbflow_2017_prefit  ={}  
+    et_vbfhigh_2017_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2017_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2017_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #electron-tau
+    et_0jetlow_2017_prefit  ={}                                                                             
+    et_0jethigh_2017_prefit  ={}  
+    et_boosted1_2017_prefit     ={}  
+    et_boosted2_2017_prefit   ={}  
+    et_vbflow_2017_prefit  ={}  
+    et_vbfhigh_2017_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2017_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2017_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted1_2017_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted1_2017_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted2_2017_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted2_2017_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbflow_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbflow_2017_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbfhigh_2017_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbfhigh_2017_prefit")                                                   
+
+    #Rebin the histograms 
+    print "combining bins"
+    #et_0jetlow_2017  = reBin(rb,et_0jetlow_2017_prefit,"et_0jetlow_2017_prefit")       
+    #et_0jethigh_2017  = reBin(rb,et_0jethigh_2017_prefit,"et_0jethigh_2017_prefit")
+    #et_boosted1_2017     = reBin(rb,et_boosted1_2017_prefit,"et_boosted1_2017_prefit") 
+    #et_boosted2_2017   = reBin(rb,et_boosted2_2017_prefit,"et_boosted2_2017_prefit")           
+    #et_vbflow_2017  = reBin(rb,et_vbflow_2017_prefit,"et_vbflow_2017_prefit")
+    #et_vbfhigh_2017 = reBin(rb,et_vbfhigh_2017_prefit,"et_vbfhigh_2017_prefit")                                                     
+
+
+    et_0jetlow_2017  = et_0jetlow_2017_prefit
+    et_0jethigh_2017  = et_0jethigh_2017_prefit
+    et_boosted1_2017     = et_boosted1_2017_prefit
+    et_boosted2_2017   = et_boosted2_2017_prefit
+    et_vbflow_2017  = et_vbflow_2017_prefit
+    et_vbfhigh_2017 = et_vbfhigh_2017_prefit
+
+
+
+    et_0jetlow_2017_subplot  ={}                                                                             
+    et_0jethigh_2017_subplot  ={}  
+    et_boosted1_2017_subplot     ={}  
+    et_boosted2_2017_subplot   ={}  
+    et_vbflow_2017_subplot  ={}  
+    et_vbfhigh_2017_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2017_prefit")                                                             
+
+    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2017_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted1_2017_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted1_2017_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted2_2017_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted2_2017_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbflow_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbflow_2017_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbfhigh_2017_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbfhigh_2017_prefit")                                                   
+    #Rebin the histograms 
+    print "combining bins"
+    #et_0jetlow_2017_sb = reBin(rb,et_0jetlow_2017_subplot,"et_0jetlow_2017_subplot")       
+    #et_0jethigh_2017_sb = reBin(rb,et_0jethigh_2017_subplot,"et_0jethigh_2017_subplot")
+    #et_boosted1_2017_sb = reBin(rb,et_boosted1_2017_subplot,"et_boosted1_2017_subplot") 
+    #et_boosted2_2017_sb = reBin(rb,et_boosted2_2017_subplot,"et_boosted2_2017_subplot")           
+    #et_vbflow_2017_sb = reBin(rb,et_vbflow_2017_subplot,"et_vbflow_2017_subplot")
+    #et_vbfhigh_2017_sb = reBin(rb,et_vbfhigh_2017_subplot,"et_vbfhigh_2017_subplot")                                                     
+    et_0jetlow_2017_sb  = et_0jetlow_2017_subplot
+    et_0jethigh_2017_sb  = et_0jethigh_2017_subplot
+    et_boosted1_2017_sb     = et_boosted1_2017_subplot
+    et_boosted2_2017_sb   = et_boosted2_2017_subplot
+    et_vbflow_2017_sb  = et_vbflow_2017_subplot
+    et_vbfhigh_2017_sb = et_vbfhigh_2017_subplot
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(et_0jethigh_2017[histo])         
+            masterDictionary[histo].Add(et_boosted1_2017[histo])   
+            masterDictionary[histo].Add(et_boosted2_2017[histo])  
+            masterDictionary[histo].Add(et_vbflow_2017[histo]) 
+            masterDictionary[histo].Add(et_vbfhigh_2017[histo])
+            masterDictionary_sb[histo].Add(et_0jethigh_2017_subplot[histo])         
+            masterDictionary_sb[histo].Add(et_boosted1_2017_subplot[histo])   
+            masterDictionary_sb[histo].Add(et_boosted2_2017_subplot[histo])  
+            masterDictionary_sb[histo].Add(et_vbflow_2017_subplot[histo]) 
+            masterDictionary_sb[histo].Add(et_vbfhigh_2017_subplot[histo])
+        except:
+            print "problem with et merge"
+    
+    #electron-muon
+    em_0jetlow_2017_prefit  ={}                                                                             
+    em_0jethigh_2017_prefit  ={}  
+    em_boosted1_2017_prefit     ={}  
+    em_boosted2_2017_prefit   ={}  
+    em_vbflow_2017_prefit  ={}  
+    em_vbfhigh_2017_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jetlow_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jetlow_2017_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jethigh_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jethigh_2017_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted1_2017_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted1_2017_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted2_2017_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted2_2017_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbflow_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbflow_2017_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbfhigh_2017_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbfhigh_2017_prefit")                                                   
+
+    #Rebin the histograms 
+    print "combining bins"
+    #em_0jetlow_2017  = reBin(rb,em_0jetlow_2017_prefit,"em_0jetlow_2017_prefit")       
+    #em_0jethigh_2017  = reBin(rb,em_0jethigh_2017_prefit,"em_0jethigh_2017_prefit")
+    #em_boosted1_2017     = reBin(rb,em_boosted1_2017_prefit,"em_boosted1_2017_prefit") 
+    #em_boosted2_2017   = reBin(rb,em_boosted2_2017_prefit,"em_boosted2_2017_prefit")           
+    #em_vbflow_2017  = reBin(rb,em_vbflow_2017_prefit,"em_vbflow_2017_prefit")
+    #em_vbfhigh_2017 = reBin(rb,em_vbfhigh_2017_prefit,"em_vbfhigh_2017_prefit")                                                     
+
+
+    em_0jetlow_2017  = em_0jetlow_2017_prefit
+    em_0jethigh_2017  = em_0jethigh_2017_prefit
+    em_boosted1_2017     = em_boosted1_2017_prefit
+    em_boosted2_2017   = em_boosted2_2017_prefit
+    em_vbflow_2017  = em_vbflow_2017_prefit
+    em_vbfhigh_2017 = em_vbfhigh_2017_prefit
+
+
+
+    em_0jetlow_2017_subplot  ={}                                                                             
+    em_0jethigh_2017_subplot  ={}  
+    em_boosted1_2017_subplot     ={}  
+    em_boosted2_2017_subplot   ={}  
+    em_vbflow_2017_subplot  ={}  
+    em_vbfhigh_2017_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jetlow_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jetlow_2017_prefit")                                                             
+
+    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_0jethigh_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jethigh_2017_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted1_2017_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted1_2017_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_boosted2_2017_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted2_2017_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbflow_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbflow_2017_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    em_vbfhigh_2017_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbfhigh_2017_prefit")                                                   
+    #Rebin the histograms 
+    print "combining bins"
+    #em_0jetlow_2017_sb = reBin(rb,em_0jetlow_2017_subplot,"em_0jetlow_2017_subplot")       
+    #em_0jethigh_2017_sb = reBin(rb,em_0jethigh_2017_subplot,"em_0jethigh_2017_subplot")
+    #em_boosted1_2017_sb = reBin(rb,em_boosted1_2017_subplot,"em_boosted1_2017_subplot") 
+    #em_boosted2_2017_sb = reBin(rb,em_boosted2_2017_subplot,"em_boosted2_2017_subplot")           
+    #em_vbflow_2017_sb = reBin(rb,em_vbflow_2017_subplot,"em_vbflow_2017_subplot")
+    #em_vbfhigh_2017_sb = reBin(rb,em_vbfhigh_2017_subplot,"em_vbfhigh_2017_subplot")                                                     
+    em_0jetlow_2017_sb  = em_0jetlow_2017_subplot
+    em_0jethigh_2017_sb  = em_0jethigh_2017_subplot
+    em_boosted1_2017_sb     = em_boosted1_2017_subplot
+    em_boosted2_2017_sb   = em_boosted2_2017_subplot
+    em_vbflow_2017_sb  = em_vbflow_2017_subplot
+    em_vbfhigh_2017_sb = em_vbfhigh_2017_subplot
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(em_0jethigh_2017[histo])         
+            masterDictionary[histo].Add(em_boosted1_2017[histo])   
+            masterDictionary[histo].Add(em_boosted2_2017[histo])  
+            masterDictionary[histo].Add(em_vbflow_2017[histo]) 
+            masterDictionary[histo].Add(em_vbfhigh_2017[histo])
+            masterDictionary_sb[histo].Add(em_0jethigh_2017_subplot[histo])         
+            masterDictionary_sb[histo].Add(em_boosted1_2017_subplot[histo])   
+            masterDictionary_sb[histo].Add(em_boosted2_2017_subplot[histo])  
+            masterDictionary_sb[histo].Add(em_vbflow_2017_subplot[histo]) 
+            masterDictionary_sb[histo].Add(em_vbfhigh_2017_subplot[histo])
+        except:
+            print "problem with em merge"
 
     mt_0jet_PTH_0_10_2016_prefit  ={}                                                                             
     mt_0jet_PTH_GE10_2016_prefit  ={}  
@@ -1208,10 +2154,8 @@ def main():
     print "merging the categories"
 
     for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(mt_0jet_PTH_0_10_2016[histo])         
-            masterDictionary_sb[histo].Add(mt_0jet_PTH_0_10_2016_subplot[histo])         
+        print "Working on merging ",histo
+        try: 
             masterDictionary[histo].Add(mt_0jet_PTH_GE10_2016[histo])         
             masterDictionary[histo].Add(mt_boosted_1J_2016[histo])   
             masterDictionary[histo].Add(mt_boosted_GE2J_2016[histo])  
@@ -1222,455 +2166,325 @@ def main():
             masterDictionary_sb[histo].Add(mt_boosted_GE2J_2016_subplot[histo])  
             masterDictionary_sb[histo].Add(mt_vbf_PTH_0_200_2016_subplot[histo]) 
             masterDictionary_sb[histo].Add(mt_vbf_PTH_GE_200_2016_subplot[histo])
-        
-    tt_0jet_PTH_0_10_2018_prefit  ={}                                                                             
-    tt_0jet_PTH_GE10_2018_prefit  ={}  
-    tt_boosted_1J_2018_prefit     ={}  
-    tt_boosted_GE2J_2018_prefit   ={}  
-    tt_vbf_PTH_0_200_2018_prefit  ={}  
-    tt_vbf_PTH_GE_200_2018_prefit ={}                                     
+        except:
+            print "problem with mt merge"
+
+
+    #Double hadronic tau
+    tt_0jet_2016_prefit  ={}  
+    tt_boosted_onejet_2016_prefit     ={}  
+    tt_boosted_multijet_2016_prefit   ={}  
+    tt_vbf_highHpT_2016_prefit  ={}  
+    tt_vbf_lowHpT_2016_prefit ={}                                     
 
     ##rebin
     rb=1
 
     #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
+    rollingBins = [30.0,10000.0]
     #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_0_10_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_0_10_2018_prefit")                                                             
+    tt_0jet_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_2016_prefit")                                                             
 
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_GE10_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_GE10_2018_prefit")
 
     rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_1J_2018_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_1J_2018_prefit") 
+    tt_boosted_onejet_2016_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_onejet_2016_prefit") 
 
     rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_GE2J_2018_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_GE2J_2018_prefit")                                                                           
+    tt_boosted_multijet_2016_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_multijet_2016_prefit")                                                                           
 
     rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
     #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_0_200_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_0_200_2018_prefit")
+    tt_vbf_highHpT_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_highHpT_2016_prefit")
 
     rollingBins = [350.0,700.0,1200.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_GE_200_2018_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_GE_200_2018_prefit")                                                   
+    tt_vbf_lowHpT_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_lowHpT_2016_prefit")
 
     #Rebin the histograms 
     print "combining bins"
-    #tt_0jet_PTH_0_10_2018  = reBin(rb,tt_0jet_PTH_0_10_2018_prefit,"tt_0jet_PTH_0_10_2018_prefit")       
-    #tt_0jet_PTH_GE10_2018  = reBin(rb,tt_0jet_PTH_GE10_2018_prefit,"tt_0jet_PTH_GE10_2018_prefit")
-    #tt_boosted_1J_2018     = reBin(rb,tt_boosted_1J_2018_prefit,"tt_boosted_1J_2018_prefit") 
-    #tt_boosted_GE2J_2018   = reBin(rb,tt_boosted_GE2J_2018_prefit,"tt_boosted_GE2J_2018_prefit")           
-    #tt_vbf_PTH_0_200_2018  = reBin(rb,tt_vbf_PTH_0_200_2018_prefit,"tt_vbf_PTH_0_200_2018_prefit")
-    #tt_vbf_PTH_GE_200_2018 = reBin(rb,tt_vbf_PTH_GE_200_2018_prefit,"tt_vbf_PTH_GE_200_2018_prefit")                                                     
+    #tt_0jet_2016  = reBin(rb,tt_0jet_2016_prefit,"tt_0jet_2016_prefit")
+    #tt_boosted_onejet_2016     = reBin(rb,tt_boosted_onejet_2016_prefit,"tt_boosted_onejet_2016_prefit") 
+    #tt_boosted_multijet_2016   = reBin(rb,tt_boosted_multijet_2016_prefit,"tt_boosted_multijet_2016_prefit")           
+    #tt_vbf_highHpT_2016  = reBin(rb,tt_vbf_highHpT_2016_prefit,"tt_vbf_highHpT_2016_prefit")
+    #tt_vbf_lowHpT_2016 = reBin(rb,tt_vbf_lowHpT_2016_prefit,"tt_vbf_lowHpT_2016_prefit")                                                     
 
 
-    tt_0jet_PTH_0_10_2018  = tt_0jet_PTH_0_10_2018_prefit
-    tt_0jet_PTH_GE10_2018  = tt_0jet_PTH_GE10_2018_prefit
-    tt_boosted_1J_2018     = tt_boosted_1J_2018_prefit
-    tt_boosted_GE2J_2018   = tt_boosted_GE2J_2018_prefit
-    tt_vbf_PTH_0_200_2018  = tt_vbf_PTH_0_200_2018_prefit
-    tt_vbf_PTH_GE_200_2018 = tt_vbf_PTH_GE_200_2018_prefit
+    tt_0jet_2016  = tt_0jet_2016_prefit
+    tt_boosted_onejet_2016     = tt_boosted_onejet_2016_prefit
+    tt_boosted_multijet_2016   = tt_boosted_multijet_2016_prefit
+    tt_vbf_highHpT_2016  = tt_vbf_highHpT_2016_prefit
+    tt_vbf_lowHpT_2016 = tt_vbf_lowHpT_2016_prefit
 
 
 
-    tt_0jet_PTH_0_10_2018_subplot  ={}                                                                             
-    tt_0jet_PTH_GE10_2018_subplot  ={}  
-    tt_boosted_1J_2018_subplot     ={}  
-    tt_boosted_GE2J_2018_subplot   ={}  
-    tt_vbf_PTH_0_200_2018_subplot  ={}  
-    tt_vbf_PTH_GE_200_2018_subplot ={}                                     
+    tt_0jet_2016_subplot  ={}  
+    tt_boosted_onejet_2016_subplot     ={}  
+    tt_boosted_multijet_2016_subplot   ={}  
+    tt_vbf_highHpT_2016_subplot  ={}  
+    tt_vbf_lowHpT_2016_subplot ={}                                     
 
     #rebin
     rb=0
 
+
     #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
+    rollingBins = [30.0,10000.0]
     #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_0_10_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_0_10_2018_prefit")                                                             
+    tt_0jet_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_2016_prefit")                                                             
 
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_GE10_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_GE10_2018_prefit")
 
     rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_1J_2018_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_1J_2018_prefit") 
+    tt_boosted_onejet_2016_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_onejet_2016_prefit") 
 
     rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_GE2J_2018_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_GE2J_2018_prefit")                                                                           
+    tt_boosted_multijet_2016_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_multijet_2016_prefit")                                                                           
 
     rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
     #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_0_200_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_0_200_2018_prefit")
+    tt_vbf_highHpT_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_highHpT_2016_prefit")
 
     rollingBins = [350.0,700.0,1200.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_GE_200_2018_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_GE_200_2018_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #tt_0jet_PTH_0_10_2018_sb = reBin(rb,tt_0jet_PTH_0_10_2018_subplot,"tt_0jet_PTH_0_10_2018_subplot")       
-    #tt_0jet_PTH_GE10_2018_sb = reBin(rb,tt_0jet_PTH_GE10_2018_subplot,"tt_0jet_PTH_GE10_2018_subplot")
-    #tt_boosted_1J_2018_sb = reBin(rb,tt_boosted_1J_2018_subplot,"tt_boosted_1J_2018_subplot") 
-    #tt_boosted_GE2J_2018_sb = reBin(rb,tt_boosted_GE2J_2018_subplot,"tt_boosted_GE2J_2018_subplot")           
-    #tt_vbf_PTH_0_200_2018_sb = reBin(rb,tt_vbf_PTH_0_200_2018_subplot,"tt_vbf_PTH_0_200_2018_subplot")
-    #tt_vbf_PTH_GE_200_2018_sb = reBin(rb,tt_vbf_PTH_GE_200_2018_subplot,"tt_vbf_PTH_GE_200_2018_subplot")                                                     
-    tt_0jet_PTH_0_10_2018_sb  = tt_0jet_PTH_0_10_2018_subplot
-    tt_0jet_PTH_GE10_2018_sb  = tt_0jet_PTH_GE10_2018_subplot
-    tt_boosted_1J_2018_sb     = tt_boosted_1J_2018_subplot
-    tt_boosted_GE2J_2018_sb   = tt_boosted_GE2J_2018_subplot
-    tt_vbf_PTH_0_200_2018_sb  = tt_vbf_PTH_0_200_2018_subplot
-    tt_vbf_PTH_GE_200_2018_sb = tt_vbf_PTH_GE_200_2018_subplot
-    #Merge the categories
-    print "merging the categories"
-    
-    #masterDictionary=tt_boosted_GE2J_2018
-    #masterDictionary_sb=tt_boosted_GE2J_2018_sb
-    print "all the histos",masterDictionary.keys()
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(tt_0jet_PTH_GE10_2018[histo])         
-            masterDictionary[histo].Add(tt_boosted_1J_2018[histo])   
-            masterDictionary[histo].Add(tt_boosted_GE2J_2018[histo])  
-            masterDictionary[histo].Add(tt_vbf_PTH_0_200_2018[histo]) 
-            masterDictionary[histo].Add(tt_vbf_PTH_GE_200_2018[histo])
-            masterDictionary_sb[histo].Add(tt_0jet_PTH_GE10_2018_subplot[histo])         
-            masterDictionary_sb[histo].Add(tt_boosted_1J_2018_subplot[histo])   
-            masterDictionary_sb[histo].Add(tt_boosted_GE2J_2018_subplot[histo])  
-            masterDictionary_sb[histo].Add(tt_vbf_PTH_0_200_2018_subplot[histo]) 
-            masterDictionary_sb[histo].Add(tt_vbf_PTH_GE_200_2018_subplot[histo])
+    tt_vbf_lowHpT_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_lowHpT_2016_prefit")
 
 
-
-    tt_0jet_PTH_0_10_2017_prefit  ={}                                                                             
-    tt_0jet_PTH_GE10_2017_prefit  ={}  
-    tt_boosted_1J_2017_prefit     ={}  
-    tt_boosted_GE2J_2017_prefit   ={}  
-    tt_vbf_PTH_0_200_2017_prefit  ={}  
-    tt_vbf_PTH_GE_200_2017_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_0_10_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_0_10_2017_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_GE10_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_GE10_2017_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_1J_2017_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_1J_2017_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_GE2J_2017_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_GE2J_2017_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_0_200_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_0_200_2017_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_GE_200_2017_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_GE_200_2017_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #tt_0jet_PTH_0_10_2017  = reBin(rb,tt_0jet_PTH_0_10_2017_prefit,"tt_0jet_PTH_0_10_2017_prefit")       
-    #tt_0jet_PTH_GE10_2017  = reBin(rb,tt_0jet_PTH_GE10_2017_prefit,"tt_0jet_PTH_GE10_2017_prefit")
-    #tt_boosted_1J_2017     = reBin(rb,tt_boosted_1J_2017_prefit,"tt_boosted_1J_2017_prefit") 
-    #tt_boosted_GE2J_2017   = reBin(rb,tt_boosted_GE2J_2017_prefit,"tt_boosted_GE2J_2017_prefit")           
-    #tt_vbf_PTH_0_200_2017  = reBin(rb,tt_vbf_PTH_0_200_2017_prefit,"tt_vbf_PTH_0_200_2017_prefit")
-    #tt_vbf_PTH_GE_200_2017 = reBin(rb,tt_vbf_PTH_GE_200_2017_prefit,"tt_vbf_PTH_GE_200_2017_prefit")                                                     
-
-
-    tt_0jet_PTH_0_10_2017  = tt_0jet_PTH_0_10_2017_prefit
-    tt_0jet_PTH_GE10_2017  = tt_0jet_PTH_GE10_2017_prefit
-    tt_boosted_1J_2017     = tt_boosted_1J_2017_prefit
-    tt_boosted_GE2J_2017   = tt_boosted_GE2J_2017_prefit
-    tt_vbf_PTH_0_200_2017  = tt_vbf_PTH_0_200_2017_prefit
-    tt_vbf_PTH_GE_200_2017 = tt_vbf_PTH_GE_200_2017_prefit
-
-
-
-    tt_0jet_PTH_0_10_2017_subplot  ={}                                                                             
-    tt_0jet_PTH_GE10_2017_subplot  ={}  
-    tt_boosted_1J_2017_subplot     ={}  
-    tt_boosted_GE2J_2017_subplot   ={}  
-    tt_vbf_PTH_0_200_2017_subplot  ={}  
-    tt_vbf_PTH_GE_200_2017_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_0_10_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_0_10_2017_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_GE10_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_GE10_2017_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_1J_2017_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_1J_2017_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_GE2J_2017_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_GE2J_2017_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_0_200_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_0_200_2017_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_GE_200_2017_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_GE_200_2017_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #tt_0jet_PTH_0_10_2017_sb = reBin(rb,tt_0jet_PTH_0_10_2017_subplot,"tt_0jet_PTH_0_10_2017_subplot")       
-    #tt_0jet_PTH_GE10_2017_sb = reBin(rb,tt_0jet_PTH_GE10_2017_subplot,"tt_0jet_PTH_GE10_2017_subplot")
-    #tt_boosted_1J_2017_sb = reBin(rb,tt_boosted_1J_2017_subplot,"tt_boosted_1J_2017_subplot") 
-    #tt_boosted_GE2J_2017_sb = reBin(rb,tt_boosted_GE2J_2017_subplot,"tt_boosted_GE2J_2017_subplot")           
-    #tt_vbf_PTH_0_200_2017_sb = reBin(rb,tt_vbf_PTH_0_200_2017_subplot,"tt_vbf_PTH_0_200_2017_subplot")
-    #tt_vbf_PTH_GE_200_2017_sb = reBin(rb,tt_vbf_PTH_GE_200_2017_subplot,"tt_vbf_PTH_GE_200_2017_subplot")                                                     
-    tt_0jet_PTH_0_10_2017_sb  = tt_0jet_PTH_0_10_2017_subplot
-    tt_0jet_PTH_GE10_2017_sb  = tt_0jet_PTH_GE10_2017_subplot
-    tt_boosted_1J_2017_sb     = tt_boosted_1J_2017_subplot
-    tt_boosted_GE2J_2017_sb   = tt_boosted_GE2J_2017_subplot
-    tt_vbf_PTH_0_200_2017_sb  = tt_vbf_PTH_0_200_2017_subplot
-    tt_vbf_PTH_GE_200_2017_sb = tt_vbf_PTH_GE_200_2017_subplot
-    #Merge the categories
-    print "merging the categories"
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(tt_0jet_PTH_0_10_2017[histo])         
-            masterDictionary_sb[histo].Add(tt_0jet_PTH_0_10_2017_subplot[histo])         
-            masterDictionary[histo].Add(tt_0jet_PTH_GE10_2017[histo])         
-            masterDictionary[histo].Add(tt_boosted_1J_2017[histo])   
-            masterDictionary[histo].Add(tt_boosted_GE2J_2017[histo])  
-            masterDictionary[histo].Add(tt_vbf_PTH_0_200_2017[histo]) 
-            masterDictionary[histo].Add(tt_vbf_PTH_GE_200_2017[histo])
-            masterDictionary_sb[histo].Add(tt_0jet_PTH_GE10_2017_subplot[histo])         
-            masterDictionary_sb[histo].Add(tt_boosted_1J_2017_subplot[histo])   
-            masterDictionary_sb[histo].Add(tt_boosted_GE2J_2017_subplot[histo])  
-            masterDictionary_sb[histo].Add(tt_vbf_PTH_0_200_2017_subplot[histo]) 
-            masterDictionary_sb[histo].Add(tt_vbf_PTH_GE_200_2017_subplot[histo])
-
-    tt_0jet_PTH_0_10_2016_prefit  ={}                                                                             
-    tt_0jet_PTH_GE10_2016_prefit  ={}  
-    tt_boosted_1J_2016_prefit     ={}  
-    tt_boosted_GE2J_2016_prefit   ={}  
-    tt_vbf_PTH_0_200_2016_prefit  ={}  
-    tt_vbf_PTH_GE_200_2016_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_0_10_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_0_10_2016_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_GE10_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_GE10_2016_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_1J_2016_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_1J_2016_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_GE2J_2016_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_GE2J_2016_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_0_200_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_0_200_2016_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_GE_200_2016_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_GE_200_2016_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #tt_0jet_PTH_0_10_2016  = reBin(rb,tt_0jet_PTH_0_10_2016_prefit,"tt_0jet_PTH_0_10_2016_prefit")       
-    #tt_0jet_PTH_GE10_2016  = reBin(rb,tt_0jet_PTH_GE10_2016_prefit,"tt_0jet_PTH_GE10_2016_prefit")
-    #tt_boosted_1J_2016     = reBin(rb,tt_boosted_1J_2016_prefit,"tt_boosted_1J_2016_prefit") 
-    #tt_boosted_GE2J_2016   = reBin(rb,tt_boosted_GE2J_2016_prefit,"tt_boosted_GE2J_2016_prefit")           
-    #tt_vbf_PTH_0_200_2016  = reBin(rb,tt_vbf_PTH_0_200_2016_prefit,"tt_vbf_PTH_0_200_2016_prefit")
-    #tt_vbf_PTH_GE_200_2016 = reBin(rb,tt_vbf_PTH_GE_200_2016_prefit,"tt_vbf_PTH_GE_200_2016_prefit")                                                     
-
-
-    tt_0jet_PTH_0_10_2016  = tt_0jet_PTH_0_10_2016_prefit
-    tt_0jet_PTH_GE10_2016  = tt_0jet_PTH_GE10_2016_prefit
-    tt_boosted_1J_2016     = tt_boosted_1J_2016_prefit
-    tt_boosted_GE2J_2016   = tt_boosted_GE2J_2016_prefit
-    tt_vbf_PTH_0_200_2016  = tt_vbf_PTH_0_200_2016_prefit
-    tt_vbf_PTH_GE_200_2016 = tt_vbf_PTH_GE_200_2016_prefit
-
-
-
-    tt_0jet_PTH_0_10_2016_subplot  ={}                                                                             
-    tt_0jet_PTH_GE10_2016_subplot  ={}  
-    tt_boosted_1J_2016_subplot     ={}  
-    tt_boosted_GE2J_2016_subplot   ={}  
-    tt_vbf_PTH_0_200_2016_subplot  ={}  
-    tt_vbf_PTH_GE_200_2016_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_0_10_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_0_10_2016_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_0jet_PTH_GE10_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_0jet_PTH_GE10_2016_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_1J_2016_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_1J_2016_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_boosted_GE2J_2016_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_boosted_GE2J_2016_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_0_200_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_0_200_2016_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    tt_vbf_PTH_GE_200_2016_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"tt_vbf_PTH_GE_200_2016_prefit")                                                   
     #Rebin the histograms 
     print "combining bins"
     #tt_0jet_PTH_0_10_2016_sb = reBin(rb,tt_0jet_PTH_0_10_2016_subplot,"tt_0jet_PTH_0_10_2016_subplot")       
-    #tt_0jet_PTH_GE10_2016_sb = reBin(rb,tt_0jet_PTH_GE10_2016_subplot,"tt_0jet_PTH_GE10_2016_subplot")
-    #tt_boosted_1J_2016_sb = reBin(rb,tt_boosted_1J_2016_subplot,"tt_boosted_1J_2016_subplot") 
-    #tt_boosted_GE2J_2016_sb = reBin(rb,tt_boosted_GE2J_2016_subplot,"tt_boosted_GE2J_2016_subplot")           
-    #tt_vbf_PTH_0_200_2016_sb = reBin(rb,tt_vbf_PTH_0_200_2016_subplot,"tt_vbf_PTH_0_200_2016_subplot")
-    #tt_vbf_PTH_GE_200_2016_sb = reBin(rb,tt_vbf_PTH_GE_200_2016_subplot,"tt_vbf_PTH_GE_200_2016_subplot")                                                     
-    tt_0jet_PTH_0_10_2016_sb  = tt_0jet_PTH_0_10_2016_subplot
-    tt_0jet_PTH_GE10_2016_sb  = tt_0jet_PTH_GE10_2016_subplot
-    tt_boosted_1J_2016_sb     = tt_boosted_1J_2016_subplot
-    tt_boosted_GE2J_2016_sb   = tt_boosted_GE2J_2016_subplot
-    tt_vbf_PTH_0_200_2016_sb  = tt_vbf_PTH_0_200_2016_subplot
-    tt_vbf_PTH_GE_200_2016_sb = tt_vbf_PTH_GE_200_2016_subplot
+    #tt_0jet_2016_sb = reBin(rb,tt_0jet_2016_subplot,"tt_0jet_2016_subplot")
+    #tt_boosted_onejet_2016_sb = reBin(rb,tt_boosted_onejet_2016_subplot,"tt_boosted_onejet_2016_subplot") 
+    #tt_boosted_multijet_2016_sb = reBin(rb,tt_boosted_multijet_2016_subplot,"tt_boosted_multijet_2016_subplot")           
+    #tt_vbf_highHpT_2016_sb = reBin(rb,tt_vbf_highHpT_2016_subplot,"tt_vbf_highHpT_2016_subplot")
+    #tt_vbf_lowHpT_2016_sb = reBin(rb,tt_vbf_lowHpT_2016_subplot,"tt_vbf_lowHpT_2016_subplot")                                                     
+
+    tt_0jet_2016_sb  = tt_0jet_2016_subplot
+    tt_boosted_onejet_2016_sb     = tt_boosted_onejet_2016_subplot
+    tt_boosted_multijet_2016_sb   = tt_boosted_multijet_2016_subplot
+    tt_vbf_highHpT_2016_sb  = tt_vbf_highHpT_2016_subplot
+    tt_vbf_lowHpT_2016_sb = tt_vbf_lowHpT_2016_subplot
+
     #Merge the categories
     print "merging the categories"
 
     for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(tt_0jet_PTH_0_10_2016[histo])         
-            masterDictionary_sb[histo].Add(tt_0jet_PTH_0_10_2016_subplot[histo])         
-            masterDictionary[histo].Add(tt_0jet_PTH_GE10_2016[histo])         
-            masterDictionary[histo].Add(tt_boosted_1J_2016[histo])   
-            masterDictionary[histo].Add(tt_boosted_GE2J_2016[histo])  
-            masterDictionary[histo].Add(tt_vbf_PTH_0_200_2016[histo]) 
-            masterDictionary[histo].Add(tt_vbf_PTH_GE_200_2016[histo])
-            masterDictionary_sb[histo].Add(tt_0jet_PTH_GE10_2016_subplot[histo])         
-            masterDictionary_sb[histo].Add(tt_boosted_1J_2016_subplot[histo])   
-            masterDictionary_sb[histo].Add(tt_boosted_GE2J_2016_subplot[histo])  
-            masterDictionary_sb[histo].Add(tt_vbf_PTH_0_200_2016_subplot[histo]) 
-            masterDictionary_sb[histo].Add(tt_vbf_PTH_GE_200_2016_subplot[histo])
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(tt_0jet_2016[histo])         
+            masterDictionary[histo].Add(tt_boosted_onejet_2016[histo])   
+            masterDictionary[histo].Add(tt_boosted_multijet_2016[histo])  
+            masterDictionary[histo].Add(tt_vbf_highHpT_2016[histo]) 
+            masterDictionary[histo].Add(tt_vbf_lowHpT_2016[histo])
+            masterDictionary_sb[histo].Add(tt_0jet_2016_subplot[histo])         
+            masterDictionary_sb[histo].Add(tt_boosted_onejet_2016_subplot[histo])   
+            masterDictionary_sb[histo].Add(tt_boosted_multijet_2016_subplot[histo])  
+            masterDictionary_sb[histo].Add(tt_vbf_highHpT_2016_subplot[histo]) 
+            masterDictionary_sb[histo].Add(tt_vbf_lowHpT_2016_subplot[histo])
+        except:
+            print "problem with tt merge"
+        
+    #electron-tau
+    et_0jetlow_2016_prefit  ={}                                                                             
+    et_0jethigh_2016_prefit  ={}  
+    et_boosted1_2016_prefit     ={}  
+    et_boosted2_2016_prefit   ={}  
+    et_vbflow_2016_prefit  ={}  
+    et_vbfhigh_2016_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2016_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2016_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #electron-tau
+    et_0jetlow_2016_prefit  ={}                                                                             
+    et_0jethigh_2016_prefit  ={}  
+    et_boosted1_2016_prefit     ={}  
+    et_boosted2_2016_prefit   ={}  
+    et_vbflow_2016_prefit  ={}  
+    et_vbfhigh_2016_prefit ={}                                     
+
+    ##rebin
+    rb=1
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2016_prefit")                                                             
+
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2016_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted1_2016_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted1_2016_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted2_2016_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted2_2016_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbflow_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbflow_2016_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbfhigh_2016_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbfhigh_2016_prefit")                                                   
+
+    #Rebin the histograms 
+    print "combining bins"
+    #et_0jetlow_2016  = reBin(rb,et_0jetlow_2016_prefit,"et_0jetlow_2016_prefit")       
+    #et_0jethigh_2016  = reBin(rb,et_0jethigh_2016_prefit,"et_0jethigh_2016_prefit")
+    #et_boosted1_2016     = reBin(rb,et_boosted1_2016_prefit,"et_boosted1_2016_prefit") 
+    #et_boosted2_2016   = reBin(rb,et_boosted2_2016_prefit,"et_boosted2_2016_prefit")           
+    #et_vbflow_2016  = reBin(rb,et_vbflow_2016_prefit,"et_vbflow_2016_prefit")
+    #et_vbfhigh_2016 = reBin(rb,et_vbfhigh_2016_prefit,"et_vbfhigh_2016_prefit")                                                     
+
+
+    et_0jetlow_2016  = et_0jetlow_2016_prefit
+    et_0jethigh_2016  = et_0jethigh_2016_prefit
+    et_boosted1_2016     = et_boosted1_2016_prefit
+    et_boosted2_2016   = et_boosted2_2016_prefit
+    et_vbflow_2016  = et_vbflow_2016_prefit
+    et_vbfhigh_2016 = et_vbfhigh_2016_prefit
+
+
+
+    et_0jetlow_2016_subplot  ={}                                                                             
+    et_0jethigh_2016_subplot  ={}  
+    et_boosted1_2016_subplot     ={}  
+    et_boosted2_2016_subplot   ={}  
+    et_vbflow_2016_subplot  ={}  
+    et_vbfhigh_2016_subplot ={}                                     
+
+    #rebin
+    rb=0
+
+    #gather the dictionaries for the histograms 
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jetlow_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jetlow_2016_prefit")                                                             
+
+    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
+    rollingBins = [30.0,40.0,50.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_0jethigh_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jethigh_2016_prefit")
+
+    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted1_2016_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted1_2016_prefit") 
+
+    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_boosted2_2016_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted2_2016_prefit")                                                                           
+
+    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
+    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbflow_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbflow_2016_prefit")
+
+    rollingBins = [350.0,700.0,1200.0,10000.0]
+    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
+    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
+    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
+    et_vbfhigh_2016_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbfhigh_2016_prefit")                                                   
+    #Rebin the histograms 
+    print "combining bins"
+    #et_0jetlow_2016_sb = reBin(rb,et_0jetlow_2016_subplot,"et_0jetlow_2016_subplot")       
+    #et_0jethigh_2016_sb = reBin(rb,et_0jethigh_2016_subplot,"et_0jethigh_2016_subplot")
+    #et_boosted1_2016_sb = reBin(rb,et_boosted1_2016_subplot,"et_boosted1_2016_subplot") 
+    #et_boosted2_2016_sb = reBin(rb,et_boosted2_2016_subplot,"et_boosted2_2016_subplot")           
+    #et_vbflow_2016_sb = reBin(rb,et_vbflow_2016_subplot,"et_vbflow_2016_subplot")
+    #et_vbfhigh_2016_sb = reBin(rb,et_vbfhigh_2016_subplot,"et_vbfhigh_2016_subplot")                                                     
+    et_0jetlow_2016_sb  = et_0jetlow_2016_subplot
+    et_0jethigh_2016_sb  = et_0jethigh_2016_subplot
+    et_boosted1_2016_sb     = et_boosted1_2016_subplot
+    et_boosted2_2016_sb   = et_boosted2_2016_subplot
+    et_vbflow_2016_sb  = et_vbflow_2016_subplot
+    et_vbfhigh_2016_sb = et_vbfhigh_2016_subplot
+    #Merge the categories
+    print "merging the categories"
+
+    for histo in masterDictionary.keys():
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(et_0jethigh_2016[histo])         
+            masterDictionary[histo].Add(et_boosted1_2016[histo])   
+            masterDictionary[histo].Add(et_boosted2_2016[histo])  
+            masterDictionary[histo].Add(et_vbflow_2016[histo]) 
+            masterDictionary[histo].Add(et_vbfhigh_2016[histo])
+            masterDictionary_sb[histo].Add(et_0jethigh_2016_subplot[histo])         
+            masterDictionary_sb[histo].Add(et_boosted1_2016_subplot[histo])   
+            masterDictionary_sb[histo].Add(et_boosted2_2016_subplot[histo])  
+            masterDictionary_sb[histo].Add(et_vbflow_2016_subplot[histo]) 
+            masterDictionary_sb[histo].Add(et_vbfhigh_2016_subplot[histo])
+        except:
+            print "problem with et merge"
     
-    et_0jet_PTH_0_10_2018_prefit  ={}                                                                             
-    et_0jet_PTH_GE10_2018_prefit  ={}  
-    et_boosted_1J_2018_prefit     ={}  
-    et_boosted_GE2J_2018_prefit   ={}  
-    et_vbf_PTH_0_200_2018_prefit  ={}  
-    et_vbf_PTH_GE_200_2018_prefit ={}                                     
+    #electron-muon
+    em_0jetlow_2016_prefit  ={}                                                                             
+    em_0jethigh_2016_prefit  ={}  
+    em_boosted1_2016_prefit     ={}  
+    em_boosted2_2016_prefit   ={}  
+    em_vbflow_2016_prefit  ={}  
+    em_vbfhigh_2016_prefit ={}                                     
 
     ##rebin
     rb=1
@@ -1680,63 +2494,63 @@ def main():
     #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_0_10_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_0_10_2018_prefit")                                                             
+    em_0jetlow_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jetlow_2016_prefit")                                                             
 
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
+    rollingBins = [30.0,40.0,50.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_GE10_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_GE10_2018_prefit")
+    em_0jethigh_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jethigh_2016_prefit")
 
     rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_1J_2018_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_1J_2018_prefit") 
+    em_boosted1_2016_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted1_2016_prefit") 
 
     rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_GE2J_2018_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_GE2J_2018_prefit")                                                                           
+    em_boosted2_2016_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted2_2016_prefit")                                                                           
 
     rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
     #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_0_200_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_0_200_2018_prefit")
+    em_vbflow_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbflow_2016_prefit")
 
     rollingBins = [350.0,700.0,1200.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_GE_200_2018_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_GE_200_2018_prefit")                                                   
+    em_vbfhigh_2016_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbfhigh_2016_prefit")                                                   
 
     #Rebin the histograms 
     print "combining bins"
-    #et_0jet_PTH_0_10_2018  = reBin(rb,et_0jet_PTH_0_10_2018_prefit,"et_0jet_PTH_0_10_2018_prefit")       
-    #et_0jet_PTH_GE10_2018  = reBin(rb,et_0jet_PTH_GE10_2018_prefit,"et_0jet_PTH_GE10_2018_prefit")
-    #et_boosted_1J_2018     = reBin(rb,et_boosted_1J_2018_prefit,"et_boosted_1J_2018_prefit") 
-    #et_boosted_GE2J_2018   = reBin(rb,et_boosted_GE2J_2018_prefit,"et_boosted_GE2J_2018_prefit")           
-    #et_vbf_PTH_0_200_2018  = reBin(rb,et_vbf_PTH_0_200_2018_prefit,"et_vbf_PTH_0_200_2018_prefit")
-    #et_vbf_PTH_GE_200_2018 = reBin(rb,et_vbf_PTH_GE_200_2018_prefit,"et_vbf_PTH_GE_200_2018_prefit")                                                     
+    #em_0jetlow_2016  = reBin(rb,em_0jetlow_2016_prefit,"em_0jetlow_2016_prefit")       
+    #em_0jethigh_2016  = reBin(rb,em_0jethigh_2016_prefit,"em_0jethigh_2016_prefit")
+    #em_boosted1_2016     = reBin(rb,em_boosted1_2016_prefit,"em_boosted1_2016_prefit") 
+    #em_boosted2_2016   = reBin(rb,em_boosted2_2016_prefit,"em_boosted2_2016_prefit")           
+    #em_vbflow_2016  = reBin(rb,em_vbflow_2016_prefit,"em_vbflow_2016_prefit")
+    #em_vbfhigh_2016 = reBin(rb,em_vbfhigh_2016_prefit,"em_vbfhigh_2016_prefit")                                                     
 
 
-    et_0jet_PTH_0_10_2018  = et_0jet_PTH_0_10_2018_prefit
-    et_0jet_PTH_GE10_2018  = et_0jet_PTH_GE10_2018_prefit
-    et_boosted_1J_2018     = et_boosted_1J_2018_prefit
-    et_boosted_GE2J_2018   = et_boosted_GE2J_2018_prefit
-    et_vbf_PTH_0_200_2018  = et_vbf_PTH_0_200_2018_prefit
-    et_vbf_PTH_GE_200_2018 = et_vbf_PTH_GE_200_2018_prefit
+    em_0jetlow_2016  = em_0jetlow_2016_prefit
+    em_0jethigh_2016  = em_0jethigh_2016_prefit
+    em_boosted1_2016     = em_boosted1_2016_prefit
+    em_boosted2_2016   = em_boosted2_2016_prefit
+    em_vbflow_2016  = em_vbflow_2016_prefit
+    em_vbfhigh_2016 = em_vbfhigh_2016_prefit
 
 
 
-    et_0jet_PTH_0_10_2018_subplot  ={}                                                                             
-    et_0jet_PTH_GE10_2018_subplot  ={}  
-    et_boosted_1J_2018_subplot     ={}  
-    et_boosted_GE2J_2018_subplot   ={}  
-    et_vbf_PTH_0_200_2018_subplot  ={}  
-    et_vbf_PTH_GE_200_2018_subplot ={}                                     
+    em_0jetlow_2016_subplot  ={}                                                                             
+    em_0jethigh_2016_subplot  ={}  
+    em_boosted1_2016_subplot     ={}  
+    em_boosted2_2016_subplot   ={}  
+    em_vbflow_2016_subplot  ={}  
+    em_vbfhigh_2016_subplot ={}                                     
 
     #rebin
     rb=0
@@ -1746,808 +2560,71 @@ def main():
     #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_0_10_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_0_10_2018_prefit")                                                             
+    em_0jetlow_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jetlow_2016_prefit")                                                             
 
     #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
     rollingBins = [30.0,40.0,50.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_GE10_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_GE10_2018_prefit")
+    em_0jethigh_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jethigh_2016_prefit")
 
     rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_1J_2018_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_1J_2018_prefit") 
+    em_boosted1_2016_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted1_2016_prefit") 
 
     rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_GE2J_2018_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_GE2J_2018_prefit")                                                                           
+    em_boosted2_2016_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted2_2016_prefit")                                                                           
 
     rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
     #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_0_200_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_0_200_2018_prefit")
+    em_vbflow_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbflow_2016_prefit")
 
     rollingBins = [350.0,700.0,1200.0,10000.0]
     #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
     recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
     recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_GE_200_2018_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_GE_200_2018_prefit")                                                   
+    em_vbfhigh_2016_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbfhigh_2016_prefit")                                                   
     #Rebin the histograms 
     print "combining bins"
-    #et_0jet_PTH_0_10_2018_sb = reBin(rb,et_0jet_PTH_0_10_2018_subplot,"et_0jet_PTH_0_10_2018_subplot")       
-    #et_0jet_PTH_GE10_2018_sb = reBin(rb,et_0jet_PTH_GE10_2018_subplot,"et_0jet_PTH_GE10_2018_subplot")
-    #et_boosted_1J_2018_sb = reBin(rb,et_boosted_1J_2018_subplot,"et_boosted_1J_2018_subplot") 
-    #et_boosted_GE2J_2018_sb = reBin(rb,et_boosted_GE2J_2018_subplot,"et_boosted_GE2J_2018_subplot")           
-    #et_vbf_PTH_0_200_2018_sb = reBin(rb,et_vbf_PTH_0_200_2018_subplot,"et_vbf_PTH_0_200_2018_subplot")
-    #et_vbf_PTH_GE_200_2018_sb = reBin(rb,et_vbf_PTH_GE_200_2018_subplot,"et_vbf_PTH_GE_200_2018_subplot")                                                     
-    et_0jet_PTH_0_10_2018_sb  = et_0jet_PTH_0_10_2018_subplot
-    et_0jet_PTH_GE10_2018_sb  = et_0jet_PTH_GE10_2018_subplot
-    et_boosted_1J_2018_sb     = et_boosted_1J_2018_subplot
-    et_boosted_GE2J_2018_sb   = et_boosted_GE2J_2018_subplot
-    et_vbf_PTH_0_200_2018_sb  = et_vbf_PTH_0_200_2018_subplot
-    et_vbf_PTH_GE_200_2018_sb = et_vbf_PTH_GE_200_2018_subplot
-    #Merge the categories
-    print "merging the categories"
-    
-    #masterDictionary=et_boosted_GE2J_2018
-    #masterDictionary_sb=et_boosted_GE2J_2018_sb
-    print "all the histos",masterDictionary.keys()
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(et_0jet_PTH_GE10_2018[histo])         
-            masterDictionary[histo].Add(et_boosted_1J_2018[histo])   
-            masterDictionary[histo].Add(et_boosted_GE2J_2018[histo])  
-            masterDictionary[histo].Add(et_vbf_PTH_0_200_2018[histo]) 
-            masterDictionary[histo].Add(et_vbf_PTH_GE_200_2018[histo])
-            masterDictionary_sb[histo].Add(et_0jet_PTH_GE10_2018_subplot[histo])         
-            masterDictionary_sb[histo].Add(et_boosted_1J_2018_subplot[histo])   
-            masterDictionary_sb[histo].Add(et_boosted_GE2J_2018_subplot[histo])  
-            masterDictionary_sb[histo].Add(et_vbf_PTH_0_200_2018_subplot[histo]) 
-            masterDictionary_sb[histo].Add(et_vbf_PTH_GE_200_2018_subplot[histo])
-
-
-
-    et_0jet_PTH_0_10_2017_prefit  ={}                                                                             
-    et_0jet_PTH_GE10_2017_prefit  ={}  
-    et_boosted_1J_2017_prefit     ={}  
-    et_boosted_GE2J_2017_prefit   ={}  
-    et_vbf_PTH_0_200_2017_prefit  ={}  
-    et_vbf_PTH_GE_200_2017_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_0_10_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_0_10_2017_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_GE10_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_GE10_2017_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_1J_2017_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_1J_2017_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_GE2J_2017_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_GE2J_2017_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_0_200_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_0_200_2017_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_GE_200_2017_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_GE_200_2017_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #et_0jet_PTH_0_10_2017  = reBin(rb,et_0jet_PTH_0_10_2017_prefit,"et_0jet_PTH_0_10_2017_prefit")       
-    #et_0jet_PTH_GE10_2017  = reBin(rb,et_0jet_PTH_GE10_2017_prefit,"et_0jet_PTH_GE10_2017_prefit")
-    #et_boosted_1J_2017     = reBin(rb,et_boosted_1J_2017_prefit,"et_boosted_1J_2017_prefit") 
-    #et_boosted_GE2J_2017   = reBin(rb,et_boosted_GE2J_2017_prefit,"et_boosted_GE2J_2017_prefit")           
-    #et_vbf_PTH_0_200_2017  = reBin(rb,et_vbf_PTH_0_200_2017_prefit,"et_vbf_PTH_0_200_2017_prefit")
-    #et_vbf_PTH_GE_200_2017 = reBin(rb,et_vbf_PTH_GE_200_2017_prefit,"et_vbf_PTH_GE_200_2017_prefit")                                                     
-
-
-    et_0jet_PTH_0_10_2017  = et_0jet_PTH_0_10_2017_prefit
-    et_0jet_PTH_GE10_2017  = et_0jet_PTH_GE10_2017_prefit
-    et_boosted_1J_2017     = et_boosted_1J_2017_prefit
-    et_boosted_GE2J_2017   = et_boosted_GE2J_2017_prefit
-    et_vbf_PTH_0_200_2017  = et_vbf_PTH_0_200_2017_prefit
-    et_vbf_PTH_GE_200_2017 = et_vbf_PTH_GE_200_2017_prefit
-
-
-
-    et_0jet_PTH_0_10_2017_subplot  ={}                                                                             
-    et_0jet_PTH_GE10_2017_subplot  ={}  
-    et_boosted_1J_2017_subplot     ={}  
-    et_boosted_GE2J_2017_subplot   ={}  
-    et_vbf_PTH_0_200_2017_subplot  ={}  
-    et_vbf_PTH_GE_200_2017_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_0_10_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_0_10_2017_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_GE10_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_GE10_2017_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_1J_2017_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_1J_2017_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_GE2J_2017_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_GE2J_2017_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_0_200_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_0_200_2017_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_GE_200_2017_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_GE_200_2017_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #et_0jet_PTH_0_10_2017_sb = reBin(rb,et_0jet_PTH_0_10_2017_subplot,"et_0jet_PTH_0_10_2017_subplot")       
-    #et_0jet_PTH_GE10_2017_sb = reBin(rb,et_0jet_PTH_GE10_2017_subplot,"et_0jet_PTH_GE10_2017_subplot")
-    #et_boosted_1J_2017_sb = reBin(rb,et_boosted_1J_2017_subplot,"et_boosted_1J_2017_subplot") 
-    #et_boosted_GE2J_2017_sb = reBin(rb,et_boosted_GE2J_2017_subplot,"et_boosted_GE2J_2017_subplot")           
-    #et_vbf_PTH_0_200_2017_sb = reBin(rb,et_vbf_PTH_0_200_2017_subplot,"et_vbf_PTH_0_200_2017_subplot")
-    #et_vbf_PTH_GE_200_2017_sb = reBin(rb,et_vbf_PTH_GE_200_2017_subplot,"et_vbf_PTH_GE_200_2017_subplot")                                                     
-    et_0jet_PTH_0_10_2017_sb  = et_0jet_PTH_0_10_2017_subplot
-    et_0jet_PTH_GE10_2017_sb  = et_0jet_PTH_GE10_2017_subplot
-    et_boosted_1J_2017_sb     = et_boosted_1J_2017_subplot
-    et_boosted_GE2J_2017_sb   = et_boosted_GE2J_2017_subplot
-    et_vbf_PTH_0_200_2017_sb  = et_vbf_PTH_0_200_2017_subplot
-    et_vbf_PTH_GE_200_2017_sb = et_vbf_PTH_GE_200_2017_subplot
+    #em_0jetlow_2016_sb = reBin(rb,em_0jetlow_2016_subplot,"em_0jetlow_2016_subplot")       
+    #em_0jethigh_2016_sb = reBin(rb,em_0jethigh_2016_subplot,"em_0jethigh_2016_subplot")
+    #em_boosted1_2016_sb = reBin(rb,em_boosted1_2016_subplot,"em_boosted1_2016_subplot") 
+    #em_boosted2_2016_sb = reBin(rb,em_boosted2_2016_subplot,"em_boosted2_2016_subplot")           
+    #em_vbflow_2016_sb = reBin(rb,em_vbflow_2016_subplot,"em_vbflow_2016_subplot")
+    #em_vbfhigh_2016_sb = reBin(rb,em_vbfhigh_2016_subplot,"em_vbfhigh_2016_subplot")                                                     
+    em_0jetlow_2016_sb  = em_0jetlow_2016_subplot
+    em_0jethigh_2016_sb  = em_0jethigh_2016_subplot
+    em_boosted1_2016_sb     = em_boosted1_2016_subplot
+    em_boosted2_2016_sb   = em_boosted2_2016_subplot
+    em_vbflow_2016_sb  = em_vbflow_2016_subplot
+    em_vbfhigh_2016_sb = em_vbfhigh_2016_subplot
     #Merge the categories
     print "merging the categories"
 
     for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(et_0jet_PTH_0_10_2017[histo])         
-            masterDictionary_sb[histo].Add(et_0jet_PTH_0_10_2017_subplot[histo])         
-            masterDictionary[histo].Add(et_0jet_PTH_GE10_2017[histo])         
-            masterDictionary[histo].Add(et_boosted_1J_2017[histo])   
-            masterDictionary[histo].Add(et_boosted_GE2J_2017[histo])  
-            masterDictionary[histo].Add(et_vbf_PTH_0_200_2017[histo]) 
-            masterDictionary[histo].Add(et_vbf_PTH_GE_200_2017[histo])
-            masterDictionary_sb[histo].Add(et_0jet_PTH_GE10_2017_subplot[histo])         
-            masterDictionary_sb[histo].Add(et_boosted_1J_2017_subplot[histo])   
-            masterDictionary_sb[histo].Add(et_boosted_GE2J_2017_subplot[histo])  
-            masterDictionary_sb[histo].Add(et_vbf_PTH_0_200_2017_subplot[histo]) 
-            masterDictionary_sb[histo].Add(et_vbf_PTH_GE_200_2017_subplot[histo])
+        print "Working on merging ",histo
+        try:
+            masterDictionary[histo].Add(em_0jethigh_2016[histo])         
+            masterDictionary[histo].Add(em_boosted1_2016[histo])   
+            masterDictionary[histo].Add(em_boosted2_2016[histo])  
+            masterDictionary[histo].Add(em_vbflow_2016[histo]) 
+            masterDictionary[histo].Add(em_vbfhigh_2016[histo])
+            masterDictionary_sb[histo].Add(em_0jethigh_2016_subplot[histo])         
+            masterDictionary_sb[histo].Add(em_boosted1_2016_subplot[histo])   
+            masterDictionary_sb[histo].Add(em_boosted2_2016_subplot[histo])  
+            masterDictionary_sb[histo].Add(em_vbflow_2016_subplot[histo]) 
+            masterDictionary_sb[histo].Add(em_vbfhigh_2016_subplot[histo])
+        except:
+            print "problem with em merge"
 
-    et_0jet_PTH_0_10_2016_prefit  ={}                                                                             
-    et_0jet_PTH_GE10_2016_prefit  ={}  
-    et_boosted_1J_2016_prefit     ={}  
-    et_boosted_GE2J_2016_prefit   ={}  
-    et_vbf_PTH_0_200_2016_prefit  ={}  
-    et_vbf_PTH_GE_200_2016_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_0_10_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_0_10_2016_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_GE10_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_GE10_2016_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_1J_2016_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_1J_2016_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_GE2J_2016_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_GE2J_2016_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_0_200_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_0_200_2016_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_GE_200_2016_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_GE_200_2016_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #et_0jet_PTH_0_10_2016  = reBin(rb,et_0jet_PTH_0_10_2016_prefit,"et_0jet_PTH_0_10_2016_prefit")       
-    #et_0jet_PTH_GE10_2016  = reBin(rb,et_0jet_PTH_GE10_2016_prefit,"et_0jet_PTH_GE10_2016_prefit")
-    #et_boosted_1J_2016     = reBin(rb,et_boosted_1J_2016_prefit,"et_boosted_1J_2016_prefit") 
-    #et_boosted_GE2J_2016   = reBin(rb,et_boosted_GE2J_2016_prefit,"et_boosted_GE2J_2016_prefit")           
-    #et_vbf_PTH_0_200_2016  = reBin(rb,et_vbf_PTH_0_200_2016_prefit,"et_vbf_PTH_0_200_2016_prefit")
-    #et_vbf_PTH_GE_200_2016 = reBin(rb,et_vbf_PTH_GE_200_2016_prefit,"et_vbf_PTH_GE_200_2016_prefit")                                                     
-
-
-    et_0jet_PTH_0_10_2016  = et_0jet_PTH_0_10_2016_prefit
-    et_0jet_PTH_GE10_2016  = et_0jet_PTH_GE10_2016_prefit
-    et_boosted_1J_2016     = et_boosted_1J_2016_prefit
-    et_boosted_GE2J_2016   = et_boosted_GE2J_2016_prefit
-    et_vbf_PTH_0_200_2016  = et_vbf_PTH_0_200_2016_prefit
-    et_vbf_PTH_GE_200_2016 = et_vbf_PTH_GE_200_2016_prefit
-
-
-
-    et_0jet_PTH_0_10_2016_subplot  ={}                                                                             
-    et_0jet_PTH_GE10_2016_subplot  ={}  
-    et_boosted_1J_2016_subplot     ={}  
-    et_boosted_GE2J_2016_subplot   ={}  
-    et_vbf_PTH_0_200_2016_subplot  ={}  
-    et_vbf_PTH_GE_200_2016_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_0_10_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_0_10_2016_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_0jet_PTH_GE10_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_0jet_PTH_GE10_2016_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_1J_2016_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_1J_2016_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_boosted_GE2J_2016_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_boosted_GE2J_2016_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_0_200_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_0_200_2016_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    et_vbf_PTH_GE_200_2016_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"et_vbf_PTH_GE_200_2016_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #et_0jet_PTH_0_10_2016_sb = reBin(rb,et_0jet_PTH_0_10_2016_subplot,"et_0jet_PTH_0_10_2016_subplot")       
-    #et_0jet_PTH_GE10_2016_sb = reBin(rb,et_0jet_PTH_GE10_2016_subplot,"et_0jet_PTH_GE10_2016_subplot")
-    #et_boosted_1J_2016_sb = reBin(rb,et_boosted_1J_2016_subplot,"et_boosted_1J_2016_subplot") 
-    #et_boosted_GE2J_2016_sb = reBin(rb,et_boosted_GE2J_2016_subplot,"et_boosted_GE2J_2016_subplot")           
-    #et_vbf_PTH_0_200_2016_sb = reBin(rb,et_vbf_PTH_0_200_2016_subplot,"et_vbf_PTH_0_200_2016_subplot")
-    #et_vbf_PTH_GE_200_2016_sb = reBin(rb,et_vbf_PTH_GE_200_2016_subplot,"et_vbf_PTH_GE_200_2016_subplot")                                                     
-    et_0jet_PTH_0_10_2016_sb  = et_0jet_PTH_0_10_2016_subplot
-    et_0jet_PTH_GE10_2016_sb  = et_0jet_PTH_GE10_2016_subplot
-    et_boosted_1J_2016_sb     = et_boosted_1J_2016_subplot
-    et_boosted_GE2J_2016_sb   = et_boosted_GE2J_2016_subplot
-    et_vbf_PTH_0_200_2016_sb  = et_vbf_PTH_0_200_2016_subplot
-    et_vbf_PTH_GE_200_2016_sb = et_vbf_PTH_GE_200_2016_subplot
-    #Merge the categories
-    print "merging the categories"
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(et_0jet_PTH_0_10_2016[histo])         
-            masterDictionary_sb[histo].Add(et_0jet_PTH_0_10_2016_subplot[histo])         
-            masterDictionary[histo].Add(et_0jet_PTH_GE10_2016[histo])         
-            masterDictionary[histo].Add(et_boosted_1J_2016[histo])   
-            masterDictionary[histo].Add(et_boosted_GE2J_2016[histo])  
-            masterDictionary[histo].Add(et_vbf_PTH_0_200_2016[histo]) 
-            masterDictionary[histo].Add(et_vbf_PTH_GE_200_2016[histo])
-            masterDictionary_sb[histo].Add(et_0jet_PTH_GE10_2016_subplot[histo])         
-            masterDictionary_sb[histo].Add(et_boosted_1J_2016_subplot[histo])   
-            masterDictionary_sb[histo].Add(et_boosted_GE2J_2016_subplot[histo])  
-            masterDictionary_sb[histo].Add(et_vbf_PTH_0_200_2016_subplot[histo]) 
-            masterDictionary_sb[histo].Add(et_vbf_PTH_GE_200_2016_subplot[histo])
-
-    em_0jet_PTH_0_10_2018_prefit  ={}                                                                             
-    em_0jet_PTH_GE10_2018_prefit  ={}  
-    em_boosted_1J_2018_prefit     ={}  
-    em_boosted_GE2J_2018_prefit   ={}  
-    em_vbf_PTH_0_200_2018_prefit  ={}  
-    em_vbf_PTH_GE_200_2018_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_0_10_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_0_10_2018_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_GE10_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_GE10_2018_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_1J_2018_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_1J_2018_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_GE2J_2018_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_GE2J_2018_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_0_200_2018_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_0_200_2018_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_GE_200_2018_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_GE_200_2018_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #em_0jet_PTH_0_10_2018  = reBin(rb,em_0jet_PTH_0_10_2018_prefit,"em_0jet_PTH_0_10_2018_prefit")       
-    #em_0jet_PTH_GE10_2018  = reBin(rb,em_0jet_PTH_GE10_2018_prefit,"em_0jet_PTH_GE10_2018_prefit")
-    #em_boosted_1J_2018     = reBin(rb,em_boosted_1J_2018_prefit,"em_boosted_1J_2018_prefit") 
-    #em_boosted_GE2J_2018   = reBin(rb,em_boosted_GE2J_2018_prefit,"em_boosted_GE2J_2018_prefit")           
-    #em_vbf_PTH_0_200_2018  = reBin(rb,em_vbf_PTH_0_200_2018_prefit,"em_vbf_PTH_0_200_2018_prefit")
-    #em_vbf_PTH_GE_200_2018 = reBin(rb,em_vbf_PTH_GE_200_2018_prefit,"em_vbf_PTH_GE_200_2018_prefit")                                                     
-
-
-    em_0jet_PTH_0_10_2018  = em_0jet_PTH_0_10_2018_prefit
-    em_0jet_PTH_GE10_2018  = em_0jet_PTH_GE10_2018_prefit
-    em_boosted_1J_2018     = em_boosted_1J_2018_prefit
-    em_boosted_GE2J_2018   = em_boosted_GE2J_2018_prefit
-    em_vbf_PTH_0_200_2018  = em_vbf_PTH_0_200_2018_prefit
-    em_vbf_PTH_GE_200_2018 = em_vbf_PTH_GE_200_2018_prefit
-
-
-
-    em_0jet_PTH_0_10_2018_subplot  ={}                                                                             
-    em_0jet_PTH_GE10_2018_subplot  ={}  
-    em_boosted_1J_2018_subplot     ={}  
-    em_boosted_GE2J_2018_subplot   ={}  
-    em_vbf_PTH_0_200_2018_subplot  ={}  
-    em_vbf_PTH_GE_200_2018_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_0_10_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_0_10_2018_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_GE10_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_GE10_2018_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_1J_2018_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_1J_2018_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_GE2J_2018_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_GE2J_2018_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_0_200_2018_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_0_200_2018_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_GE_200_2018_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_GE_200_2018_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #em_0jet_PTH_0_10_2018_sb = reBin(rb,em_0jet_PTH_0_10_2018_subplot,"em_0jet_PTH_0_10_2018_subplot")       
-    #em_0jet_PTH_GE10_2018_sb = reBin(rb,em_0jet_PTH_GE10_2018_subplot,"em_0jet_PTH_GE10_2018_subplot")
-    #em_boosted_1J_2018_sb = reBin(rb,em_boosted_1J_2018_subplot,"em_boosted_1J_2018_subplot") 
-    #em_boosted_GE2J_2018_sb = reBin(rb,em_boosted_GE2J_2018_subplot,"em_boosted_GE2J_2018_subplot")           
-    #em_vbf_PTH_0_200_2018_sb = reBin(rb,em_vbf_PTH_0_200_2018_subplot,"em_vbf_PTH_0_200_2018_subplot")
-    #em_vbf_PTH_GE_200_2018_sb = reBin(rb,em_vbf_PTH_GE_200_2018_subplot,"em_vbf_PTH_GE_200_2018_subplot")                                                     
-    em_0jet_PTH_0_10_2018_sb  = em_0jet_PTH_0_10_2018_subplot
-    em_0jet_PTH_GE10_2018_sb  = em_0jet_PTH_GE10_2018_subplot
-    em_boosted_1J_2018_sb     = em_boosted_1J_2018_subplot
-    em_boosted_GE2J_2018_sb   = em_boosted_GE2J_2018_subplot
-    em_vbf_PTH_0_200_2018_sb  = em_vbf_PTH_0_200_2018_subplot
-    em_vbf_PTH_GE_200_2018_sb = em_vbf_PTH_GE_200_2018_subplot
-    #Merge the categories
-    print "merging the categories"
-    
-    #masterDictionary=em_boosted_GE2J_2018
-    #masterDictionary_sb=em_boosted_GE2J_2018_sb
-    print "all the histos",masterDictionary.keys()
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(em_0jet_PTH_GE10_2018[histo])         
-            masterDictionary[histo].Add(em_boosted_1J_2018[histo])   
-            masterDictionary[histo].Add(em_boosted_GE2J_2018[histo])  
-            masterDictionary[histo].Add(em_vbf_PTH_0_200_2018[histo]) 
-            masterDictionary[histo].Add(em_vbf_PTH_GE_200_2018[histo])
-            masterDictionary_sb[histo].Add(em_0jet_PTH_GE10_2018_subplot[histo])         
-            masterDictionary_sb[histo].Add(em_boosted_1J_2018_subplot[histo])   
-            masterDictionary_sb[histo].Add(em_boosted_GE2J_2018_subplot[histo])  
-            masterDictionary_sb[histo].Add(em_vbf_PTH_0_200_2018_subplot[histo]) 
-            masterDictionary_sb[histo].Add(em_vbf_PTH_GE_200_2018_subplot[histo])
-
-
-
-    em_0jet_PTH_0_10_2017_prefit  ={}                                                                             
-    em_0jet_PTH_GE10_2017_prefit  ={}  
-    em_boosted_1J_2017_prefit     ={}  
-    em_boosted_GE2J_2017_prefit   ={}  
-    em_vbf_PTH_0_200_2017_prefit  ={}  
-    em_vbf_PTH_GE_200_2017_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_0_10_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_0_10_2017_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_GE10_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_GE10_2017_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_1J_2017_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_1J_2017_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_GE2J_2017_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_GE2J_2017_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_0_200_2017_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_0_200_2017_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_GE_200_2017_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_GE_200_2017_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #em_0jet_PTH_0_10_2017  = reBin(rb,em_0jet_PTH_0_10_2017_prefit,"em_0jet_PTH_0_10_2017_prefit")       
-    #em_0jet_PTH_GE10_2017  = reBin(rb,em_0jet_PTH_GE10_2017_prefit,"em_0jet_PTH_GE10_2017_prefit")
-    #em_boosted_1J_2017     = reBin(rb,em_boosted_1J_2017_prefit,"em_boosted_1J_2017_prefit") 
-    #em_boosted_GE2J_2017   = reBin(rb,em_boosted_GE2J_2017_prefit,"em_boosted_GE2J_2017_prefit")           
-    #em_vbf_PTH_0_200_2017  = reBin(rb,em_vbf_PTH_0_200_2017_prefit,"em_vbf_PTH_0_200_2017_prefit")
-    #em_vbf_PTH_GE_200_2017 = reBin(rb,em_vbf_PTH_GE_200_2017_prefit,"em_vbf_PTH_GE_200_2017_prefit")                                                     
-
-
-    em_0jet_PTH_0_10_2017  = em_0jet_PTH_0_10_2017_prefit
-    em_0jet_PTH_GE10_2017  = em_0jet_PTH_GE10_2017_prefit
-    em_boosted_1J_2017     = em_boosted_1J_2017_prefit
-    em_boosted_GE2J_2017   = em_boosted_GE2J_2017_prefit
-    em_vbf_PTH_0_200_2017  = em_vbf_PTH_0_200_2017_prefit
-    em_vbf_PTH_GE_200_2017 = em_vbf_PTH_GE_200_2017_prefit
-
-
-
-    em_0jet_PTH_0_10_2017_subplot  ={}                                                                             
-    em_0jet_PTH_GE10_2017_subplot  ={}  
-    em_boosted_1J_2017_subplot     ={}  
-    em_boosted_GE2J_2017_subplot   ={}  
-    em_vbf_PTH_0_200_2017_subplot  ={}  
-    em_vbf_PTH_GE_200_2017_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_0_10_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_0_10_2017_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_GE10_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_GE10_2017_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_1J_2017_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_1J_2017_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_GE2J_2017_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_GE2J_2017_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_0_200_2017_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_0_200_2017_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_GE_200_2017_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_GE_200_2017_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #em_0jet_PTH_0_10_2017_sb = reBin(rb,em_0jet_PTH_0_10_2017_subplot,"em_0jet_PTH_0_10_2017_subplot")       
-    #em_0jet_PTH_GE10_2017_sb = reBin(rb,em_0jet_PTH_GE10_2017_subplot,"em_0jet_PTH_GE10_2017_subplot")
-    #em_boosted_1J_2017_sb = reBin(rb,em_boosted_1J_2017_subplot,"em_boosted_1J_2017_subplot") 
-    #em_boosted_GE2J_2017_sb = reBin(rb,em_boosted_GE2J_2017_subplot,"em_boosted_GE2J_2017_subplot")           
-    #em_vbf_PTH_0_200_2017_sb = reBin(rb,em_vbf_PTH_0_200_2017_subplot,"em_vbf_PTH_0_200_2017_subplot")
-    #em_vbf_PTH_GE_200_2017_sb = reBin(rb,em_vbf_PTH_GE_200_2017_subplot,"em_vbf_PTH_GE_200_2017_subplot")                                                     
-    em_0jet_PTH_0_10_2017_sb  = em_0jet_PTH_0_10_2017_subplot
-    em_0jet_PTH_GE10_2017_sb  = em_0jet_PTH_GE10_2017_subplot
-    em_boosted_1J_2017_sb     = em_boosted_1J_2017_subplot
-    em_boosted_GE2J_2017_sb   = em_boosted_GE2J_2017_subplot
-    em_vbf_PTH_0_200_2017_sb  = em_vbf_PTH_0_200_2017_subplot
-    em_vbf_PTH_GE_200_2017_sb = em_vbf_PTH_GE_200_2017_subplot
-    #Merge the categories
-    print "merging the categories"
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(em_0jet_PTH_0_10_2017[histo])         
-            masterDictionary_sb[histo].Add(em_0jet_PTH_0_10_2017_subplot[histo])         
-            masterDictionary[histo].Add(em_0jet_PTH_GE10_2017[histo])         
-            masterDictionary[histo].Add(em_boosted_1J_2017[histo])   
-            masterDictionary[histo].Add(em_boosted_GE2J_2017[histo])  
-            masterDictionary[histo].Add(em_vbf_PTH_0_200_2017[histo]) 
-            masterDictionary[histo].Add(em_vbf_PTH_GE_200_2017[histo])
-            masterDictionary_sb[histo].Add(em_0jet_PTH_GE10_2017_subplot[histo])         
-            masterDictionary_sb[histo].Add(em_boosted_1J_2017_subplot[histo])   
-            masterDictionary_sb[histo].Add(em_boosted_GE2J_2017_subplot[histo])  
-            masterDictionary_sb[histo].Add(em_vbf_PTH_0_200_2017_subplot[histo]) 
-            masterDictionary_sb[histo].Add(em_vbf_PTH_GE_200_2017_subplot[histo])
-
-    em_0jet_PTH_0_10_2016_prefit  ={}                                                                             
-    em_0jet_PTH_GE10_2016_prefit  ={}  
-    em_boosted_1J_2016_prefit     ={}  
-    em_boosted_GE2J_2016_prefit   ={}  
-    em_vbf_PTH_0_200_2016_prefit  ={}  
-    em_vbf_PTH_GE_200_2016_prefit ={}                                     
-
-    ##rebin
-    rb=1
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_0_10_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_0_10_2016_prefit")                                                             
-
-    rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_GE10_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_GE10_2016_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_1J_2016_prefit     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_1J_2016_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_GE2J_2016_prefit   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_GE2J_2016_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_0_200_2016_prefit  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_0_200_2016_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_GE_200_2016_prefit = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_GE_200_2016_prefit")                                                   
-
-    #Rebin the histograms 
-    print "combining bins"
-    #em_0jet_PTH_0_10_2016  = reBin(rb,em_0jet_PTH_0_10_2016_prefit,"em_0jet_PTH_0_10_2016_prefit")       
-    #em_0jet_PTH_GE10_2016  = reBin(rb,em_0jet_PTH_GE10_2016_prefit,"em_0jet_PTH_GE10_2016_prefit")
-    #em_boosted_1J_2016     = reBin(rb,em_boosted_1J_2016_prefit,"em_boosted_1J_2016_prefit") 
-    #em_boosted_GE2J_2016   = reBin(rb,em_boosted_GE2J_2016_prefit,"em_boosted_GE2J_2016_prefit")           
-    #em_vbf_PTH_0_200_2016  = reBin(rb,em_vbf_PTH_0_200_2016_prefit,"em_vbf_PTH_0_200_2016_prefit")
-    #em_vbf_PTH_GE_200_2016 = reBin(rb,em_vbf_PTH_GE_200_2016_prefit,"em_vbf_PTH_GE_200_2016_prefit")                                                     
-
-
-    em_0jet_PTH_0_10_2016  = em_0jet_PTH_0_10_2016_prefit
-    em_0jet_PTH_GE10_2016  = em_0jet_PTH_GE10_2016_prefit
-    em_boosted_1J_2016     = em_boosted_1J_2016_prefit
-    em_boosted_GE2J_2016   = em_boosted_GE2J_2016_prefit
-    em_vbf_PTH_0_200_2016  = em_vbf_PTH_0_200_2016_prefit
-    em_vbf_PTH_GE_200_2016 = em_vbf_PTH_GE_200_2016_prefit
-
-
-
-    em_0jet_PTH_0_10_2016_subplot  ={}                                                                             
-    em_0jet_PTH_GE10_2016_subplot  ={}  
-    em_boosted_1J_2016_subplot     ={}  
-    em_boosted_GE2J_2016_subplot   ={}  
-    em_vbf_PTH_0_200_2016_subplot  ={}  
-    em_vbf_PTH_GE_200_2016_subplot ={}                                     
-
-    #rebin
-    rb=0
-
-    #gather the dictionaries for the histograms 
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins=[50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_0_10_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_0_10_2016_prefit")                                                             
-
-    #rollingBins = [30.0,40.0,50.0,60.0,70.0,10000.0]
-    rollingBins = [30.0,40.0,50.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_0jet_PTH_GE10_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_0jet_PTH_GE10_2016_prefit")
-
-    rollingBins = [0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_1J_2016_subplot     = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_1J_2016_prefit") 
-
-    rollingBins=[0.0,60.0,120.0,200.0,250.0,300.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_boosted_GE2J_2016_subplot   = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_boosted_GE2J_2016_prefit")                                                                           
-
-    rollingBins=[350.0,700.0,1000.0,1500.0,1800.0,10000.0]
-    #recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_0_200_2016_subplot  = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_0_200_2016_prefit")
-
-    rollingBins = [350.0,700.0,1200.0,10000.0]
-    #recoBins = [50.0,70.0,90.0,110.0,130.0,150.0,170.0,210.0,250.0,9000.0]
-    recoBins=[50.0,70.0,90.,110.,130.,150.0,170.0,210.0,250.0,300.0]
-    recobw = [20.0,20.0,20.0,20.0,20.0,20.0,40.0,40.0,8750.0,10000.0]
-    em_vbf_PTH_GE_200_2016_subplot = makePlots(fhisto,rerollfile,recoBins,rollingBins,recobw,rb,"em_vbf_PTH_GE_200_2016_prefit")                                                   
-    #Rebin the histograms 
-    print "combining bins"
-    #em_0jet_PTH_0_10_2016_sb = reBin(rb,em_0jet_PTH_0_10_2016_subplot,"em_0jet_PTH_0_10_2016_subplot")       
-    #em_0jet_PTH_GE10_2016_sb = reBin(rb,em_0jet_PTH_GE10_2016_subplot,"em_0jet_PTH_GE10_2016_subplot")
-    #em_boosted_1J_2016_sb = reBin(rb,em_boosted_1J_2016_subplot,"em_boosted_1J_2016_subplot") 
-    #em_boosted_GE2J_2016_sb = reBin(rb,em_boosted_GE2J_2016_subplot,"em_boosted_GE2J_2016_subplot")           
-    #em_vbf_PTH_0_200_2016_sb = reBin(rb,em_vbf_PTH_0_200_2016_subplot,"em_vbf_PTH_0_200_2016_subplot")
-    #em_vbf_PTH_GE_200_2016_sb = reBin(rb,em_vbf_PTH_GE_200_2016_subplot,"em_vbf_PTH_GE_200_2016_subplot")                                                     
-    em_0jet_PTH_0_10_2016_sb  = em_0jet_PTH_0_10_2016_subplot
-    em_0jet_PTH_GE10_2016_sb  = em_0jet_PTH_GE10_2016_subplot
-    em_boosted_1J_2016_sb     = em_boosted_1J_2016_subplot
-    em_boosted_GE2J_2016_sb   = em_boosted_GE2J_2016_subplot
-    em_vbf_PTH_0_200_2016_sb  = em_vbf_PTH_0_200_2016_subplot
-    em_vbf_PTH_GE_200_2016_sb = em_vbf_PTH_GE_200_2016_subplot
-    #Merge the categories
-    print "merging the categories"
-
-    for histo in masterDictionary.keys():
-        if histo in histonames:
-            print "Working on merging ",histo
-            masterDictionary[histo].Add(em_0jet_PTH_0_10_2016[histo])         
-            masterDictionary_sb[histo].Add(em_0jet_PTH_0_10_2016_subplot[histo])         
-            masterDictionary[histo].Add(em_0jet_PTH_GE10_2016[histo])         
-            masterDictionary[histo].Add(em_boosted_1J_2016[histo])   
-            masterDictionary[histo].Add(em_boosted_GE2J_2016[histo])  
-            masterDictionary[histo].Add(em_vbf_PTH_0_200_2016[histo]) 
-            masterDictionary[histo].Add(em_vbf_PTH_GE_200_2016[histo])
-            masterDictionary_sb[histo].Add(em_0jet_PTH_GE10_2016_subplot[histo])         
-            masterDictionary_sb[histo].Add(em_boosted_1J_2016_subplot[histo])   
-            masterDictionary_sb[histo].Add(em_boosted_GE2J_2016_subplot[histo])  
-            masterDictionary_sb[histo].Add(em_vbf_PTH_0_200_2016_subplot[histo]) 
-            masterDictionary_sb[histo].Add(em_vbf_PTH_GE_200_2016_subplot[histo])
     #Final Plots
     c = ROOT.TCanvas("c1","c1",50,50,600,600)
     #leg = ROOT.TLegend(0.1,0.45,0.28,0.84)
