@@ -75,7 +75,7 @@ def translate_categ(i):
    elif "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125" in i: return "ggH-2j/mJJ<350/pT[120,200]"
    elif "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125" in i: return "ggH-2j/mJJ[350,700]/pTHJJ[0,25]"
    elif "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125" in i: return "ggH-2j/mJJ[350,700]/pTHJJ>25"
-   elif "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125" in i: return "ggH-2j/mJJ>700/pTHJJ><5"
+   elif "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125" in i: return "ggH-2j/mJJ>700/pTHJJ[0,25]"
    elif "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125" in i: return "ggH-2j/mJJ>700/pTHJJ>25"
    elif "ggH_PTH_0_200_GE2J_MJJ_GE350" in i: return "ggH-2j/mJJ>350"
    elif "ggH_PTH_200_300_htt125" in i: return "ggH/pT[200,300]"
@@ -120,13 +120,20 @@ def is_included(mycat,type):
                                       or translate_categ(mycat)=="ZH" 
                                       or translate_categ(mycat)=="qqH" 
                                       or translate_categ(mycat)=="ggH") 
-                                  and not "_25" in mycat 
-                                  and not "qqH_0J" in mycat 
-                                  and not "qqH_1J" in mycat 
-                                  and not "GE25" in mycat 
-                                  and not "qqH_GE2J_MJJ_0_60" in mycat 
-                                  and not "qqH_GE2J_MJJ_60_120" in mycat 
-                                  and not "qqH_GE2J_MJJ_120_350" in mycat):
+                                  and ("PTH_0_10" in mycat
+                                       or "PTH_10_200" in mycat
+                                       or "PTH_0_60" in mycat
+                                       or "PTH_60_120" in mycat
+                                       or "PTH_120_200" in mycat
+                                       or "ggH_PTH_0_200_GE2J_MJJ_GE350" in mycat
+                                       or "PTH_200_300" in mycat
+                                       or "PTH_300_450" in mycat
+                                       or "PTH_GE200" in mycat
+                                       or "LT2J" in mycat
+                                       or "MJJ_0_350" in mycat
+                                       or "MJJ_350_700_PTH_0_200" in mycat
+                                       or "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25" in mycat
+                                       or "MJJ_GE700_PTH_0_200" in mycat)):
        included=1
     return included
 
