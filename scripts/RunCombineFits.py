@@ -125,6 +125,9 @@ logging.info("Final Card Combining Command:")
 logging.info('\n\n'+CardCombiningCommand+'\n')
 os.system(CardCombiningCommand)
 
+return 
+exit
+
 
 #per signal card workspace set up
 print("Setting up per signal workspace")
@@ -403,11 +406,13 @@ if (args.RunKappaVKappaF and not args.RealData):
     os.chdir(OutputDir)
 
     #Create Workspace
+    #using kappav kappaf physics parameters here:/HiggsAnalysis/CombinedLimit/python/HiggsCouplings.py (and LHCHCGModels line 581 etc) 
     KappaVKappaFcmd = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+OutputDir+"FinalCard_"+DateTag+".txt"+"-o comb_htt_kvkf.root"
     logging.info("Text to workspace kappaV kappaF:")
     logging.info('\n\n'+KappaVKappaFcmd+'\n')
     os.system(KappaVKappaFcmd)
-    #using kappav kappaf physics parameters here:/HiggsAnalysis/CombinedLimit/python/HiggsCouplings.py (and LHCHCGModels line 385 etc) 
+    print "exiting"
+    return 
     #the multidim fit fines the best fit value at a single point using 1000 toys spanning ranges of the coupling (k_v 0 to 5 k_f 0 to 5) - SM physics>0!
     KappaVKappaFcmd = "combine -M MultiDimFit -m 125 -n htt -t -1000 --setParameterRanges kappa_V=0.0,5.0:kappa_F=0.0,5.0 comb_htt_kvkf.root --algo=singles --robustFit=1" 
     logging.info("MultiDim Fit for kappaV kappaF central value:")

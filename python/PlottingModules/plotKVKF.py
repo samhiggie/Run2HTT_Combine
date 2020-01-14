@@ -91,7 +91,8 @@ SETTINGSC = {
     'tau': {
         'xvar': 'kappa_V',
         'yvar': 'kappa_F',
-        'fill_color': ROOT.TColor.GetColor(204, 204, 102),
+        'fill_color': ROOT.TColor.GetColor("#9999CC"),
+        'fill_color2': ROOT.TColor.GetColor("#CCCCFF"),
         'line_color': ROOT.TColor.GetColor(51, 51, 0),
         'legend': 'H#rightarrow#tau#tau',
         'multi': 2
@@ -158,8 +159,9 @@ SETTINGSA = {
     'tau': {
         'xvar': 'kappa_V',
         'yvar': 'kappa_F',
-        'fill_color': ROOT.TColor.GetColor(240, 234, 245),
-        'line_color': ROOT.TColor.GetColor(102, 51,  153),
+        'fill_color': ROOT.TColor.GetColor("#9999CC"),
+        'fill_color2': ROOT.TColor.GetColor("#CCCCFF"),
+        'line_color': ROOT.TColor.GetColor(51, 51, 0),
         'legend': 'H#rightarrow#tau#tau',
         'multi': 4
     },
@@ -328,7 +330,7 @@ for scan in order:
     fixZeros(hists[scan])
     outfile.WriteTObject(hists[scan], hists[scan].GetName() + '_processed')
     #conts68[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(1-0.683, 2))
-    #conts95[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(1-0.9545, 2))
+    conts95[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(1-0.9545, 2))
     conts68[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(
         1 - 0.683, 2), frameValue=10)
 
@@ -359,6 +361,7 @@ for scan in order:
         c.SetName('graph95_%s_%i' % (scan, i))
         for i, c in enumerate(conts95[scan]):
             c.SetLineColor(SETTINGS[scan]['line_color'])
+            c.SetFillColor(SETTINGS[scan]['fill_color2'])
             c.SetLineWidth(3)
             c.SetLineStyle(3)
             pads[0].cd()
@@ -393,9 +396,9 @@ legend.Draw()
 
 legend2 = ROOT.TLegend(0.7, 0.7, 0.9, 0.9, '', 'NBNDC')
 legend2.SetNColumns(1)
-#legend2.AddEntry(conts68['comb'][0], '1#sigma region', 'F')
-#legend2.AddEntry(conts95['comb'][0], '2#sigma region', 'L')
-#legend2.AddEntry(bestfits['comb'], 'Best fit', 'P')
+legend2.AddEntry(conts68['comb'][0], '1#sigma region', 'F')
+legend2.AddEntry(conts95['comb'][0], '2#sigma region', 'L')
+legend2.AddEntry(bestfits['comb'], 'Best fit', 'P')
 legend2.AddEntry(sm_point, 'SM expected', 'P')
 
 legend2.SetMargin(0.4)
@@ -417,7 +420,8 @@ latex2.SetTextSize(0.6*canv.GetTopMargin())
 latex2.SetTextFont(42)
 latex2.SetTextAlign(31)
 #latex2.DrawLatex(0.9, 0.95,"35.9 fb^{-1} (13 TeV)")
-latex2.DrawLatex(0.9, 0.95,"59.74 fb^{-1} (13 TeV) 2018")
+#latex2.DrawLatex(0.9, 0.95,"59.74 fb^{-1} (13 TeV) 2018")
+latex2.DrawLatex(0.9, 0.95,"137 fb^{-1} (13 TeV) Run II")
 latex2.SetTextAlign(11)
 latex2.SetTextSize(0.06)#0.7*canv.GetTopMargin())
 latex2.SetTextFont(62)
