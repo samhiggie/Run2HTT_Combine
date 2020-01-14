@@ -6,7 +6,7 @@ YBounds = (0.7,1.3)
 
 ratioMarkerStyle = 20
 ratioYAxisTitle = 'Obs / H#rightarrow#tau#tau + Bkg.'
-ratioYAxisTitleSize = 0.1
+ratioYAxisTitleSize = 0.08
 ratioYAxisTitleOffset = 0.62
 ratioYAxisLabelSize = 0.10
 ratioYAxisNDivisions = (6,0,0)
@@ -114,6 +114,6 @@ def MakeRatioPlot(theStack,theData):
     MCErrors.GetYaxis().SetNdivisions(ratioYAxisNDivisions[0],
                                        ratioYAxisNDivisions[1],
                                        ratioYAxisNDivisions[2])
-    MCErrors.GetYaxis().SetRangeUser(YBounds[0],YBounds[1])       
+    MCErrors.GetYaxis().SetRangeUser(YBounds[0],YBounds[1])           
 
     return ratioHist,MCErrors

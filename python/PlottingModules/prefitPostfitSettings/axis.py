@@ -1,8 +1,11 @@
 import ROOT
+from rebinning import GetNSlices
 
 #axisLabels = ['-----','','#uparrow','50.0-170.0','#downarrow','-----','170.0-210.0','210.0-250.0','250.0+']
+genericAxisLabels = ['50-70','70-90','90-110','110-130','130-150','150-170','170-210','210-250','250+']
 
-plotXAxisTitleSize = 0.1
+plotXAxisTitleSize = 0.12
+plotXAxisTitleOffset = 1.7
 
 xAxisLeftBound = 0.16
 
@@ -14,54 +17,28 @@ plotYAxisLabelSize = 0.075
 #approximately 0.0305 per bin at 3 slices.
 #approximate left bound at 0.16?
 
-def CreateAxisLabels(theHist):
-    pass
-    """
+def CreateAxisLabels(theHist,category):
     theAxis = theHist.GetXaxis()
-    theAxis.SetTitle('m_{#tau#tau}')
+    theAxis.SetTitle('m_{#tau#tau} (GeV)')
     theAxis.SetTitleSize(plotXAxisTitleSize)
-    theAxis.SetTitleOffset(1.1)
+    theAxis.SetTitleOffset(plotXAxisTitleOffset)
+    nSlices = GetNSlices(category)
+    nBins = 9 * nSlices    
+    for i in range(1,nBins+1):
+        theAxis.SetBinLabel(i,genericAxisLabels[(i-1)%9])
+
+    plotXAxisLabelSize = 0.3/(1.0*nSlices)
+
+    theAxis.SetLabelSize(plotXAxisLabelSize)
+
+    theAxis.LabelsOption("Mv")
     #theAxis.CenterTitle()
-    theAxis.SetLabelOffset(999)
-    theAxis.SetLabelSize(0.0)
+    #theAxis.SetLabelOffset(999)
+    #theAxis.SetLabelSize(0.0)
     #theAxis.SetAlphanumeric
     #theAxis.LabelsOption('v')
     #for i in range(1,10):
     #    theAxis.SetBinLabel(i,axisLabels[i-1])
-    labelOne = ROOT.TLatex()
-    labelOne.SetNDC()
-    labelOne.SetTextColor(ROOT.kBlack)
-    labelOne.SetTextFont(42)
-    labelOne.SetTextSize(0.08)
-    #labelOne.DrawLatex(0.16,0.18,'50.0-170.0')
-    labelTwo = ROOT.TLatex()
-    labelTwo.SetNDC()
-    labelTwo.SetTextColor(ROOT.kBlack)
-    labelTwo.SetTextFont(42)
-    labelTwo.SetTextSize(0.05)
-    labelTwo.SetTextAngle(45)
-    #labelTwo.DrawLatex(0.35,0.2,'170.0-210.0')    
-    labelThree = ROOT.TLatex()
-    labelThree.SetNDC()
-    labelThree.SetTextColor(ROOT.kBlack)
-    labelThree.SetTextFont(42)
-    labelThree.SetTextSize(0.05)
-    labelThree.SetTextAngle(45)
-    #labelThree.DrawLatex(0.38,0.2,'210.0-250.0')    
-    labelFour = ROOT.TLatex()
-    labelFour.SetNDC()
-    labelFour.SetTextColor(ROOT.kBlack)
-    labelFour.SetTextFont(42)
-    labelFour.SetTextSize(0.05)
-    labelFour.SetTextAngle(45)
-    #labelFour.DrawLatex(0.41,0.2,'250.0+')    
-    for i in range(0,3):
-        midValue = xAxisLeftBound + 2*0.0305 + i*9*0.0305
-        labelOne.DrawLatex(midValue,0.18,'50.0-170.0')
-        labelTwo.DrawLatex(0.315+i*9*0.0305,0.045,'170.0-210.0')
-        labelThree.DrawLatex(0.315+0.0305+i*9*0.0305,0.045,'210.0-250.0')
-        labelFour.DrawLatex(0.33+2*0.0305+i*9*0.0305,0.13,'250.0+')
-    """
         
 def SetPlotXaxis(theHist):
     theAxis = theHist.GetXaxis()

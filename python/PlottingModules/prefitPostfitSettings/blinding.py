@@ -12,11 +12,20 @@ def CalculateB(i,FullDictionary):
     content += FullDictionary['ZT'].GetBinContent(i)
     content += FullDictionary['ZL'].GetBinContent(i)
     content += FullDictionary['TTL'].GetBinContent(i)
-    content += FullDictionary['TTT'].GetBinContent(i)
+    try:
+        content += FullDictionary['TTT'].GetBinContent(i)
+    except KeyError:
+        pass
     content += FullDictionary['VVL'].GetBinContent(i)
-    content += FullDictionary['VVT'].GetBinContent(i)
+    try:
+        content += FullDictionary['VVT'].GetBinContent(i)
+    except KeyError:
+        pass
     content += FullDictionary['STL'].GetBinContent(i)
-    content += FullDictionary['STT'].GetBinContent(i)
+    try:
+        content += FullDictionary['STT'].GetBinContent(i)
+    except KeyError:
+        pass
     return content
 
 #this function will blind our datapoints,

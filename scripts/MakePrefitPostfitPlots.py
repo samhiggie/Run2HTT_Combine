@@ -57,10 +57,11 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     histograms[channel][year][category][prefitOrPostfit]['Data']={'data_obs':dataHistogram}                    
     outputRootFile.cd()                                        
     #let's do the rebinning
-    prefitPostfitSettings.rebinning.RebinCollection(histograms)
+    prefitPostfitSettings.rebinning.RebinCollection(histograms)    
     
     #let's add all the histograms together and get a run 2 collection as well now.
     #PROVIDED we have all the years present and accounted for
+    print("Making run 2...")
     if ('2016' in years
         and '2017' in years
         and '2018' in years):
@@ -81,6 +82,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
 
                     #Create the canvas and pads needed
                     theCanvas = ROOT.TCanvas(channel+"_"+year+"_"+category+"_"+prefitOrPostfit,channel+"_"+year+"_"+category+"_"+prefitOrPostfit)
+                    theCanvas.SetFillColor(0)
                     print("Performing pad set-up...")
                     plotPad,ratioPad = prefitPostfitSettings.plotPad.CreatePads(theCanvas)
                     prefitPostfitSettings.plotPad.SetupPad(plotPad)
@@ -107,6 +109,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     histograms[channel][year][category][prefitOrPostfit]['Signals']['Higgs'].Scale(20.0)                
                     print("Drawing...")
                     plotPad.cd()
+                    plotPad.SetFillColor(0)
                     backgroundStack.SetMinimum(max(backgroundStack.GetMinimum()*0.9,0.1))
                     backgroundStack.SetMaximum(backgroundStack.GetMaximum()*10)
                     backgroundStack.Draw()
@@ -115,7 +118,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'].Draw("SAME e1")
                     #axes
                     #prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
-                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())                    
+                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram()) 
                     #slice lines
                     plotSlicePad,plotSlices = prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram(),plotPad)
                     plotSlicePad.Draw()
@@ -131,18 +134,33 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     prefitPostfitSettings.channelText.DrawCategoryName(category)
                     prefitPostfitSettings.channelText.DrawChannelName(channel)
 
+                    #slice text
+                    prefitPostfitSettings.sliceLabels.CreateSliceText(category)
                     #ratio plot
                     ratioPad.cd()
                     #ratioPlot.Draw("AP")
                     #ratioPlot.Draw('ex0')                    
+                    
                     ratioErrors.Draw('e2')
                     ratioPlot.Draw('E0P')
+
+                    #Axis junk
+                    prefitPostfitSettings.axis.CreateAxisLabels(ratioErrors,category)                    
                     
+                    ratioPlotSlicePad,ratioPlotSlices = prefitPostfitSettings.sliceLines.CreateRatioSliceLines(plotSlices,ratioPad)
+                    ratioPlotSlicePad.Draw()
+                    ratioPlotSlicePad.cd()
+                    #ratioPad.cd()
+                    ratioPlotSlices.Draw()
+
                     #prefitPostfitSettings.sliceLines.CreateRatioSliceLines(category,ratioPlot)
-                    ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())
-                                        
+                    #print(ratioErrors.GetNdivisions())
+                    #ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())                    
+                    #print(ratioErrors.GetNdivisions())
                     
-                    #raw_input("Press enter to continue...")
+                    
+                    
+                    raw_input("Press enter to continue...")
                     
                     theCanvas.SaveAs(outputDir+theCanvas.GetName()+".png")
                     theCanvas.SaveAs(outputDir+theCanvas.GetName()+".pdf")

@@ -4,6 +4,45 @@ from array import array
 
 standardSliceSetup = [0,1,2,3,4,5,6,8,10,11]
 
+def GetNSlices(category):
+    if (category == catConfig.tt_boosted_1J_category
+        or category == catConfig.tt_boosted_GE2J_category
+        or category == catConfig.mt_boosted_1J_category
+        or category == catConfig.mt_boosted_GE2J_category
+        or category == catConfig.et_boosted_1J_category
+        or category == catConfig.et_boosted_GE2J_category
+        or category == catConfig.em_boosted_1J_category
+        or category == catConfig.em_boosted_GE2J_category
+        
+        ):
+            nSlices = 6
+    elif (category == catConfig.mt_vbf_low_category                    
+          or category == catConfig.em_vbf_low_category          
+          or category == catConfig.et_vbf_low_category
+          or category == catConfig.tt_vbf_high_category
+          or category == catConfig.tt_vbf_low_category
+          ):        
+        nSlices = 5
+    #elif (
+    #      ):
+    #    nSlices = 4
+    elif (category == catConfig.mt_vbf_high_category
+          or category == catConfig.et_vbf_high_category
+          or category == catConfig.em_vbf_high_category
+          or category == catConfig.mt_0jet_high_category
+          or category == catConfig.mt_0jet_low_category
+          or category == catConfig.et_0jet_high_category
+          or category == catConfig.et_0jet_low_category
+          or category == catConfig.em_0jet_high_category
+          or category == catConfig.em_0jet_low_category
+          ):
+        nSlices = 3    
+    #elif ():
+    #    nSlices = 2
+    elif (category == catConfig.tt_0jet_category):
+        nSlices = 0
+    return nSlices
+
 def CreateStandardSliceBinBoundaryArray(nSlices):
     binBoundaryArray = standardSliceSetup[:]    
     for i in range(nSlices):
@@ -17,49 +56,27 @@ def CreateStandardSliceBinBoundaryArray(nSlices):
 
 def RebinDictionary(dictionary,channel,category):
     binBoundaries = []
-    if (category == catConfig.tt_boosted_1J_category
-        or category == catConfig.tt_boosted_GE2J_category
-        or category == catConfig.mt_boosted_1J_category
-        or category == catConfig.mt_boosted_GE2J_category
-        or category == catConfig.et_boosted_1J_category
-        or category == catConfig.et_boosted_GE2J_category
-        or category == catConfig.em_boosted_1J_category
-        or category == catConfig.em_boosted_GE2J_category
-        or category == catConfig.tt_vbf_high_category
-        or category == catConfig.tt_vbf_low_category):
-            nSlices = 6
-    elif (category == catConfig.mt_vbf_low_category                    
-          or category == catConfig.em_vbf_low_category
-          or category == catConfig.mt_0jet_high_category          
-          ):        
-        nSlices = 5
-    elif (category == catConfig.et_vbf_low_category
-          or category == catConfig.et_0jet_high_category):
-        nSlices = 4
-    elif (category == catConfig.mt_vbf_high_category
-          or category == catConfig.et_vbf_high_category
-          or category == catConfig.em_vbf_high_category
-          or category == catConfig.mt_0jet_low_category
-          or category == catConfig.et_0jet_low_category
-          or category == catConfig.em_0jet_high_category):
-        nSlices = 3    
-    elif (category == catConfig.em_0jet_low_category):
-        nSlices = 2
-    elif (category == catConfig.tt_0jet_category):
-        nSlices = 0
+    nSlices = GetNSlices(category)
     binBoundaries = array('f',CreateStandardSliceBinBoundaryArray(nSlices))
+    #print(binBoundaries)    
     
+    #print binBoundaries
     print channel
     print category    
     for histogram in dictionary:
-        print histogram
+        #print histogram
+        #print(binBoundaries)
+        #print(dictionary[histogram].GetNbinsX())
         newHistogram  = ROOT.TH1F(dictionary[histogram].GetName(),
                                   dictionary[histogram].GetName(),
                                   dictionary[histogram].GetNbinsX(),
                                   binBoundaries)
+        #print("New One Made")
         for i in range(1,dictionary[histogram].GetNbinsX()+1):
+            #print(i)
             newHistogram.SetBinContent(i,dictionary[histogram].GetBinContent(i))
-            newHistogram.SetBinError(i,dictionary[histogram].GetBinError(i))
+            newHistogram.SetBinError(i,dictionary[histogram].GetBinError(i))            
+        #print("replacing")
         dictionary[histogram] = newHistogram
 
     
