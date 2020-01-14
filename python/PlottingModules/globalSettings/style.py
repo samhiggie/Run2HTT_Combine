@@ -21,7 +21,7 @@ def setPASStyle():
     #Pad Settings
     pasStyle.SetPadBorderMode(0)
     
-    pasStyle.SetPadColor(ROOT.kWhite)
+    pasStyle.SetPadColor(0)
     pasStyle.SetPadGridX(False)
     pasStyle.SetPadGridY(False)
     pasStyle.SetGridColor(0)

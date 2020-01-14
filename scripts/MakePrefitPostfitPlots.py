@@ -118,7 +118,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'].Draw("SAME e1")
                     #axes
                     #prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
-                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram())                    
+                    prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram()) 
                     #slice lines
                     plotSlicePad,plotSlices = prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram(),plotPad)
                     plotSlicePad.Draw()
@@ -134,16 +134,31 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     prefitPostfitSettings.channelText.DrawCategoryName(category)
                     prefitPostfitSettings.channelText.DrawChannelName(channel)
 
+                    #slice text
+                    prefitPostfitSettings.sliceLabels.CreateSliceText(category)
                     #ratio plot
                     ratioPad.cd()
                     #ratioPlot.Draw("AP")
                     #ratioPlot.Draw('ex0')                    
+                    
                     ratioErrors.Draw('e2')
                     ratioPlot.Draw('E0P')
+
+                    #Axis junk
+                    prefitPostfitSettings.axis.CreateAxisLabels(ratioErrors,category)                    
                     
+                    ratioPlotSlicePad,ratioPlotSlices = prefitPostfitSettings.sliceLines.CreateRatioSliceLines(plotSlices,ratioPad)
+                    ratioPlotSlicePad.Draw()
+                    ratioPlotSlicePad.cd()
+                    #ratioPad.cd()
+                    ratioPlotSlices.Draw()
+
                     #prefitPostfitSettings.sliceLines.CreateRatioSliceLines(category,ratioPlot)
-                    ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())
-                                        
+                    #print(ratioErrors.GetNdivisions())
+                    #ratioErrors.GetXaxis().SetNdivisions(plotSlices.GetXaxis().GetNdivisions())                    
+                    #print(ratioErrors.GetNdivisions())
+                    
+                    
                     
                     raw_input("Press enter to continue...")
                     

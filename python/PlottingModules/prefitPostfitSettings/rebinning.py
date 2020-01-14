@@ -4,19 +4,7 @@ from array import array
 
 standardSliceSetup = [0,1,2,3,4,5,6,8,10,11]
 
-def CreateStandardSliceBinBoundaryArray(nSlices):
-    binBoundaryArray = standardSliceSetup[:]    
-    for i in range(nSlices):
-        binBoundariesToAdd = standardSliceSetup[:]
-        for j in range(len(standardSliceSetup)):
-            binBoundariesToAdd[j] += 11*(i+1)
-        binBoundariesToAdd.pop(0)
-        binBoundaryArray  += binBoundariesToAdd                
-    return binBoundaryArray
-    
-
-def RebinDictionary(dictionary,channel,category):
-    binBoundaries = []
+def GetNSlices(category):
     if (category == catConfig.tt_boosted_1J_category
         or category == catConfig.tt_boosted_GE2J_category
         or category == catConfig.mt_boosted_1J_category
@@ -53,6 +41,22 @@ def RebinDictionary(dictionary,channel,category):
     #    nSlices = 2
     elif (category == catConfig.tt_0jet_category):
         nSlices = 0
+    return nSlices
+
+def CreateStandardSliceBinBoundaryArray(nSlices):
+    binBoundaryArray = standardSliceSetup[:]    
+    for i in range(nSlices):
+        binBoundariesToAdd = standardSliceSetup[:]
+        for j in range(len(standardSliceSetup)):
+            binBoundariesToAdd[j] += 11*(i+1)
+        binBoundariesToAdd.pop(0)
+        binBoundaryArray  += binBoundariesToAdd                
+    return binBoundaryArray
+    
+
+def RebinDictionary(dictionary,channel,category):
+    binBoundaries = []
+    nSlices = GetNSlices(category)
     binBoundaries = array('f',CreateStandardSliceBinBoundaryArray(nSlices))
     #print(binBoundaries)    
     

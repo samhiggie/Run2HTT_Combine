@@ -14,3 +14,4 @@ import stack
 import histogramAddition
 import rebinning
 import channelText
+import sliceLabels
