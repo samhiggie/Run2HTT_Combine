@@ -32,7 +32,9 @@ int main(int argc, char **argv)
   string aux_shapes = string(getenv("CMSSW_BASE")) + "/src/auxiliaries/shapes/";
 
   //keep a handle on the file, we need it to check if shapes are empty.
-  TFile* TheFile = new TFile((aux_shapes+"smh2016tt.root").c_str());
+  TFile* TheFile;
+  if(Input.OptionExists("-c"))TheFile = new TFile((aux_shapes+"tt_controls_2016.root").c_str());
+  else TheFile= new TFile((aux_shapes+"smh2016tt.root").c_str());
 
   //categories loaded from configurations
   std::vector<std::pair<int,std::string>> cats = {};
@@ -193,30 +195,47 @@ int main(int argc, char **argv)
 	TheFile,
 	CategoryArgs);
       */
+      if(Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",
+		"CMS_rawFF_tt_qcd_1jet_2016",
+		"CMS_rawFF_tt_qcd_2jet_2016",
+		"CMS_FF_closure_tau2pt_tt_qcd_0jet",
+		"CMS_FF_closure_tau2pt_tt_qcd_1jet",
+		"CMS_FF_closure_tau2pt_tt_qcd_2jet"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    CategoryArgs);
+	}
+      else
+	{
+	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",	    
+		"CMS_FF_closure_tau2pt_tt_qcd_0jet"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"tt_0jet"});
 
-      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",	    
-	    "CMS_FF_closure_tau2pt_tt_qcd_0jet"},
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,
-	{"tt_0jet"});
+	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_1jet_2016",	    
+		"CMS_FF_closure_tau2pt_tt_qcd_1jet"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"tt_boosted_onejet"});
 
-      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_1jet_2016",	    
-	    "CMS_FF_closure_tau2pt_tt_qcd_1jet"},
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,
-	{"tt_boosted_onejet"});
-
-      AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_2jet_2016",	    
-	    "CMS_FF_closure_tau2pt_tt_qcd_2jet"},
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,
-	{"tt_boosted_multijet","tt_vbf_highHpT","tt_vbf_lowHpT"});
+	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_2jet_2016",	    
+		"CMS_FF_closure_tau2pt_tt_qcd_2jet"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"tt_boosted_multijet","tt_vbf_highHpT","tt_vbf_lowHpT"});
+	}
+      
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_met_unclustered_2016"},
