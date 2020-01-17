@@ -91,8 +91,10 @@ SETTINGSC = {
     'tau': {
         'xvar': 'kappa_V',
         'yvar': 'kappa_F',
-        'fill_color': ROOT.TColor.GetColor(204, 204, 102),
-        'line_color': ROOT.TColor.GetColor(51, 51, 0),
+        'fill_color': ROOT.TColor.GetColor("#9999CC"),
+        'fill_color2': ROOT.TColor.GetColor("#CCCCFF"),
+        #'line_color': ROOT.TColor.GetColor(51, 51, 0),
+        'line_color': ROOT.kBlack,
         'legend': 'H#rightarrow#tau#tau',
         'multi': 2
     },
@@ -158,8 +160,10 @@ SETTINGSA = {
     'tau': {
         'xvar': 'kappa_V',
         'yvar': 'kappa_F',
-        'fill_color': ROOT.TColor.GetColor(240, 234, 245),
-        'line_color': ROOT.TColor.GetColor(102, 51,  153),
+        'fill_color': ROOT.TColor.GetColor("#9999CC"),
+        'fill_color2': ROOT.TColor.GetColor("#CCCCFF"),
+        #'line_color': ROOT.TColor.GetColor(51, 51, 0),
+        'line_color': ROOT.kBlack,
         'legend': 'H#rightarrow#tau#tau',
         'multi': 4
     },
@@ -242,6 +246,7 @@ parser.add_argument('--multi', type=int, default=1, help='scale number of bins')
 parser.add_argument('--thin', type=int, default=1, help='thin graph points')
 parser.add_argument('--order', default='Z,b,tau,gam,W,comb')
 parser.add_argument('--legend-order', default='b,tau,Z,gam,W,comb')
+parser.add_argument('--leg', help="draw the subprocesses legend",action="store_true")
 parser.add_argument('--x-range', default=None)
 parser.add_argument('--y-range', default=None)
 parser.add_argument('--pub', action='store_true')
@@ -328,7 +333,7 @@ for scan in order:
     fixZeros(hists[scan])
     outfile.WriteTObject(hists[scan], hists[scan].GetName() + '_processed')
     #conts68[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(1-0.683, 2))
-    #conts95[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(1-0.9545, 2))
+    conts95[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(1-0.9545, 2))
     conts68[scan] = plot.contourFromTH2(hists[scan], ROOT.Math.chisquared_quantile_c(
         1 - 0.683, 2), frameValue=10)
 
@@ -359,43 +364,51 @@ for scan in order:
         c.SetName('graph95_%s_%i' % (scan, i))
         for i, c in enumerate(conts95[scan]):
             c.SetLineColor(SETTINGS[scan]['line_color'])
+            c.SetFillColor(SETTINGS[scan]['fill_color2'])
             c.SetLineWidth(3)
-            c.SetLineStyle(3)
+            #c.SetLineStyle(3)
             pads[0].cd()
             outfile.WriteTObject(c, 'graph95_%s_%i' % (scan, i))
+        c.SetLineColor(SETTINGS[scan]['line_color'])
+        c.SetFillColor(SETTINGS[scan]['fill_color2'])
 for scan in legend_order:
     legend.AddEntry(conts68[scan][0], SETTINGS[scan]['legend'], 'F')
 for scan in order:
-    for i, c in enumerate(conts68[scan]):
-        if (i==0): c.Draw('L SAME')
     if scan in conts95:
         for i, c in enumerate(conts95[scan]):
-            c.Draw('L SAME')
+            c.Draw('LF SAME')
+    for i, c in enumerate(conts68[scan]):
+        if (i==0): c.Draw('LF SAME')
 
 for scan in order:
     bestfits[scan].SetMarkerColor(SETTINGS[scan]['line_color'])
     bestfits[scan].SetMarkerStyle(34)
-    bestfits[scan].SetMarkerSize(1.2)
+    bestfits[scan].SetMarkerSize(2.0)
     if scan == 'comb':
-        bestfits[scan].SetMarkerSize(1.5)
+        bestfits[scan].SetMarkerSize(2.0)
     bestfits[scan].Draw('PSAME')
 
 sm_point = ROOT.TGraph()
 sm_point.SetPoint(0, 1, 1)
 # sm_point.SetMarkerColor(ROOT.TColor.GetColor(249, 71, 1))
-sm_point.SetMarkerColor(ROOT.kBlack)
-sm_point.SetMarkerStyle(29)
+sm_point.SetMarkerColor(ROOT.kRed)
+sm_point.SetMarkerStyle(33)
 sm_point.SetMarkerSize(2)
 sm_point.Draw('PSAME')
 # sm_point.SetFillColor(ROOT.TColor.GetColor(248, 255, 1))
 
-legend.Draw()
+if args.leg:
+    legend.Draw()
 
-legend2 = ROOT.TLegend(0.7, 0.7, 0.9, 0.9, '', 'NBNDC')
+
+legend2 = ROOT.TLegend(0.55, 0.7, 0.9, 0.9, '', 'NBNDC')
 legend2.SetNColumns(1)
-#legend2.AddEntry(conts68['comb'][0], '1#sigma region', 'F')
-#legend2.AddEntry(conts95['comb'][0], '2#sigma region', 'L')
-#legend2.AddEntry(bestfits['comb'], 'Best fit', 'P')
+#legend2.AddEntry(conts68['tau'][0], '1#sigma region', 'f')
+#legend2.AddEntry(conts95['tau'][0], '2#sigma region', 'l')
+#legend2.AddEntry(bestfits['tau'], 'best fit 1000 toy model', 'p')
+legend2.AddEntry(conts68['tau'][0], '68% CL', 'f')
+legend2.AddEntry(conts95['tau'][0], '95% CL', 'f')
+legend2.AddEntry(bestfits['tau'], 'best fit Asimov', 'p')
 legend2.AddEntry(sm_point, 'SM expected', 'P')
 
 legend2.SetMargin(0.4)
@@ -417,16 +430,17 @@ latex2.SetTextSize(0.6*canv.GetTopMargin())
 latex2.SetTextFont(42)
 latex2.SetTextAlign(31)
 #latex2.DrawLatex(0.9, 0.95,"35.9 fb^{-1} (13 TeV)")
-latex2.DrawLatex(0.9, 0.95,"59.74 fb^{-1} (13 TeV) 2018")
+#latex2.DrawLatex(0.9, 0.95,"59.74 fb^{-1} (13 TeV) 2018")
+latex2.DrawLatex(0.9, 0.95,"137 fb^{-1} (13 TeV) Run II")
 latex2.SetTextAlign(11)
 latex2.SetTextSize(0.06)#0.7*canv.GetTopMargin())
 latex2.SetTextFont(62)
 latex2.SetTextAlign(11)
-latex2.DrawLatex(0.17, 0.95, "CMS")
+latex2.DrawLatex(0.17, 0.88, "CMS")
 latex2.SetTextSize(0.7*canv.GetTopMargin())
 latex2.SetTextFont(52)
 latex2.SetTextAlign(11)
-latex2.DrawLatex(0.3, 0.95, "Preliminary")
+latex2.DrawLatex(0.3, 0.88, "Preliminary")
 
 
 pads[0].RedrawAxis()
