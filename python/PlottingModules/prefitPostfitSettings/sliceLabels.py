@@ -19,7 +19,7 @@ def CreateSliceText(category):
     sliceLatex.SetNDC()
     sliceLatex.SetTextColor(ROOT.kBlack)
     sliceLatex.SetTextAlign(sliceTextAlign)    
-    sliceLatex.SetTextSize(0.09/(1.0*nSlices))        
+    sliceLatex.SetTextSize(0.12/(1.0*nSlices))        
     
     if (category == category == catConfig.mt_vbf_high_category or 
         category == catConfig.et_vbf_high_category or 
@@ -40,7 +40,7 @@ def CreateSliceText(category):
           category == catConfig.et_boosted_GE2J_category or 
           category == catConfig.em_boosted_1J_category or 
           category == catConfig.em_boosted_GE2J_category):
-        labels = mt_boosted_latex
+        labels = boosted_latex
 
     elif (category == catConfig.mt_vbf_high_category or 
           category == catConfig.et_vbf_high_category or 

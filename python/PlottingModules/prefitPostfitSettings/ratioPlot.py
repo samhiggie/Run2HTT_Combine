@@ -2,13 +2,13 @@ import ROOT
 from .. import Utilities
 from array import array
 
-YBounds = (0.7,1.3)
+YBounds = (0.5,1.5)
 
 ratioMarkerStyle = 20
 ratioYAxisTitle = 'Obs / H#rightarrow#tau#tau + Bkg.'
 ratioYAxisTitleSize = 0.08
 ratioYAxisTitleOffset = 0.62
-ratioYAxisLabelSize = 0.10
+ratioYAxisLabelSize = 0.1
 ratioYAxisNDivisions = (6,0,0)
 
 errorFillStyle = 3001

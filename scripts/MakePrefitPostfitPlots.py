@@ -74,10 +74,9 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     prefitPostfitSettings.dataSettings.ApplyDataSettings(histograms[channel][year][category][prefitOrPostfit]['Data']['data_obs'])
                     #perform blinding                    
                     print("blinding...")
-                    prefitPostfitSettings.blinding.BlindDataPoints(
-                        histograms[channel][year][category][prefitOrPostfit]['Signals'],
-                        histograms[channel][year][category][prefitOrPostfit]['Full'],
-                        histograms[channel][year][category][prefitOrPostfit]['Data']
+                    prefitPostfitSettings.blinding.BlindDataPoints(                        
+                        histograms[channel][year][category][prefitOrPostfit]['Data'],
+                        category
                     )                    
 
                     #Create the canvas and pads needed
