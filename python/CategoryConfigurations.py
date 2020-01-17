@@ -38,7 +38,7 @@ tt_0jet_categories = []
 tt_0jet_categories.append(tt_0jet_category)
 
 tt_Categories = []
-tt_Categories = tt_boosted_categories + tt_vbf_categories + tt_0jet_categories
+tt_Categories = tt_vbf_categories + tt_boosted_categories + tt_0jet_categories
 
 mt_boosted_categories = []
 mt_boosted_categories.append(mt_boosted_1J_category)

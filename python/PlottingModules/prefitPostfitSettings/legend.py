@@ -1,4 +1,5 @@
 import ROOT
+legendTextSizePixels = 15
 legendPosition = (0,0,1,1)
 histogramEntries = {
     'jetFakes':'Jet mis-ID',
@@ -27,6 +28,8 @@ histogramFormats = {
 nLegendColumns = 2
 
 theLegend = ROOT.TLegend(legendPosition[0],legendPosition[1],legendPosition[2],legendPosition[3])
+#theLegend.SetTextSizePixels(legendTextSizePixels)
+theLegend.SetTextSize(0.05)
 
 def CreateLegend(histogramDictionary):    
     
@@ -49,3 +52,5 @@ def DrawLegend(outputDir):
     legendCanvas.SaveAs(outputDir+"legend.png")
     legendCanvas.SaveAs(outputDir+"legend.pdf")
     legendCanvas.Write()
+    #print theLegend.GetTextSize()
+    #raw_input("")

@@ -10,37 +10,46 @@ def RetrievePlotsFromDirectory(channel, directory):
         print("no jet fakes found, assuming this is an e mu channel")
         W = directory.Get("W")
         QCD = directory.Get("QCD")
-    ZT = directory.Get("embedded")
-    if channel == 'mt' or channel == 'tt':
-        ZL = directory.Get("ZL")
-    else:
-        ZL = directory.Get("DYL")
+    ZT = directory.Get("embedded")    
+    ZL = directory.Get("ZL")    
     TTL = directory.Get("TTL")
-    TTT = directory.Get("TTT")
     VVL = directory.Get("VVL")
-    VVT = directory.Get("VVT")
     STL = directory.Get("STL")
-    STT = directory.Get("STT")
+    if channel != 'tt' and channel != 'em':
+        TTT = directory.Get("TTT")
+        VVT = directory.Get("VVT")
+        STT = directory.Get("STT")
     ggH = directory.Get("ggH_htt125")
     qqH = directory.Get("qqH_htt125")
     WH = directory.Get("WH_htt125")
     ZH = directory.Get("ZH_htt125")
+    if not ZL:
+        ZL = ZT.Clone()        
+        ZL.Reset()
+        ZL.SetNameTitle("ZL","ZL")
+    if not STL:
+        STL = ZT.Clone()
+        STL.Reset()
 
     TT = TTL.Clone()
     TT.SetNameTitle("TT","TT")
-    TT.Add(TTT)
+    if channel != 'tt' and channel != 'em':
+        TT.Add(TTT)
     
     VV = VVL.Clone()
     VV.SetNameTitle("VV","VV")
-    VV.Add(VVT)
+
+    if channel != 'tt' and channel != 'em':
+        VV.Add(VVT)
 
     ST = STL.Clone()
     ST.SetNameTitle("ST","ST")
-    ST.Add(STT)
+    if channel != 'tt' and channel != 'em':
+        ST.Add(STT)
 
     Top = TT.Clone()
     Top.SetNameTitle("Top","Top")
-    Top.Add(ST)
+    #Top.Add(ST)
 
     Higgs = ggH.Clone()
     Higgs.SetNameTitle("Higgs","Higgs")
@@ -51,17 +60,15 @@ def RetrievePlotsFromDirectory(channel, directory):
     Other = VV.Clone()
     Other.SetNameTitle("Other","Other")
     Other.Add(Higgs)    
+    Other.Add(ST)
 
     #create the Full histogram list
     fullDictionary = {        
         'ZT':ZT,
         'ZL':ZL,
-        'TTL':TTL,
-        'TTT':TTT,
-        'VVL':VVL,
-        'VVT':VVT,
-        'STL':STL,
-        'STT':STT,
+        'TTL':TTL,        
+        'VVL':VVL,        
+        'STL':STL,        
         'ggH':ggH,
         'qqH':qqH,
         'WH':WH,
@@ -81,7 +88,10 @@ def RetrievePlotsFromDirectory(channel, directory):
     else:
         fullDictionary['jetFakes'] = jetFakes
         slimmedDictionary['jetFakes'] = jetFakes
-
+    if channel != 'tt' and channel != 'em':
+        fullDictionary['TTT'] = TTT
+        fullDictionary['VVT'] = VVT
+        fullDictionary['STT'] = STT        
     signalDictionary = {
         'Higgs':Higgs,
         'ggH':ggH,

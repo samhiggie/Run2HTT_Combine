@@ -28,11 +28,11 @@ singleSTXSBin_ggH = [
   "r_ggH_FWDH_htt125",
   'r_ggH_PTH_0_200_0J_PTH_0_10_htt125',# 0J
   'r_ggH_PTH_0_200_0J_PTH_10_200_htt125', 
-  'r_ggH_PTH_0_200_1J_PTH_60_120_htt125', # 1J
   'r_ggH_PTH_0_200_1J_PTH_0_60_htt125',
+  'r_ggH_PTH_0_200_1J_PTH_60_120_htt125', # 1J  
   'r_ggH_PTH_0_200_1J_PTH_120_200_htt125',
-  'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125', # GE2J_MJJ_0_350
   'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125',
+  'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125', # GE2J_MJJ_0_350  
   'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125',
   'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125', #GE2J_MJJ_350_700
   'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125',
@@ -106,7 +106,7 @@ print "\t\t\t\t\t\33[1;30;47m<< STXS Stage1.2 >>\33[0m"
 print ""
 for poi in singleSTXSBin_ggH:
   colorCode = '\33[34m'
-  if poi == 'r_ggH_PTH_0_200_0J_PTH_0_10_htt125' or poi == 'r_ggH_PTH_0_200_1J_PTH_60_120_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125' or poi == "r_ggH_PTH_200_300_htt125" or poi == "r_ggH_FWDH_htt125":
+  if poi == 'r_ggH_PTH_0_200_0J_PTH_0_10_htt125' or poi == 'r_ggH_PTH_0_200_1J_PTH_0_60_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125' or poi == 'r_ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125' or poi == "r_ggH_PTH_200_300_htt125" or poi == "r_ggH_FWDH_htt125":
     print dashLine
   gap = gapComputer(poi,30)
   print (colorCode + poi + '\33[0m \t:\t' + UncertaintiesDic[poi] + gap)
