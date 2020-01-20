@@ -148,7 +148,7 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
         ratioErrors.Draw('e2')
         ratioPlot.Draw('E0P')
 
-        raw_input("Press enter to continue...")
+        theCanvas.SaveAs(outputDir+"/"+directoryName+".png")
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "Create control plots from a fit diagnostic output file")
