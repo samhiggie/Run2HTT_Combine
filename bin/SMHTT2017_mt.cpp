@@ -227,41 +227,6 @@ int main(int argc, char **argv)
                           1.00,
                           TheFile,CategoryArgs);
       
-      
-      //Fake factors
-      /*
-      std::cout<<"Fake Factors"<<std::endl;
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_mt_qcd_0jet_unc1_2017",
-            "CMS_rawFF_mt_qcd_0jet_unc2_2017",
-            "CMS_rawFF_mt_qcd_1jet_unc1_2017",
-            "CMS_rawFF_mt_qcd_1jet_unc2_2017",
-            "CMS_rawFF_mt_qcd_2jet_unc1_2017",
-            "CMS_rawFF_mt_qcd_2jet_unc2_2017",
-            "CMS_rawFF_mt_w_0jet_unc1_2017",
-            "CMS_rawFF_mt_w_0jet_unc2_2017",
-            "CMS_rawFF_mt_w_1jet_unc1_2017",
-            "CMS_rawFF_mt_w_1jet_unc2_2017",
-            "CMS_rawFF_mt_w_2jet_unc1_2017",
-            "CMS_rawFF_mt_w_2jet_unc2_2017",
-            "CMS_rawFF_mt_tt_unc1_2017",
-            "CMS_rawFF_mt_tt_unc2_2017",
-            "CMS_FF_closure_mvis_mt_qcd_0jet_2017",
-            "CMS_FF_closure_mvis_mt_qcd_1jet_2017",
-            "CMS_FF_closure_mvis_mt_qcd_2jet_2017",
-            "CMS_FF_closure_mvis_mt_w_0jet_2017",            
-            "CMS_FF_closure_mvis_mt_w_1jet_2017",
-            "CMS_FF_closure_mvis_mt_w_2jet_2017",
-            "CMS_FF_closure_mvis_mt_tt_0jet_2017",            
-            "CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
-            "CMS_FF_closure_mt_mt_w_unc1_2017",
-            "CMS_FF_closure_mt_mt_w_unc2_2017"
-	    },
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
-      */
       if (Input.OptionExists("-c"))
 	{
 	  AddShapesIfNotEmpty({
@@ -279,14 +244,20 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_2jet_unc2_2017",
 		"CMS_rawFF_mt_tt_unc1_2017",
 		"CMS_rawFF_mt_tt_unc2_2017",
-		"CMS_FF_closure_mvis_mt_qcd_0jet",
-		"CMS_FF_closure_mvis_mt_w_0jet",
-		"CMS_FF_closure_mvis_mt_qcd_1jet",
-		"CMS_FF_closure_mvis_mt_w_1jet",
-		"CMS_FF_closure_mvis_mt_qcd_2jet",
-		"CMS_FF_closure_mvis_mt_w_2jet",
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_0jet",
+		//"CMS_FF_closure_mvis_mt_w_0jet",
+		//"CMS_FF_closure_mvis_mt_qcd_1jet",
+		//"CMS_FF_closure_mvis_mt_w_1jet",
+		//"CMS_FF_closure_mvis_mt_qcd_2jet",
+		//"CMS_FF_closure_mvis_mt_w_2jet",
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2017",
+		"CMS_FF_closure_lpt_mt_qcd_2017",
+		"CMS_FF_closure_lpt_mt_w_2017",
+		"CMS_FF_closure_lpt_mt_tt_2017",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 		"CMS_FF_closure_mt_mt_w_unc1_2017",
 		"CMS_FF_closure_mt_mt_w_unc2_2017"},
 	    {"jetFakes"},
@@ -304,10 +275,16 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_0jet_unc2_2017",
 		"CMS_rawFF_mt_tt_unc1_2017",
 		"CMS_rawFF_mt_tt_unc2_2017",
-		"CMS_FF_closure_mvis_mt_qcd_0jet",
-		"CMS_FF_closure_mvis_mt_w_0jet",
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_0jet",
+		//"CMS_FF_closure_mvis_mt_w_0jet",
+		//"CMS_FF_closure_mvis_mt_tt",       
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2017",
+		"CMS_FF_closure_lpt_mt_qcd_2017",
+		"CMS_FF_closure_lpt_mt_w_2017",
+		"CMS_FF_closure_lpt_mt_tt_2017",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 		"CMS_FF_closure_mt_mt_w_unc1_2017",
 		"CMS_FF_closure_mt_mt_w_unc2_2017"},
 	    {"jetFakes"},
@@ -323,10 +300,16 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_1jet_unc2_2017",
 		"CMS_rawFF_mt_tt_unc1_2017",
 		"CMS_rawFF_mt_tt_unc2_2017",
-		"CMS_FF_closure_mvis_mt_qcd_1jet",
-		"CMS_FF_closure_mvis_mt_w_1jet",
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_1jet",
+		//"CMS_FF_closure_mvis_mt_w_1jet",
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2017",
+		"CMS_FF_closure_lpt_mt_qcd_2017",
+		"CMS_FF_closure_lpt_mt_w_2017",
+		"CMS_FF_closure_lpt_mt_tt_2017",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 		"CMS_FF_closure_mt_mt_w_unc1_2017",
 		"CMS_FF_closure_mt_mt_w_unc2_2017"},
 	    {"jetFakes"},
@@ -342,10 +325,16 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_2jet_unc2_2017",
 		"CMS_rawFF_mt_tt_unc1_2017",
 		"CMS_rawFF_mt_tt_unc2_2017",
-		"CMS_FF_closure_mvis_mt_qcd_2jet",
-		"CMS_FF_closure_mvis_mt_w_2jet",	    
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_2jet",
+		//"CMS_FF_closure_mvis_mt_w_2jet",	    
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2017",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2017",
+		"CMS_FF_closure_lpt_mt_qcd_2017",
+		"CMS_FF_closure_lpt_mt_w_2017",
+		"CMS_FF_closure_lpt_mt_tt_2017",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 		"CMS_FF_closure_mt_mt_w_unc1_2017",
 		"CMS_FF_closure_mt_mt_w_unc2_2017"
 		},
@@ -500,7 +489,10 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_m_embedded_2017","lnN",SystMap<>::init(1.01732));
 
       //Tau ID eff
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2017", "lnN", SystMap<>::init(1.020));
+      //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2017", "lnN", SystMap<>::init(1.020));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_pt30to35_2017", "shape", SystMap<>::init(1.00));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_pt35to40_2017", "shape", SystMap<>::init(1.00));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_ptgt40_2017", "shape", SystMap<>::init(1.00));
  
       // Embedded normalization
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_htt_doublemutrg_2017", "lnN", SystMap<>::init(1.04));

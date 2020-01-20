@@ -366,7 +366,11 @@ int main(int argc, char **argv)
     {      
  
       //Tau ID eff
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2016", "lnN", SystMap<>::init(1.040));
+      //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2016", "lnN", SystMap<>::init(1.040));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_dm0_2016", "shape", SystMap<>::init(1.000));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_dm1_2016", "shape", SystMap<>::init(1.000));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_dm10_2016", "shape", SystMap<>::init(1.000));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_dm11_2016", "shape", SystMap<>::init(1.000));
 
       //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_1ProngPi0Eff","lnN",ch::syst::SystMapAsymm<>::init(0.9934,1.011));
       //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_3ProngEff","lnN",ch::syst::SystMapAsymm<>::init(0.969,1.005));

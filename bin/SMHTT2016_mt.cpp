@@ -248,14 +248,20 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_2jet_unc2_2016",
 		"CMS_rawFF_mt_tt_unc1_2016",
 		"CMS_rawFF_mt_tt_unc2_2016",
-		"CMS_FF_closure_mvis_mt_qcd_0jet",
-		"CMS_FF_closure_mvis_mt_w_0jet",
-		"CMS_FF_closure_mvis_mt_qcd_1jet",
-		"CMS_FF_closure_mvis_mt_w_1jet",
-		"CMS_FF_closure_mvis_mt_qcd_2jet",
-		"CMS_FF_closure_mvis_mt_w_2jet",	    
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_0jet",
+		//"CMS_FF_closure_mvis_mt_w_0jet",
+		//"CMS_FF_closure_mvis_mt_qcd_1jet",
+		//"CMS_FF_closure_mvis_mt_w_1jet",
+		//"CMS_FF_closure_mvis_mt_qcd_2jet",
+		//"CMS_FF_closure_mvis_mt_w_2jet",	    
+		//"CMS_FF_closure_mvis_mt_tt",       
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2016",
+		"CMS_FF_closure_lpt_mt_qcd_2016",
+		"CMS_FF_closure_lpt_mt_w_2016",
+		"CMS_FF_closure_lpt_mt_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2016",            
 		"CMS_FF_closure_mt_mt_w_unc1_2016",
 		"CMS_FF_closure_mt_mt_w_unc2_2016",
 		},
@@ -273,10 +279,16 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_0jet_unc2_2016",
 		"CMS_rawFF_mt_tt_unc1_2016",
 		"CMS_rawFF_mt_tt_unc2_2016",
-		"CMS_FF_closure_mvis_mt_qcd_0jet",
-		"CMS_FF_closure_mvis_mt_w_0jet",
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_0jet",
+		//"CMS_FF_closure_mvis_mt_w_0jet",
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2016",
+		"CMS_FF_closure_lpt_mt_qcd_2016",
+		"CMS_FF_closure_lpt_mt_w_2016",
+		"CMS_FF_closure_lpt_mt_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2016",            
 		"CMS_FF_closure_mt_mt_w_unc1_2016",
 		"CMS_FF_closure_mt_mt_w_unc2_2016"},
 	    {"jetFakes"},
@@ -292,10 +304,16 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_1jet_unc2_2016",
 		"CMS_rawFF_mt_tt_unc1_2016",
 		"CMS_rawFF_mt_tt_unc2_2016",
-		"CMS_FF_closure_mvis_mt_qcd_1jet",
-		"CMS_FF_closure_mvis_mt_w_1jet",
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_1jet",
+		//"CMS_FF_closure_mvis_mt_w_1jet",
+		//"CMS_FF_closure_mvis_mt_tt",  
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2016",
+		"CMS_FF_closure_lpt_mt_qcd_2016",
+		"CMS_FF_closure_lpt_mt_w_2016",
+		"CMS_FF_closure_lpt_mt_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2016",            
 		"CMS_FF_closure_mt_mt_w_unc1_2016",
 		"CMS_FF_closure_mt_mt_w_unc2_2016"},
 	    {"jetFakes"},
@@ -311,10 +329,16 @@ int main(int argc, char **argv)
 		"CMS_rawFF_mt_w_2jet_unc2_2016",
 		"CMS_rawFF_mt_tt_unc1_2016",
 		"CMS_rawFF_mt_tt_unc2_2016",
-		"CMS_FF_closure_mvis_mt_qcd_2jet",
-		"CMS_FF_closure_mvis_mt_w_2jet",	    
-		"CMS_FF_closure_mvis_mt_tt",            
-		"CMS_FF_closure_OSSS_mvis_mt_qcd",            
+		//"CMS_FF_closure_mvis_mt_qcd_2jet",
+		//"CMS_FF_closure_mvis_mt_w_2jet",	    
+		//"CMS_FF_closure_mvis_mt_tt",  
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2016",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2016",
+		"CMS_FF_closure_lpt_mt_qcd_2016",
+		"CMS_FF_closure_lpt_mt_w_2016",
+		"CMS_FF_closure_lpt_mt_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2016",            
 		"CMS_FF_closure_mt_mt_w_unc1_2016",
 		"CMS_FF_closure_mt_mt_w_unc2_2016"
 		},
@@ -324,7 +348,6 @@ int main(int argc, char **argv)
 	    TheFile,
 	    {"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
 	}
-      
 
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
@@ -446,7 +469,11 @@ int main(int argc, char **argv)
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_m_embedded_2018","lnN",SystMap<>::init(1.01732));
 
       //Tau ID eff
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2016", "lnN", SystMap<>::init(1.020));
+      //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2016", "lnN", SystMap<>::init(1.020));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_pt30to35_2016", "shape", SystMap<>::init(1.00));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_pt35to40_2016", "shape", SystMap<>::init(1.00));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_ptgt40_2016", "shape", SystMap<>::init(1.00));
+      
 
       //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_1ProngPi0Eff","lnN",ch::syst::SystMapAsymm<>::init(0.9934,1.011));
       //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_3ProngEff","lnN",ch::syst::SystMapAsymm<>::init(0.969,1.005));

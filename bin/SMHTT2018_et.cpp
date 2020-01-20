@@ -202,14 +202,20 @@ int main(int argc, char **argv) {
 		"CMS_rawFF_et_w_2jet_unc2_2018",
 		"CMS_rawFF_et_tt_unc1_2018",
 		"CMS_rawFF_et_tt_unc2_2018",
-		"CMS_FF_closure_mvis_et_qcd_0jet",
-		"CMS_FF_closure_mvis_et_w_0jet",
-		"CMS_FF_closure_mvis_et_qcd_1jet",
-		"CMS_FF_closure_mvis_et_w_1jet",
-		"CMS_FF_closure_mvis_et_qcd_2jet",
-		"CMS_FF_closure_mvis_et_w_2jet",
-		"CMS_FF_closure_mvis_et_tt",            
-		"CMS_FF_closure_OSSS_mvis_et_qcd",            
+		//"CMS_FF_closure_mvis_et_qcd_0jet",
+		//"CMS_FF_closure_mvis_et_w_0jet",
+		//"CMS_FF_closure_mvis_et_qcd_1jet",
+		//"CMS_FF_closure_mvis_et_w_1jet",
+		//"CMS_FF_closure_mvis_et_qcd_2jet",
+		//"CMS_FF_closure_mvis_et_w_2jet",
+		//"CMS_FF_closure_mvis_et_tt",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
 		"CMS_FF_closure_mt_et_w_unc1_2018",
 		"CMS_FF_closure_mt_et_w_unc2_2018"},
 	    {"jetFakes"},
@@ -220,6 +226,10 @@ int main(int argc, char **argv) {
 	}
       else
 	{
+	  //some of the uncerts are only relevant in certain categories. 
+	  //and missing in all the others
+	  //so the names have been explicitly hacked in
+	  // we need a better way to handle uncertainties that may be explicit to certain categories only
 	  AddShapesIfNotEmpty({
 	      "CMS_rawFF_et_qcd_0jet_unc1_2018",
 		"CMS_rawFF_et_qcd_0jet_unc2_2018",
@@ -227,10 +237,16 @@ int main(int argc, char **argv) {
 		"CMS_rawFF_et_w_0jet_unc2_2018",
 		"CMS_rawFF_et_tt_unc1_2018",
 		"CMS_rawFF_et_tt_unc2_2018",
-		"CMS_FF_closure_mvis_et_qcd_0jet",
-		"CMS_FF_closure_mvis_et_w_0jet",
-		"CMS_FF_closure_mvis_et_tt",            
-		"CMS_FF_closure_OSSS_mvis_et_qcd",            
+		//"CMS_FF_closure_mvis_et_qcd_0jet",
+		//"CMS_FF_closure_mvis_et_w_0jet",
+		//"CMS_FF_closure_mvis_et_tt",       
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
 		"CMS_FF_closure_mt_et_w_unc1_2018",
 		"CMS_FF_closure_mt_et_w_unc2_2018"},
 	    {"jetFakes"},
@@ -246,10 +262,16 @@ int main(int argc, char **argv) {
 		"CMS_rawFF_et_w_1jet_unc2_2018",
 		"CMS_rawFF_et_tt_unc1_2018",
 		"CMS_rawFF_et_tt_unc2_2018",
-		"CMS_FF_closure_mvis_et_qcd_1jet",
-		"CMS_FF_closure_mvis_et_w_1jet",
-		"CMS_FF_closure_mvis_et_tt",            
-		"CMS_FF_closure_OSSS_mvis_et_qcd",            
+		//"CMS_FF_closure_mvis_et_qcd_1jet",
+		//"CMS_FF_closure_mvis_et_w_1jet",
+		//"CMS_FF_closure_mvis_et_tt",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
 		"CMS_FF_closure_mt_et_w_unc1_2018",
 		"CMS_FF_closure_mt_et_w_unc2_2018"},
 	    {"jetFakes"},
@@ -265,9 +287,15 @@ int main(int argc, char **argv) {
 		"CMS_rawFF_et_w_2jet_unc2_2018",
 		"CMS_rawFF_et_tt_unc1_2018",
 		"CMS_rawFF_et_tt_unc2_2018",
-		"CMS_FF_closure_mvis_et_qcd_2jet_2018",
-		"CMS_FF_closure_mvis_et_w_2jet_2018",	    
-		"CMS_FF_closure_mvis_et_tt_2018",            
+		//"CMS_FF_closure_mvis_et_qcd_2jet_2018",
+		//"CMS_FF_closure_mvis_et_w_2jet_2018",	    
+		//"CMS_FF_closure_mvis_et_tt_2018",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
 		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
 		"CMS_FF_closure_mt_et_w_unc1_2018",
 		"CMS_FF_closure_mt_et_w_unc2_2018"
@@ -410,7 +438,10 @@ int main(int argc, char **argv) {
       cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_e_embedded_2018","lnN",SystMap<>::init(1.01732));
 
       //Tau ID eff
-      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2018", "lnN", SystMap<>::init(1.020));
+      //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_2018", "lnN", SystMap<>::init(1.020));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_pt30to35_2018", "shape", SystMap<>::init(1.00));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_pt35to40_2018", "shape", SystMap<>::init(1.00));
+      cb.cp().process({"embedded"}).AddSyst(cb,"CMS_eff_t_embedded_ptgt40_2018", "shape", SystMap<>::init(1.00));
 
       //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_1ProngPi0Eff","lnN",ch::syst::SystMapAsymm<>::init(0.9934,1.011));
       //cb.cp().process({"embedded"}).AddSyst(cb,"CMS_3ProngEff","lnN",ch::syst::SystMapAsymm<>::init(0.969,1.005));
