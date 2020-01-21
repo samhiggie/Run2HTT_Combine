@@ -7,6 +7,38 @@ import CombineHarvester.Run2HTT_Combine.PlottingModules.globalSettings as global
 import CombineHarvester.Run2HTT_Combine.PlottingModules.prefitPostfitSettings as prefitPostfitSettings
 import CombineHarvester.Run2HTT_Combine.PlottingModules.Utilities as Utils
 
+axisLabels = {
+    'mt':{'MT':"MT",
+          'dr':'#Delta R',
+          'higgspt':'p_{t}^{H}',
+          'met':"MET",
+          'mjj':"m_{jj}",
+          'mtt':"m_{#tau#tau}",
+          'mueta':"#eta_{#mu}",
+          'mupt':"p_{t}^{#mu}",
+          'mvis':"m_{vis}",
+          'njets':"N_{jets}",
+          'taueta':"#eta_{#tau}",
+          'taupt':"p_{t}^{#tau}"},
+    'tt':{},
+    'et':{},
+    'em':{},
+    }
+tickLabels = {
+    'MT':"MT",
+          'dr':(0.0,6.0),
+          'higgspt':(0.0,120.0),
+          'met':(0.0,200.0),
+          'mjj':(0.0,500.0),
+          'mtt':(0.0,300.0),
+          'mueta':(-2.4,2.4),
+          'mupt':(20.0,80.0),
+          'mvis':(50.0,200.0),
+          'njets':(0.0,6.0),
+          'taueta':(-2.5,2.5),
+          'taupt':(30.0,80.0),
+    }
+
 def DrawControls(tag,year,channel,DontPerformCalculation=False):
     globalSettings.style.setPASStyle()
     ROOT.gROOT.SetStyle('pasStyle')
@@ -141,11 +173,22 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
         backgroundStack.SetMaximum(backgroundStack.GetMaximum()*1.05)
         backgroundStack.Draw()
         backgroundStackErrors.Draw("SAME e2")
+        backgroundStack.GetHistogram().GetYaxis().SetTitle("Events")
+        backgroundStack.GetHistogram().GetYaxis().CenterTitle()
+        #backgroundStack.GetHistogram().SetTitle(axisLabels[channel][directoryName])
+        backgroundStack.GetHistogram().GetYaxis().SetTitleOffset(1.5)        
         AllHiggs.Draw("SAME HIST")
         Data.Draw("SAME e1")
 
         ratioPad.cd()
         ratioErrors.Draw('e2')
+        ratioErrors.GetXaxis().SetTitle(axisLabels[channel][directoryName])
+        ratioErrors.GetXaxis().SetTitleOffset(1.5)
+        ratioErrors.GetXaxis().SetBinLabel(1,str(tickLabels[directoryName][0]))
+        ratioErrors.GetXaxis().SetBinLabel(ratioErrors.GetNbinsX(),str(tickLabels[directoryName][1]))
+        ratioErrors.GetXaxis().SetLabelSize(0.10)
+        ratioErrors.GetXaxis().SetLabelOffset(0.02)
+        ratioErrors.GetXaxis().SetTitleSize(0.12)
         ratioPlot.Draw('E0P')
 
         theCanvas.SaveAs(outputDir+"/"+directoryName+".png")
