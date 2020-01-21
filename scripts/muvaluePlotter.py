@@ -214,7 +214,7 @@ for x in f:
     elif ii==0:
       combineMu= mean; lowBnad=down; highBand=up;
 
-    myresult=str(mean)+" -"+str(down)+"/-"+str(up)
+    myresult=str(mean)+" -"+str(down)+"/+"+str(up)
 
     print mycat2,is_included(mycat2,args.type)
     if is_included(mycat2,args.type):
