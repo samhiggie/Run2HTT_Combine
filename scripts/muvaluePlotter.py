@@ -170,7 +170,7 @@ print nlines
 
 f.seek(0)
 
-axis = ROOT.TH2F('axis', '', 1, 0., 10, 10, 0.01, nlines)
+axis = ROOT.TH2F('axis', '', 1, -10, 10, 10, 0.01, nlines)
 axis.GetXaxis().SetTitle("#mu")
 axis.GetYaxis().SetLabelSize(0)
 axis.GetYaxis().SetTickLength(0)
