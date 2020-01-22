@@ -17,27 +17,20 @@ def RandomStringTag(size=6,chars=string.ascii_uppercase+string.ascii_lowercase+s
 parser = argparse.ArgumentParser(description="Centralized script for running combine fits on dynamically changing analysis categories.")
 parser.add_argument('--years',nargs="+",choices=['2016','2017','2018'],help="Specify the year(s) to run the fit for",required=True)
 parser.add_argument('--channels',nargs="+",choices=['mt','et','tt','em'],help="specify the channels to create data cards for",required=True)
+parser.add_argument('--NoDatacards',help="Don't use combine harvester to collect the histograms from root files and make text datacards",default=False,action="store_true")
 parser.add_argument('--RunShapeless',help="Run combine model without using any shape uncertainties",action="store_true")
 parser.add_argument('--RunWithBinByBin',help="Run combine model without using bin-by-bin uncertainties",action="store_true")
 parser.add_argument('--RunWithoutAutoMCStats',help="Run with auto mc stats command appended to data cards",action="store_true")
-parser.add_argument('--RunInclusiveggH',help="Run using an inclusive ggH distribution (no STXS bins), using either this or the the inclusive qqH will cancel STXS bin measurements",action="store_true")
-parser.add_argument('--RunInclusiveqqH',help="Run using an inclusive qqH distribution (no STXS bins), using either this or the inclusive ggH will cancel STXS bin measurements.",action="store_true")
-parser.add_argument('--ComputeSignificance',help="Compute expected significances instead of expected POIs",action="store_true")
-parser.add_argument('--ComputeImpacts',help="Compute expected impacts on Inclusive POI",action="store_true")
-parser.add_argument('--ComputeGOF',help="Compute saturated GOF",action="store_true")
-#parser.add_argument('--DisableCategoryFits',help="Disable category card creation and fits",action="store_true")
+parser.add_argument('--MakeStage0',help="Run using only signals",action="store_true")
+parser.add_argument('--MakeStage12',help="Make the workspace for all 1.2 categories",action="store_true")
+parser.add_argument('--MakeStage12Merged',help="Run using only signals",action="store_true")
 parser.add_argument('--Timeout', help="Trigger timeout as conditions on fits (prevents infinitely running fits)", action="store_true")
 parser.add_argument('--TimeoutTime',nargs='?',help="Time allotted before a timeout (linux timeout syntax)",default="180s")
 parser.add_argument('--SplitUncertainties', help="Create groups for helping to split the measurements",action="store_true")
 parser.add_argument('--SplitInclusive',help="Split the inclusive measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
 parser.add_argument('--SplitSignals',help="Split signal measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
 parser.add_argument('--SplitSTXS',help="Split STXS measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
-parser.add_argument('--RunParallel',help='Run all fits in parallel using threads',action="store_true")
-parser.add_argument('--numthreads',nargs='?',help='Number of threads to use to run fits in parallel',type=int,default=12)
 parser.add_argument('--DecorrelateForMe',help="Run the decorrelator as part of the overall run. Looks for a datacard named smh<year><channel>_nocorrelation.root",action="store_true")
-parser.add_argument('--StoreShapes', help = "Store pre and post-fit shapes for use later",action = "store_true")
-parser.add_argument('--RunKappaVKappaF',help="Runs kappa_V and kappa_F scan",action="store_true")
-parser.add_argument('--RealData',help="Use the RealData dataset in the limit calculation - only available for kappa_V and kappa_F scan at the moment",action="store_true")
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
@@ -51,8 +44,7 @@ print("This session is run under tag: "+DateTag)
 print "*********************************************"
 print ''
 #check if we have an output directory
-if args.RunParallel:
-    ThreadHandler = ThreadManager(args.numthreads)
+
 if not os.path.isdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output"):
     os.mkdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output")
 OutputDir = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+DateTag+"/"
@@ -102,48 +94,48 @@ for year in args.years:
 #we can't do this the old way of first mashing all channels together and then mashing those into a final card
 #messes with paths somewhere
 #we have to do this in one fell swoop.
-CombinedCardName = OutputDir+"FinalCard_"+DateTag+".txt"
-CardCombiningCommand = "combineCards.py"
-if args.SplitUncertainties:
-    Splitter = UncertaintySplitter()
-for year in args.years:
-    for channel in args.channels:
-        CardNum = 1
-        TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
-        for Directory in TheFile.GetListOfKeys():
-            if Directory.GetName() in cfg.Categories[channel]:
-                if not args.RunWithoutAutoMCStats:
-                    CardFile = open(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt","a+")
-                    CardFile.write("* autoMCStats 0.0\n")
-                    CardFile.close()                
-                if args.SplitUncertainties:                    
-                    Splitter.FindAndTagGroups(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt")
-                CardCombiningCommand += " "+Directory.GetName()+"_"+year+"="+OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
-                CardNum+=1
-CardCombiningCommand+= " > "+CombinedCardName
-logging.info("Final Card Combining Command:")
-logging.info('\n\n'+CardCombiningCommand+'\n')
-os.system(CardCombiningCommand)
+if not args.NoDatacards:
+    CombinedCardName = OutputDir+"FinalCard_"+DateTag+".txt"
+    CardCombiningCommand = "combineCards.py"
+    if args.SplitUncertainties:
+        Splitter = UncertaintySplitter()
+    for year in args.years:
+        for channel in args.channels:
+            CardNum = 1
+            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
+            for Directory in TheFile.GetListOfKeys():
+                if Directory.GetName() in cfg.Categories[channel]:
+                    if not args.RunWithoutAutoMCStats:
+                        CardFile = open(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt","a+")
+                        CardFile.write("* autoMCStats 0.0\n")
+                        CardFile.close()                
+                    if args.SplitUncertainties:                    
+                        Splitter.FindAndTagGroups(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt")
+                    CardCombiningCommand += " "+Directory.GetName()+"_"+year+"="+OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
+                    CardNum+=1
 
-return 
-exit
+    CardCombiningCommand+= " > "+CombinedCardName
+    logging.info("Final Card Combining Command:")
+    logging.info('\n\n'+CardCombiningCommand+'\n')
+    os.system(CardCombiningCommand)
 
 
-#per signal card workspace set up
-print("Setting up per signal workspace")
-PerSignalName = OutputDir+"Workspace_per_signal_breakdown_cmb_"+DateTag+".root"
-#PerSignalWorkspaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-Input = "ls  ../../../auxiliaries/shapes" 
-PerSignalWorkspaceCommand = " combineTool.py -M T2W -o "+OutputDir+"InclusiveMasterworkspace.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
-PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
-PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
-PerSignalWorkspaceCommand+= "--PO 'map=.*/ZH_htt125.*:r_ZH[1,-25,25]' "
-PerSignalWorkspaceCommand+= CombinedCardName +" -o "+PerSignalName+" -m 125"
+if args.MakeStage0:
+    #per signal card workspace set up
+    print("Setting up per signal workspace")
+    PerSignalName = OutputDir+"Workspace_per_signal_breakdown_cmb_"+DateTag+".root"
+    #PerSignalWorkspaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
+    Input = "ls  ../../../auxiliaries/shapes" 
+    PerSignalWorkspaceCommand = " combineTool.py -M T2W -o "+OutputDir+"workspace_"+DateTag+"_stage0.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
+    PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
+    PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
+    PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
+    PerSignalWorkspaceCommand+= "--PO 'map=.*/ZH_htt125.*:r_ZH[1,-25,25]' "
 
-logging.info("Per Signal Workspace Command:")
-logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
-os.system(PerSignalWorkspaceCommand)
+    logging.info("Per Signal Workspace Command:")
+    logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
+    os.system(PerSignalWorkspaceCommand)
+
 
 #per category
 """
@@ -163,7 +155,7 @@ if not args.DisableCategoryFits:
 """
 
 #Set up the possible STXS bins list
-if not (args.RunInclusiveggH or args.RunInclusiveqqH):
+if (args.MakeStage12):
     print("Setting up STXS commands")
     STXSBins = ["ggH_PTH_0_200_0J_PTH_10_200_htt125",
                 "ggH_PTH_0_200_0J_PTH_0_10_htt125",
@@ -193,26 +185,20 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
                 "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125",
                 "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
                 "qqH_FWDH_htt125"]
-    PerSTXSName = OutputDir+"workspace_per_STXS_breakdown_cmb_"+DateTag+".root"
-    #PerSTXSBinsWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-    #PerSTXSBinsWorkspaceCommand = " combineTool.py -M T2W -o "+OutputDir+"STXSMasterworkspace.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-    PerSTXSBinsWorkspaceCommand = " combineTool.py -M T2W -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
+    PerSTXSBinsWorkspaceCommand = " combineTool.py -M T2W -o workspace_"+DateTag+"_stage1.2.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
     STXSSignalNames=[]
     for Bin in STXSBins:
         STXSSignalNames.append("r_"+Bin)
         PerSTXSBinsWorkSpaceCommand += "--PO 'map=.*/"+Bin+":"+"r_"+Bin+"[1,-25,25]' "
-    #PerSTXSBinsWorkSpaceCommand += CombinedCardName+" -o "+PerSTXSName+" -m 125"
-    PerSTXSBinsWorkSpaceCommand += " -o "+PerSTXSName+" -m 125"
 
     logging.info("Per STXS Bins Work Space Command")
     logging.info('\n\n'+PerSTXSBinsWorkSpaceCommand+'\n')
     os.system(PerSTXSBinsWorkSpaceCommand)
 
+if (args.MakeStage12Merged):
     #add in the merged ones
     PerMergedBinName = OutputDir+"workspace_per_Merged_breakdown_cmb_"+DateTag+".root"
-    #PerMergedBinWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-    #PerMergedBinWorkspaceCommand = " combineTool.py -M T2W -o "+OutputDir+"MergedMasterworkspace.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-    PerMergedBinWorkspaceCommand = " combineTool.py -M T2W -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
+    PerMergedBinWorkspaceCommand = " combineTool.py -M T2W -o workspace_"+DateTag+"_stage1.2_merged.root-i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
     MergedSignalNames=[]
     #qqH, less than 2 Jets
     MergedSignalNames.append("qqH_LT2J")
@@ -244,15 +230,8 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_450_600_htt125:r_ggH_PTH_GE200[1,-25,25]' "
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_GE650_htt125:r_ggH_PTH_GE200[1,-25,25]' "
 
-    #PerMergedBinWorkSpaceCommand += CombinedCardName+" -o "+PerMergedBinName+" -m 125"
-    PerMergedBinWorkSpaceCommand += " -o "+PerMergedBinName+" -m 125"
 
     logging.info("Per Merged Bin Work Space Command")
     logging.info('\n\n'+PerMergedBinWorkSpaceCommand+'\n')
     os.system(PerMergedBinWorkSpaceCommand)
-
-#TextWorkspaceCommand = "text2workspace.py "+CombinedCardName+" -m 125"
-#logging.info("Text 2 Worskpace Command:")
-#logging.info('\n\n'+TextWorkspaceCommand+'\n')
-#os.system(TextWorkspaceCommand)
 
