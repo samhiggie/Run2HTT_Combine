@@ -32,6 +32,7 @@ parser.add_argument('--SplitUncertainties', help="Create groups for helping to s
 parser.add_argument('--SplitInclusive',help="Split the inclusive measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
 parser.add_argument('--SplitSignals',help="Split signal measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
 parser.add_argument('--SplitSTXS',help="Split STXS measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
+parser.add_argument('--Simultaneous',help="Run a combined fit on all parameters in STXS and STXS merged",action="store_true")
 parser.add_argument('--RunParallel',help='Run all fits in parallel using threads',action="store_true")
 parser.add_argument('--numthreads',nargs='?',help='Number of threads to use to run fits in parallel',type=int,default=12)
 parser.add_argument('--DecorrelateForMe',help="Run the decorrelator as part of the overall run. Looks for a datacard named smh<year><channel>_nocorrelation.root",action="store_true")
@@ -252,7 +253,7 @@ if args.ComputeSignificance:
     ExtraCombineOptions = '--X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --cl=0.68'
 if args.StoreShapes:
     PhysModel = 'FitDiagnostics'
-    ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP  --cl=0.68 --saveShapes'
+    ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP  --cl=0.68 --saveShapes --plots'
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
@@ -301,7 +302,11 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance
         CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 --setParameters "
         for BinName in STXSBins:
             CombineCommand+=("r_"+BinName+"=1,")        
-        CombineCommand+=" -P r_"+STXSBin+" --floatOtherPOIs=1"
+        if args.simultaneous:
+            CombineCommand+=" -P r_"+STXSBin+""
+        else:
+            CombineCommand+=" -P r_"+STXSBin+" --floatOtherPOIs=1"
+        
         if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" "+ CombineCommand
         logging.info("STXS Combine Command:")
@@ -317,7 +322,11 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance
         CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 --setParameters "
         for BinName in MergedSignalNames:
             CombineCommand+=("r_"+BinName+"=1,")
-        CombineCommand+=" -P r_"+MergedBin+" --floatOtherPOIs=1"
+        if args.simultaneous:
+            CombineCommand+=" -P r_"+STXSBin+""
+        else:
+            CombineCommand+=" -P r_"+MergedBin+" --floatOtherPOIs=1"
+
         if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand        
         logging.info("Merged Bin Combine Command:")
