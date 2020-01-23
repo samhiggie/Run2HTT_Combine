@@ -176,35 +176,41 @@ if not args.DisableCategoryFits:
 #Set up the possible STXS bins list
 if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     print("Setting up STXS commands")
-    STXSBins = ["ggH_PTH_0_200_0J_PTH_10_200_htt125",
-                "ggH_PTH_0_200_0J_PTH_0_10_htt125",
-                "ggH_PTH_0_200_1J_PTH_0_60_htt125",
-                "ggH_PTH_0_200_1J_PTH_60_120_htt125",
-                "ggH_PTH_0_200_1J_PTH_120_200_htt125",
-                "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125",		   
-                "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125",		   
-                "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125",		   
-                "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125",		   
-                "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125",
-                "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125",		   
-                "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125",		   
-#                "ggH_FWDH_htt125", #buggy?
-                "ggH_PTH_200_300_htt125",
-                "ggH_PTH_300_450_htt125",
-                "ggH_PTH_450_650_htt125",
-                "ggH_PTH_GE650_htt125",
-                "qqH_0J_htt125",
-                "qqH_1J_htt125",
-                "qqH_GE2J_MJJ_0_60_htt125",
-                "qqH_GE2J_MJJ_60_120_htt125",
-                "qqH_GE2J_MJJ_120_350_htt125",
-                "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125",
-                "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125",
-                "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125",
-                "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125",
-                "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
-#                "qqH_FWDH_htt125", #buggy?
+    
+    unMergedSTXSBins = [
+        "ggH_PTH_0_200_0J_PTH_10_200_htt125",
+        "ggH_PTH_0_200_0J_PTH_0_10_htt125",
+        "ggH_PTH_0_200_1J_PTH_0_60_htt125",
+        "ggH_PTH_0_200_1J_PTH_60_120_htt125",
+        "ggH_PTH_0_200_1J_PTH_120_200_htt125",
+        "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_0_60_htt125",		   
+        "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_60_120_htt125",		   
+        "ggH_PTH_0_200_GE2J_MJJ_0_350_PTH_120_200_htt125",		   
+        "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
+        #"ggH_FWDH_htt125", #buggy?
+        #"qqH_FWDH_htt125", #buggy?
     ]
+    mergedSTXSBins = [
+        "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_0_25_htt125",		   
+        "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125",
+        "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125",		   
+        "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125",	
+        "ggH_PTH_200_300_htt125",
+        "ggH_PTH_300_450_htt125",
+        "ggH_PTH_450_650_htt125",
+        "ggH_PTH_GE650_htt125",
+        "qqH_0J_htt125",
+        "qqH_1J_htt125",
+        "qqH_GE2J_MJJ_0_60_htt125",
+        "qqH_GE2J_MJJ_60_120_htt125",
+        "qqH_GE2J_MJJ_120_350_htt125",
+        "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125",
+        "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125",
+        "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125",
+        "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125",
+    ]
+
+    STXSBins = unMergedSTXSBins + mergedSTXSBins
     PerSTXSName = OutputDir+"workspace_per_STXS_breakdown_cmb_"+DateTag+".root"
     PerSTXSBinsWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
     STXSSignalNames=[]
@@ -250,6 +256,11 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_300_450_htt125:r_ggH_PTH_GE200[1,-25,25]' "
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_450_600_htt125:r_ggH_PTH_GE200[1,-25,25]' "
     PerMergedBinWorkSpaceCommand += "--PO 'map=.*/ggH_PTH_GE650_htt125:r_ggH_PTH_GE200[1,-25,25]' "
+
+    #we also need to add in the unmerged STXS bins so we perform a fit across all parameters
+    for Bin in unMergedSTXSBins:
+        MergedSignalNames.append(Bin)
+        PerMergedBinWorkSpaceCommand += "--PO 'map=.*/"+Bin+":r_"+Bin+"[1,-25,25]' "
 
     PerMergedBinWorkSpaceCommand += CombinedCardName+" -o "+PerMergedBinName+" -m 125"
 
