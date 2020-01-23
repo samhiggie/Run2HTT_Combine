@@ -32,7 +32,6 @@ parser.add_argument('--SplitUncertainties', help="Create groups for helping to s
 parser.add_argument('--SplitInclusive',help="Split the inclusive measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
 parser.add_argument('--SplitSignals',help="Split signal measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
 parser.add_argument('--SplitSTXS',help="Split STXS measurements into component pieces. REQUIRES --SplitUncertainties",action="store_true")
-parser.add_argument('--Simultaneous',help="Run a combined fit on all parameters in STXS and STXS merged",action="store_true")
 parser.add_argument('--RunParallel',help='Run all fits in parallel using threads',action="store_true")
 parser.add_argument('--numthreads',nargs='?',help='Number of threads to use to run fits in parallel',type=int,default=12)
 parser.add_argument('--DecorrelateForMe',help="Run the decorrelator as part of the overall run. Looks for a datacard named smh<year><channel>_nocorrelation.root",action="store_true")
@@ -40,6 +39,7 @@ parser.add_argument('--StoreShapes', help = "Store pre and post-fit shapes for u
 parser.add_argument('--RunKappaVKappaF',help="Runs kappa_V and kappa_F scan",action="store_true")
 parser.add_argument('--RealData',help="Use the RealData dataset in the limit calculation - only available for kappa_V and kappa_F scan at the moment",action="store_true")
 parser.add_argument('--ControlMode',help="Run in control mode, for making accurate error control plots",action="store_true")
+parser.add_argument('--ExperimentalSpeedup',help="Run experimental acceleration options. May speed up fits at slight cost to accuracy",action = "store_true")
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
@@ -188,7 +188,7 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
                 "ggH_PTH_0_200_GE2J_MJJ_350_700_PTHJJ_GE25_htt125",
                 "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_0_25_htt125",		   
                 "ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125",		   
-                "ggH_FWDH_htt125",
+#                "ggH_FWDH_htt125", #buggy?
                 "ggH_PTH_200_300_htt125",
                 "ggH_PTH_300_450_htt125",
                 "ggH_PTH_450_650_htt125",
@@ -203,7 +203,8 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
                 "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125",
                 "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125",
                 "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
-                "qqH_FWDH_htt125"]
+#                "qqH_FWDH_htt125", #buggy?
+    ]
     PerSTXSName = OutputDir+"workspace_per_STXS_breakdown_cmb_"+DateTag+".root"
     PerSTXSBinsWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
     STXSSignalNames=[]
@@ -269,6 +270,8 @@ if args.ComputeSignificance:
 if args.StoreShapes:
     PhysModel = 'FitDiagnostics'
     ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --cl=0.68 --saveShapes --plots'
+if args.ExperimentalSpeedup:
+    ExtraCombineOptions += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0'
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
@@ -286,70 +289,47 @@ if args.SplitInclusive:
 
 if not args.ComputeSignificance:
     #run the signal samples
-    for SignalName in ["r_ggH","r_qqH","r_WH","r_ZH"]:
-        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSignalName+" "+ExtraCombineOptions+" -t -1 --setParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1 -P "+SignalName+" --floatOtherPOIs=1" 
-        if args.Timeout is True:
-            CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand        
-        logging.info("Signal Sample Signal Command: ")
-        logging.info('\n\n'+CombineCommand+'\n')
-        if args.RunParallel:
-            ThreadHandler.AddNewFit(CombineCommand,SignalName,OutputDir)
-        else:            
-            os.system(CombineCommand)
-        if args.SplitSignals:
-            Splitter.SplitMeasurement(CombineCommand,OutputDir)
-
-    #run the per categories
-    """
-    if not args.DisableCategoryFits:
-        for SignalName in CategorySignalNames:
-            CombineCommand = "combineTool.py -M "+PhysModel+" "+PerCategoryName+" "+ExtraCombineOptions+" -t -1 --setParameters r_0jet_PTH_0_10=1,r_0jet_PTH_GE10=1,r_boosted_1J=1,r_boosted_GE2J=1,r_vbf_PTH_0_200=1,r_vbf_PTH_GE_200=1 -P "+SignalName+" --floatOtherPOIs=1"
-            if args.Timeout is True:
-                CombineCommand = "timeout 180s " + CombineCommand                
-            logging.info("Category Signal Command: ")
-            logging.info('\n\n'+CombineCommand+'\n')    
-            os.system(CombineCommand)
-    """
+    #okay, we're no longer doing individual fits. It's redundant. We just need one command that fits everything.
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSignalName+" "+ExtraCombineOptions+" -t -1 --setParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1"
+    if args.Timeout is True:
+            CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand
+    logging.info("Signal Sample Signal Command: ")
+    logging.info('\n\n'+CombineCommand+'\n')
+    if args.RunParallel:
+        ThreadHandler.AddNewFit(CombineCommand,'Stage_0',OutputDir)
+    else:            
+        os.system(CombineCommand)
+    if args.SplitSignals:
+        Splitter.SplitMeasurement(CombineCommand,OutputDir)    
 
 # run the STXS bins
 if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance):
-    for STXSBin in STXSBins:
-        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 --setParameters "
-        for BinName in STXSBins:
-            CombineCommand+=("r_"+BinName+"=1,")        
-        if args.simultaneous:
-            CombineCommand+=" -P r_"+STXSBin+""
-        else:
-            CombineCommand+=" -P r_"+STXSBin+" --floatOtherPOIs=1"
-        
-        if args.Timeout is True:
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 --setParameters "
+    for BinName in STXSBins:
+        CombineCommand+=("r_"+BinName+"=1,")
+    if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" "+ CombineCommand
-        logging.info("STXS Combine Command:")
-        logging.info('\n\n'+CombineCommand+'\n')    
-        if args.RunParallel:
-            ThreadHandler.AddNewFit(CombineCommand,"r_"+STXSBin,OutputDir)
-        else:            
-            os.system(CombineCommand)
-        if args.SplitSTXS:
-            Splitter.SplitMeasurement(CombineCommand,OutputDir)
+    logging.info("STXS Combine Command:")
+    logging.info('\n\n'+CombineCommand+'\n')    
+    if args.RunParallel:
+        ThreadHandler.AddNewFit(CombineCommand,"STXS_1p2",OutputDir)
+    else:            
+        os.system(CombineCommand)
+    if args.SplitSTXS:
+        Splitter.SplitMeasurement(CombineCommand,OutputDir)
+    
     #run the merged bins
-    for MergedBin in MergedSignalNames:
-        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 --setParameters "
-        for BinName in MergedSignalNames:
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 --setParameters "
+    for BinName in MergedSignalNames:
             CombineCommand+=("r_"+BinName+"=1,")
-        if args.simultaneous:
-            CombineCommand+=" -P r_"+STXSBin+""
-        else:
-            CombineCommand+=" -P r_"+MergedBin+" --floatOtherPOIs=1"
-
-        if args.Timeout is True:
+    if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand        
-        logging.info("Merged Bin Combine Command:")
-        logging.info('\n\n'+CombineCommand+'\n')
-        if args.RunParallel:
-            ThreadHandler.AddNewFit(CombineCommand,"r_"+MergedBin,OutputDir)
-        else:            
-            os.system(CombineCommand)
+    logging.info("Merged Bin Combine Command:")
+    logging.info('\n\n'+CombineCommand+'\n')
+    if args.RunParallel:
+        ThreadHandler.AddNewFit(CombineCommand,"MergedScheme",OutputDir)
+    else:            
+        os.system(CombineCommand)
 
 #run impact fitting
 if args.ComputeImpacts:
