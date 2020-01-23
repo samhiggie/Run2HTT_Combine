@@ -39,6 +39,7 @@ parser.add_argument('--DecorrelateForMe',help="Run the decorrelator as part of t
 parser.add_argument('--StoreShapes', help = "Store pre and post-fit shapes for use later",action = "store_true")
 parser.add_argument('--RunKappaVKappaF',help="Runs kappa_V and kappa_F scan",action="store_true")
 parser.add_argument('--RealData',help="Use the RealData dataset in the limit calculation - only available for kappa_V and kappa_F scan at the moment",action="store_true")
+parser.add_argument('--ControlMode',help="Run in control mode, for making accurate error control plots",action="store_true")
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
@@ -69,7 +70,10 @@ for year in args.years:
     for channel in args.channels:
 
         if args.DecorrelateForMe:
-            AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/smh"+year+channel+".root "
+            if args.ControlMode:
+                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/"+channel+"_controls_"+year+".root "
+            else:
+                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/smh"+year+channel+".root "
             if channel=="et" or channel=="em":
                 AddShapeCommand+="--TrimYears "
             print("Duplicating shapes for year correlations")
@@ -79,6 +83,8 @@ for year in args.years:
 
         DataCardCreationCommand="SMHTT"+year
         DataCardCreationCommand+="_"+channel+" "+OutputDir
+        if args.ControlMode:
+            DataCardCreationCommand+=" -c"
         if args.RunShapeless:
             DataCardCreationCommand+=" -s"
         if not args.RunWithBinByBin:
@@ -91,8 +97,13 @@ for year in args.years:
         if args.RunInclusiveqqH:
             DataCardCreationCommand+=" -q"
         DataCardCreationCommand+=" --Categories"
-        for Category in cfg.Categories[channel]:
-            DataCardCreationCommand+=" "+Category
+        if args.ControlMode:
+            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root")
+            for Directory in TheFile.GetListOfKeys():
+                DataCardCreationCommand+=" "+Directory.GetName()
+        else:
+            for Category in cfg.Categories[channel]:
+                DataCardCreationCommand+=" "+Category
         print("Creating data cards")
         logging.info("Data Card Creation Command:")
         logging.info('\n\n'+DataCardCreationCommand+'\n')
@@ -110,22 +121,26 @@ if args.SplitUncertainties:
 for year in args.years:
     for channel in args.channels:
         CardNum = 1
-        TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
+        if args.ControlMode:
+            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root")
+        else:
+            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
+
         for Directory in TheFile.GetListOfKeys():
-            if Directory.GetName() in cfg.Categories[channel]:
-                if not args.RunWithoutAutoMCStats:
-                    CardFile = open(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt","a+")
-                    CardFile.write("* autoMCStats 0.0\n")
-                    CardFile.close()                
-                if args.SplitUncertainties:                    
-                    Splitter.FindAndTagGroups(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt")
-                CardCombiningCommand += " "+Directory.GetName()+"_"+year+"="+OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
-                CardNum+=1
+            if not args.ControlMode and not (Directory.GetName() in cfg.Categories[channel]):
+                continue
+            if not args.RunWithoutAutoMCStats:
+                CardFile = open(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt","a+")
+                CardFile.write("* autoMCStats 0.0\n")
+                CardFile.close()                
+            if args.SplitUncertainties:                    
+                Splitter.FindAndTagGroups(OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt")
+            CardCombiningCommand += " "+Directory.GetName()+"_"+year+"="+OutputDir+"smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
+            CardNum+=1
 CardCombiningCommand+= " > "+CombinedCardName
 logging.info("Final Card Combining Command:")
 logging.info('\n\n'+CardCombiningCommand+'\n')
 os.system(CardCombiningCommand)
-
 
 #per signal card workspace set up
 print("Setting up per signal workspace")

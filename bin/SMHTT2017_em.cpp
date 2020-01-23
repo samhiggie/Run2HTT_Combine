@@ -32,7 +32,9 @@ int main(int argc, char **argv)
   string aux_shapes = string(getenv("CMSSW_BASE")) + "/src/auxiliaries/shapes/";
 
   //keep a handle on the file, we need it to check if shapes are empty.
-  TFile* TheFile = new TFile((aux_shapes+"smh2017em.root").c_str());  
+  TFile* TheFile;
+  if(Input.OptionExists("-c")) TheFile = new TFile((aux_shapes+"em_controls_2017.root").c_str());
+  else TheFile = new TFile((aux_shapes+"smh2017em.root").c_str());  
     
   //categories loaded from configurations
   std::vector<std::pair<int,std::string>> cats = {};
@@ -190,35 +192,39 @@ int main(int argc, char **argv)
       //Recoil Shapes:                  
       //check which signal processes this should be applied to. If any.
       std::cout<<"MET recoil"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2017","CMS_htt_boson_scale_met_0jet_2017"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"em_0jetlow","em_0jethigh"});
+      if (Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2017","CMS_htt_boson_scale_met_0jet_2017",
+		"CMS_htt_boson_reso_met_1jet_2017","CMS_htt_boson_scale_met_1jet_2017",
+		"CMS_htt_boson_reso_met_2jet_2017","CMS_htt_boson_scale_met_2jet_2017"},
+	    JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+	    &cb,
+	    1.00,
+	    TheFile,CategoryArgs); 
+	}
+      else
+	{
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2017","CMS_htt_boson_scale_met_0jet_2017"},
+			      JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"em_0jetlow","em_0jethigh"});
       
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2017","CMS_htt_boson_scale_met_1jet_2017"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"em_boosted1"});
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2017","CMS_htt_boson_scale_met_1jet_2017"},
+			      JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"em_boosted1"});
 
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2017","CMS_htt_boson_scale_met_2jet_2017"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"em_boosted2","em_vbflow","em_vbfhigh"});
-      /*
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2017","CMS_htt_boson_scale_met_0jet_2017",
-	    "CMS_htt_boson_reso_met_1jet_2017","CMS_htt_boson_scale_met_1jet_2017",
-	    "CMS_htt_boson_reso_met_2jet_2017","CMS_htt_boson_scale_met_2jet_2017"},
-	JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
-      */
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2017","CMS_htt_boson_scale_met_2jet_2017"},
+			      JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"em_boosted2","em_vbflow","em_vbfhigh"});
+	}
 
       //ZPT Reweighting Shapes:      
       std::cout<<"Z pT"<<std::endl;
@@ -340,15 +346,28 @@ int main(int argc, char **argv)
     }
 
   //********************************************************************************************************************************                          
-
-  cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "smh2017em.root",
-      "$BIN/$PROCESS",
-      "$BIN/$PROCESS_$SYSTEMATIC");
-  cb.cp().signals().ExtractShapes(
-      aux_shapes + "smh2017em.root",
-      "$BIN/$PROCESS$MASS",
-      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+  if (Input.OptionExists("-c"))
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "em_controls_2017.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "em_controls_2017.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+  else
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "smh2017em.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "smh2017em.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }  
   //! [part7]
 
   //! [part8]

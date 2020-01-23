@@ -33,7 +33,9 @@ int main(int argc, char **argv) {
   string aux_shapes = string(getenv("CMSSW_BASE")) + "/src/auxiliaries/shapes/";
   
   //keep a handle on the file, we need it to check if shapes are empty.
-  TFile* TheFile = new TFile((aux_shapes+"smh2018mt.root").c_str());  
+  TFile* TheFile;
+  if (Input.OptionExists("-c")) TheFile = new TFile ((aux_shapes+"mt_controls_2018.root").c_str());
+  else TheFile = new TFile((aux_shapes+"smh2018mt.root").c_str());  
     
   //categories loaded from configurations
   std::vector<std::pair<int,std::string>> cats = {};
@@ -211,116 +213,124 @@ int main(int argc, char **argv) {
 			  1.00,
 			  TheFile,CategoryArgs);
             
-      //Fake factors
-      /*
-      std::cout<<"Fake Factors"<<std::endl;
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_mt_qcd_0jet_unc1_2018",
-            "CMS_rawFF_mt_qcd_0jet_unc2_2018",
-            "CMS_rawFF_mt_qcd_1jet_unc1_2018",
-            "CMS_rawFF_mt_qcd_1jet_unc2_2018",
-            "CMS_rawFF_mt_qcd_2jet_unc1_2018",
-            "CMS_rawFF_mt_qcd_2jet_unc2_2018",
-            "CMS_rawFF_mt_w_0jet_unc1_2018",
-            "CMS_rawFF_mt_w_0jet_unc2_2018",
-            "CMS_rawFF_mt_w_1jet_unc1_2018",
-            "CMS_rawFF_mt_w_1jet_unc2_2018",
-            "CMS_rawFF_mt_w_2jet_unc1_2018",
-            "CMS_rawFF_mt_w_2jet_unc2_2018",
-            "CMS_rawFF_mt_tt_unc1_2018",
-            "CMS_rawFF_mt_tt_unc2_2018",
-            "CMS_FF_closure_mvis_mt_qcd_0jet_2018",
-            "CMS_FF_closure_mvis_mt_qcd_1jet_2018",
-            "CMS_FF_closure_mvis_mt_qcd_2jet_2018",
-            "CMS_FF_closure_mvis_mt_w_0jet_2018",            
-            "CMS_FF_closure_mvis_mt_w_1jet_2018",
-            "CMS_FF_closure_mvis_mt_w_2jet_2018",
-            "CMS_FF_closure_mvis_mt_tt_0jet_2018",            
-            "CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
-            "CMS_FF_closure_mt_mt_w_unc1_2018",
-            "CMS_FF_closure_mt_mt_w_unc2_2018"
-	    },
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
-      */
+      //Fake factors      
+      if(Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_mt_qcd_0jet_unc1_2018",
+		"CMS_rawFF_mt_qcd_0jet_unc2_2018",
+		"CMS_rawFF_mt_w_0jet_unc1_2018",
+		"CMS_rawFF_mt_w_0jet_unc2_2018",
+		"CMS_rawFF_mt_qcd_1jet_unc1_2018",
+		"CMS_rawFF_mt_qcd_1jet_unc2_2018",
+		"CMS_rawFF_mt_w_1jet_unc1_2018",
+		"CMS_rawFF_mt_w_1jet_unc2_2018",
+		"CMS_rawFF_mt_qcd_2jet_unc1_2018",
+		"CMS_rawFF_mt_qcd_2jet_unc2_2018",
+		"CMS_rawFF_mt_w_2jet_unc1_2018",
+		"CMS_rawFF_mt_w_2jet_unc2_2018",
+		"CMS_rawFF_mt_tt_unc1_2018",
+		"CMS_rawFF_mt_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_mt_qcd_0jet",
+		//"CMS_FF_closure_mvis_mt_w_0jet",
+		//"CMS_FF_closure_mvis_mt_qcd_1jet",
+		//"CMS_FF_closure_mvis_mt_w_1jet",
+		//"CMS_FF_closure_mvis_mt_qcd_2jet",
+		//"CMS_FF_closure_mvis_mt_w_2jet",
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2018",
+		"CMS_FF_closure_lpt_mt_qcd_2018",
+		"CMS_FF_closure_lpt_mt_w_2018",
+		"CMS_FF_closure_lpt_mt_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
+		"CMS_FF_closure_mt_mt_w_unc1_2018",
+		"CMS_FF_closure_mt_mt_w_unc2_2018"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    CategoryArgs);
+	}
+      else
+	{
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_mt_qcd_0jet_unc1_2018",
+		"CMS_rawFF_mt_qcd_0jet_unc2_2018",
+		"CMS_rawFF_mt_w_0jet_unc1_2018",
+		"CMS_rawFF_mt_w_0jet_unc2_2018",
+		"CMS_rawFF_mt_tt_unc1_2018",
+		"CMS_rawFF_mt_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_mt_qcd_0jet",
+		//"CMS_FF_closure_mvis_mt_w_0jet",
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2018",
+		"CMS_FF_closure_lpt_mt_qcd_2018",
+		"CMS_FF_closure_lpt_mt_w_2018",
+		"CMS_FF_closure_lpt_mt_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
+		"CMS_FF_closure_mt_mt_w_unc1_2018",
+		"CMS_FF_closure_mt_mt_w_unc2_2018"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"mt_0jet_PTH_0_10","mt_0jet_PTH_GE10"});
 
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_mt_qcd_0jet_unc1_2018",
-	    "CMS_rawFF_mt_qcd_0jet_unc2_2018",
-	    "CMS_rawFF_mt_w_0jet_unc1_2018",
-	    "CMS_rawFF_mt_w_0jet_unc2_2018",
-       	    "CMS_rawFF_mt_tt_unc1_2018",
-	    "CMS_rawFF_mt_tt_unc2_2018",
-	    //"CMS_FF_closure_mvis_mt_qcd_0jet",
-       	    //"CMS_FF_closure_mvis_mt_w_0jet",
-       	    //"CMS_FF_closure_mvis_mt_tt",            
-	    "CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
-	    "CMS_FF_closure_lpt_xtrg_mt_w_2018",
-	    "CMS_FF_closure_lpt_xtrg_mt_tt_2018",
-	    "CMS_FF_closure_lpt_mt_qcd_2018",
-	    "CMS_FF_closure_lpt_mt_w_2018",
-	    "CMS_FF_closure_lpt_mt_tt_2018",
-       	    "CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
-	    "CMS_FF_closure_mt_mt_w_unc1_2018",
-	    "CMS_FF_closure_mt_mt_w_unc2_2018"},
-       	{"jetFakes"},
-       	&cb,
-       	1.00,
-       	TheFile,
-       	{"mt_0jet_PTH_0_10","mt_0jet_PTH_GE10"});
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_mt_qcd_1jet_unc1_2018",
+		"CMS_rawFF_mt_qcd_1jet_unc2_2018",
+		"CMS_rawFF_mt_w_1jet_unc1_2018",
+		"CMS_rawFF_mt_w_1jet_unc2_2018",
+		"CMS_rawFF_mt_tt_unc1_2018",
+		"CMS_rawFF_mt_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_mt_qcd_1jet",
+		//"CMS_FF_closure_mvis_mt_w_1jet",
+		//"CMS_FF_closure_mvis_mt_tt",       
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2018",
+		"CMS_FF_closure_lpt_mt_qcd_2018",
+		"CMS_FF_closure_lpt_mt_w_2018",
+		"CMS_FF_closure_lpt_mt_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
+		"CMS_FF_closure_mt_mt_w_unc1_2018",
+		"CMS_FF_closure_mt_mt_w_unc2_2018"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"mt_boosted_1J"});
 
-      AddShapesIfNotEmpty({
-       	  "CMS_rawFF_mt_qcd_1jet_unc1_2018",
-	    "CMS_rawFF_mt_qcd_1jet_unc2_2018",
-       	    "CMS_rawFF_mt_w_1jet_unc1_2018",
-	    "CMS_rawFF_mt_w_1jet_unc2_2018",
-       	    "CMS_rawFF_mt_tt_unc1_2018",
-	    "CMS_rawFF_mt_tt_unc2_2018",
-       	    //"CMS_FF_closure_mvis_mt_qcd_1jet",
-       	    //"CMS_FF_closure_mvis_mt_w_1jet",
-	    //"CMS_FF_closure_mvis_mt_tt",       
-	    "CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
-	    "CMS_FF_closure_lpt_xtrg_mt_w_2018",
-	    "CMS_FF_closure_lpt_xtrg_mt_tt_2018",
-	    "CMS_FF_closure_lpt_mt_qcd_2018",
-	    "CMS_FF_closure_lpt_mt_w_2018",
-	    "CMS_FF_closure_lpt_mt_tt_2018",
-	    "CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
-	    "CMS_FF_closure_mt_mt_w_unc1_2018",
-	    "CMS_FF_closure_mt_mt_w_unc2_2018"},
-       	{"jetFakes"},
-       	&cb,
-       	1.00,
-       	TheFile,
-       	{"mt_boosted_1J"});
-
-      AddShapesIfNotEmpty({
-       	  "CMS_rawFF_mt_qcd_2jet_unc1_2018",
-	    "CMS_rawFF_mt_qcd_2jet_unc2_2018",
-       	    "CMS_rawFF_mt_w_2jet_unc1_2018",
-	    "CMS_rawFF_mt_w_2jet_unc2_2018",
-       	    "CMS_rawFF_mt_tt_unc1_2018",
-	    "CMS_rawFF_mt_tt_unc2_2018",
-       	    //"CMS_FF_closure_mvis_mt_qcd_2jet",
-       	    //"CMS_FF_closure_mvis_mt_w_2jet",	    
-	    //"CMS_FF_closure_mvis_mt_tt",            
-	    "CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
-	    "CMS_FF_closure_lpt_xtrg_mt_w_2018",
-	    "CMS_FF_closure_lpt_xtrg_mt_tt_2018",
-	    "CMS_FF_closure_lpt_mt_qcd_2018",
-	    "CMS_FF_closure_lpt_mt_w_2018",
-	    "CMS_FF_closure_lpt_mt_tt_2018",
-	    "CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
-	    "CMS_FF_closure_mt_mt_w_unc1_2018",
-	    "CMS_FF_closure_mt_mt_w_unc2_2018"
-       	    },
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,
-	{"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_mt_qcd_2jet_unc1_2018",
+		"CMS_rawFF_mt_qcd_2jet_unc2_2018",
+		"CMS_rawFF_mt_w_2jet_unc1_2018",
+		"CMS_rawFF_mt_w_2jet_unc2_2018",
+		"CMS_rawFF_mt_tt_unc1_2018",
+		"CMS_rawFF_mt_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_mt_qcd_2jet",
+		//"CMS_FF_closure_mvis_mt_w_2jet",	    
+		//"CMS_FF_closure_mvis_mt_tt",            
+		"CMS_FF_closure_lpt_xtrg_mt_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_w_2018",
+		"CMS_FF_closure_lpt_xtrg_mt_tt_2018",
+		"CMS_FF_closure_lpt_mt_qcd_2018",
+		"CMS_FF_closure_lpt_mt_w_2018",
+		"CMS_FF_closure_lpt_mt_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_mt_qcd_2018",            
+		"CMS_FF_closure_mt_mt_w_unc1_2018",
+		"CMS_FF_closure_mt_mt_w_unc2_2018"
+		},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
+	}
 
       //MET Unclustered Energy Scale      
       AddShapesIfNotEmpty({"CMS_scale_met_unclustered_2018"},
@@ -331,35 +341,39 @@ int main(int argc, char **argv) {
       
       //Recoil Shapes:                  
       //check which signal processes this should be applied to. If any.
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2018","CMS_htt_boson_scale_met_0jet_2018"},
-			  RecoilVector,
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"mt_0jet_PTH_0_10","mt_0jet_PTH_GE10"});
+      if(Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2018","CMS_htt_boson_scale_met_0jet_2018",
+		"CMS_htt_boson_reso_met_1jet_2018","CMS_htt_boson_scale_met_1jet_2018",
+		"CMS_htt_boson_reso_met_2jet_2018","CMS_htt_boson_scale_met_2jet_2018"},
+	    RecoilVector,
+	    &cb,
+	    1.00,
+	    TheFile,CategoryArgs);
+	}
+      else
+	{
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2018","CMS_htt_boson_scale_met_0jet_2018"},
+			      RecoilVector,
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"mt_0jet_PTH_0_10","mt_0jet_PTH_GE10"});
       
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2018","CMS_htt_boson_scale_met_1jet_2018"},
-			  RecoilVector,
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"mt_boosted_1J"});
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2018","CMS_htt_boson_scale_met_1jet_2018"},
+			      RecoilVector,
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"mt_boosted_1J"});
 
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2018","CMS_htt_boson_scale_met_2jet_2018"},
-			  RecoilVector,
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
-      /*
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2018","CMS_htt_boson_scale_met_0jet_2018",
-	    "CMS_htt_boson_reso_met_1jet_2018","CMS_htt_boson_scale_met_1jet_2018",
-	    "CMS_htt_boson_reso_met_2jet_2018","CMS_htt_boson_scale_met_2jet_2018"},
-	RecoilVector,
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
-      */
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2018","CMS_htt_boson_scale_met_2jet_2018"},
+			      RecoilVector,
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"mt_boosted_GE2J","mt_vbf_PTH_0_200","mt_vbf_PTH_GE_200"});
+	}
 
       //ZPT Reweighting Shapes:      
       AddShapesIfNotEmpty({"CMS_htt_dyShape"},
@@ -496,14 +510,28 @@ int main(int argc, char **argv) {
     }
   //********************************************************************************************************************************                          
 
-  cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "smh2018mt.root",
-      "$BIN/$PROCESS",
-      "$BIN/$PROCESS_$SYSTEMATIC");
-  cb.cp().signals().ExtractShapes(
-      aux_shapes + "smh2018mt.root",
-      "$BIN/$PROCESS$MASS",
-      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+  if(Input.OptionExists("-c"))
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "mt_controls_2018.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "mt_controls_2018.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+  else
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "smh2018mt.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "smh2018mt.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
   //! [part7]
 
   //! [part8]

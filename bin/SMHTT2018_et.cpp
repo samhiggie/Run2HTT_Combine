@@ -33,7 +33,9 @@ int main(int argc, char **argv) {
   string aux_shapes = string(getenv("CMSSW_BASE")) + "/src/auxiliaries/shapes/";
   
   //keep a handle on the file, we need it to check if shapes are empty.
-  TFile* TheFile = new TFile((aux_shapes+"smh2018et.root").c_str());  
+  TFile* TheFile;
+  if (Input.OptionExists("-c")) TheFile = new TFile((aux_shapes+"et_controls_2018.root").c_str());
+  else TheFile = new TFile((aux_shapes+"smh2018et.root").c_str());  
   
   //categories loaded from configurations
   std::vector<std::pair<int,std::string>> cats = {};
@@ -183,117 +185,127 @@ int main(int argc, char **argv) {
 
 
 	// Fake factors
-      /*
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_et_qcd_0jet_unc1_2018",
-            "CMS_rawFF_et_qcd_0jet_unc2_2018",
-            "CMS_rawFF_et_qcd_1jet_unc1_2018",
-            "CMS_rawFF_et_qcd_1jet_unc2_2018",
-            "CMS_rawFF_et_qcd_2jet_unc1_2018",
-            "CMS_rawFF_et_qcd_2jet_unc2_2018",
-            "CMS_rawFF_et_w_0jet_unc1_2018",
-            "CMS_rawFF_et_w_0jet_unc2_2018",
-            "CMS_rawFF_et_w_1jet_unc1_2018",
-            "CMS_rawFF_et_w_1jet_unc2_2018",
-            "CMS_rawFF_et_w_2jet_unc1_2018",
-            "CMS_rawFF_et_w_2jet_unc2_2018",
-            "CMS_rawFF_et_tt_unc1_2018",
-            "CMS_rawFF_et_tt_unc2_2018",
-            "CMS_FF_closure_mvis_et_qcd_0jet_2018",
-            "CMS_FF_closure_mvis_et_qcd_1jet_2018",
-            "CMS_FF_closure_mvis_et_qcd_2jet_2018",
-            "CMS_FF_closure_mvis_et_w_0jet_2018",            
-            "CMS_FF_closure_mvis_et_w_1jet_2018",
-            "CMS_FF_closure_mvis_et_w_2jet_2018",
-            "CMS_FF_closure_mvis_et_tt_0jet_2018",            
-            "CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
-            "CMS_FF_closure_et_mt_w_unc1_2018",
-            "CMS_FF_closure_et_mt_w_unc2_2018"},
-	{"jetFakes"},
-                          &cb,
-                          1.00,
-                          TheFile,CategoryArgs);
-      */
-      
-      //some of the uncerts are only relevant in certain categories. 
-      //and missing in all the others
-      //so the names have been explicitly hacked in
-      // we need a better way to handle uncertainties that may be explicit to certain categories only
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_et_qcd_0jet_unc1_2018",
-	    "CMS_rawFF_et_qcd_0jet_unc2_2018",
-	    "CMS_rawFF_et_w_0jet_unc1_2018",
-	    "CMS_rawFF_et_w_0jet_unc2_2018",
-       	    "CMS_rawFF_et_tt_unc1_2018",
-	    "CMS_rawFF_et_tt_unc2_2018",
-	    //"CMS_FF_closure_mvis_et_qcd_0jet",
-       	    //"CMS_FF_closure_mvis_et_w_0jet",
-       	    //"CMS_FF_closure_mvis_et_tt",       
-	    "CMS_FF_closure_lpt_xtrg_et_qcd_2018",
-	    "CMS_FF_closure_lpt_xtrg_et_w_2018",
-	    "CMS_FF_closure_lpt_xtrg_et_tt_2018",
-	    "CMS_FF_closure_lpt_et_qcd_2018",
-	    "CMS_FF_closure_lpt_et_w_2018",
-	    "CMS_FF_closure_lpt_et_tt_2018",
-       	    "CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
-	    "CMS_FF_closure_mt_et_w_unc1_2018",
-	    "CMS_FF_closure_mt_et_w_unc2_2018"},
-       	{"jetFakes"},
-       	&cb,
-       	1.00,
-       	TheFile,
-       	{"et_0jetlow","et_0jethigh"});
+      if(Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_0jet_unc1_2018",
+		"CMS_rawFF_et_qcd_0jet_unc2_2018",
+		"CMS_rawFF_et_w_0jet_unc1_2018",
+		"CMS_rawFF_et_w_0jet_unc2_2018",
+		"CMS_rawFF_et_qcd_1jet_unc1_2018",
+		"CMS_rawFF_et_qcd_1jet_unc2_2018",
+		"CMS_rawFF_et_w_1jet_unc1_2018",
+		"CMS_rawFF_et_w_1jet_unc2_2018",
+		"CMS_rawFF_et_qcd_2jet_unc1_2018",
+		"CMS_rawFF_et_qcd_2jet_unc2_2018",
+		"CMS_rawFF_et_w_2jet_unc1_2018",
+		"CMS_rawFF_et_w_2jet_unc2_2018",
+		"CMS_rawFF_et_tt_unc1_2018",
+		"CMS_rawFF_et_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_et_qcd_0jet",
+		//"CMS_FF_closure_mvis_et_w_0jet",
+		//"CMS_FF_closure_mvis_et_qcd_1jet",
+		//"CMS_FF_closure_mvis_et_w_1jet",
+		//"CMS_FF_closure_mvis_et_qcd_2jet",
+		//"CMS_FF_closure_mvis_et_w_2jet",
+		//"CMS_FF_closure_mvis_et_tt",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
+		"CMS_FF_closure_mt_et_w_unc1_2018",
+		"CMS_FF_closure_mt_et_w_unc2_2018"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    CategoryArgs);
+	}
+      else
+	{
+	  //some of the uncerts are only relevant in certain categories. 
+	  //and missing in all the others
+	  //so the names have been explicitly hacked in
+	  // we need a better way to handle uncertainties that may be explicit to certain categories only
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_0jet_unc1_2018",
+		"CMS_rawFF_et_qcd_0jet_unc2_2018",
+		"CMS_rawFF_et_w_0jet_unc1_2018",
+		"CMS_rawFF_et_w_0jet_unc2_2018",
+		"CMS_rawFF_et_tt_unc1_2018",
+		"CMS_rawFF_et_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_et_qcd_0jet",
+		//"CMS_FF_closure_mvis_et_w_0jet",
+		//"CMS_FF_closure_mvis_et_tt",       
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
+		"CMS_FF_closure_mt_et_w_unc1_2018",
+		"CMS_FF_closure_mt_et_w_unc2_2018"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"et_0jetlow","et_0jethigh"});
 
-      AddShapesIfNotEmpty({
-       	  "CMS_rawFF_et_qcd_1jet_unc1_2018",
-	    "CMS_rawFF_et_qcd_1jet_unc2_2018",
-       	    "CMS_rawFF_et_w_1jet_unc1_2018",
-	    "CMS_rawFF_et_w_1jet_unc2_2018",
-       	    "CMS_rawFF_et_tt_unc1_2018",
-	    "CMS_rawFF_et_tt_unc2_2018",
-       	    //"CMS_FF_closure_mvis_et_qcd_1jet",
-       	    //"CMS_FF_closure_mvis_et_w_1jet",
-	    //"CMS_FF_closure_mvis_et_tt",            
-	    "CMS_FF_closure_lpt_xtrg_et_qcd_2018",
-	    "CMS_FF_closure_lpt_xtrg_et_w_2018",
-	    "CMS_FF_closure_lpt_xtrg_et_tt_2018",
-	    "CMS_FF_closure_lpt_et_qcd_2018",
-	    "CMS_FF_closure_lpt_et_w_2018",
-	    "CMS_FF_closure_lpt_et_tt_2018",
-	    "CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
-	    "CMS_FF_closure_mt_et_w_unc1_2018",
-	    "CMS_FF_closure_mt_et_w_unc2_2018"},
-       	{"jetFakes"},
-       	&cb,
-       	1.00,
-       	TheFile,
-       	{"et_boosted1"});
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_1jet_unc1_2018",
+		"CMS_rawFF_et_qcd_1jet_unc2_2018",
+		"CMS_rawFF_et_w_1jet_unc1_2018",
+		"CMS_rawFF_et_w_1jet_unc2_2018",
+		"CMS_rawFF_et_tt_unc1_2018",
+		"CMS_rawFF_et_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_et_qcd_1jet",
+		//"CMS_FF_closure_mvis_et_w_1jet",
+		//"CMS_FF_closure_mvis_et_tt",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
+		"CMS_FF_closure_mt_et_w_unc1_2018",
+		"CMS_FF_closure_mt_et_w_unc2_2018"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"et_boosted1"});
 
-      AddShapesIfNotEmpty({
-       	  "CMS_rawFF_et_qcd_2jet_unc1_2018",
-	    "CMS_rawFF_et_qcd_2jet_unc2_2018",
-       	    "CMS_rawFF_et_w_2jet_unc1_2018",
-	    "CMS_rawFF_et_w_2jet_unc2_2018",
-       	    "CMS_rawFF_et_tt_unc1_2018",
-	    "CMS_rawFF_et_tt_unc2_2018",
-       	    //"CMS_FF_closure_mvis_et_qcd_2jet_2018",
-       	    //"CMS_FF_closure_mvis_et_w_2jet_2018",	    
-	    //"CMS_FF_closure_mvis_et_tt_2018",            
-	    "CMS_FF_closure_lpt_xtrg_et_qcd_2018",
-	    "CMS_FF_closure_lpt_xtrg_et_w_2018",
-	    "CMS_FF_closure_lpt_xtrg_et_tt_2018",
-	    "CMS_FF_closure_lpt_et_qcd_2018",
-	    "CMS_FF_closure_lpt_et_w_2018",
-	    "CMS_FF_closure_lpt_et_tt_2018",
-	    "CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
-	    "CMS_FF_closure_mt_et_w_unc1_2018",
-	    "CMS_FF_closure_mt_et_w_unc2_2018"
-       	    },
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,
-	{"et_boosted2","et_vbflow","et_vbfhigh"});
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_2jet_unc1_2018",
+		"CMS_rawFF_et_qcd_2jet_unc2_2018",
+		"CMS_rawFF_et_w_2jet_unc1_2018",
+		"CMS_rawFF_et_w_2jet_unc2_2018",
+		"CMS_rawFF_et_tt_unc1_2018",
+		"CMS_rawFF_et_tt_unc2_2018",
+		//"CMS_FF_closure_mvis_et_qcd_2jet_2018",
+		//"CMS_FF_closure_mvis_et_w_2jet_2018",	    
+		//"CMS_FF_closure_mvis_et_tt_2018",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2018",
+		"CMS_FF_closure_lpt_xtrg_et_w_2018",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2018",
+		"CMS_FF_closure_lpt_et_qcd_2018",
+		"CMS_FF_closure_lpt_et_w_2018",
+		"CMS_FF_closure_lpt_et_tt_2018",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2018",            
+		"CMS_FF_closure_mt_et_w_unc1_2018",
+		"CMS_FF_closure_mt_et_w_unc2_2018"
+		},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"et_boosted2","et_vbflow","et_vbfhigh"});
+	}
       
       //MET Unclustered Energy Scale      
       AddShapesIfNotEmpty({"CMS_scale_met_unclustered_2018"},
@@ -457,15 +469,29 @@ int main(int argc, char **argv) {
 
     }
   //********************************************************************************************************************************                          
-
-  cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "smh2018et.root",
-      "$BIN/$PROCESS",
-      "$BIN/$PROCESS_$SYSTEMATIC");
-  cb.cp().signals().ExtractShapes(
-      aux_shapes + "smh2018et.root",
-      "$BIN/$PROCESS$MASS",
-      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+  
+  if(Input.OptionExists("-c"))
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "et_controls_2018.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "et_controls_2018.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+  else
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "smh2018et.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "smh2018et.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
   //! [part7]
 
   //! [part8]

@@ -33,7 +33,9 @@ int main(int argc, char **argv)
   string aux_shapes = string(getenv("CMSSW_BASE")) + "/src/auxiliaries/shapes/";
   
   //keep a handle on the file, we need it to check if shapes are empty.
-  TFile* TheFile = new TFile((aux_shapes+"smh2016et.root").c_str());  
+  TFile* TheFile;
+  if (Input.OptionExists("-c"))TheFile = new TFile((aux_shapes+"et_controls_2016.root").c_str());
+  else TheFile = new TFile((aux_shapes+"smh2016et.root").c_str());  
     
   //categories loaded from configurations
   std::vector<std::pair<int,std::string>> cats = {};
@@ -188,117 +190,129 @@ int main(int argc, char **argv)
       
       //Fake Factors
       /*
-      std::cout<<"Fake Factors"<<std::endl;
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_et_qcd_0jet_unc1_2016",
-            "CMS_rawFF_et_qcd_0jet_unc2_2016",
-            "CMS_rawFF_et_qcd_1jet_unc1_2016",
-            "CMS_rawFF_et_qcd_1jet_unc2_2016",
-            "CMS_rawFF_et_qcd_2jet_unc1_2016",
-            "CMS_rawFF_et_qcd_2jet_unc2_2016",
-            "CMS_rawFF_et_w_0jet_unc1_2016",
-            "CMS_rawFF_et_w_0jet_unc2_2016",
-            "CMS_rawFF_et_w_1jet_unc1_2016",
-            "CMS_rawFF_et_w_1jet_unc2_2016",
-            "CMS_rawFF_et_w_2jet_unc1_2016",
-            "CMS_rawFF_et_w_2jet_unc2_2016",
-            "CMS_rawFF_et_tt_unc1_2016",
-            "CMS_rawFF_et_tt_unc2_2016",
-            "CMS_FF_closure_mvis_et_qcd_0jet_2016",
-            "CMS_FF_closure_mvis_et_qcd_1jet_2016",
-            "CMS_FF_closure_mvis_et_qcd_2jet_2016",
-            "CMS_FF_closure_mvis_et_w_0jet_2016",            
-            "CMS_FF_closure_mvis_et_w_1jet_2016",
-            "CMS_FF_closure_mvis_et_w_2jet_2016",
-            "CMS_FF_closure_mvis_et_tt_0jet_2016",            
-            "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
-            "CMS_FF_closure_et_mt_w_unc1_2016",
-            "CMS_FF_closure_et_mt_w_unc2_2016"
-	    },
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
+	std::cout<<"Fake Factors"<<std::endl;	
       */
-            //some of the uncerts are only relevant in certain categories. 
-      //and missing in all the others
-      //so the names have been explicitly hacked in
-      // we need a better way to handle uncertainties that may be explicit to certain categories only
-      AddShapesIfNotEmpty({
-	  "CMS_rawFF_et_qcd_0jet_unc1_2016",
-	    "CMS_rawFF_et_qcd_0jet_unc2_2016",
-	    "CMS_rawFF_et_w_0jet_unc1_2016",
-	    "CMS_rawFF_et_w_0jet_unc2_2016",
-       	    "CMS_rawFF_et_tt_unc1_2016",
-	    "CMS_rawFF_et_tt_unc2_2016",
-	    //"CMS_FF_closure_mvis_et_qcd_0jet",
-       	    //"CMS_FF_closure_mvis_et_w_0jet",
-       	    //"CMS_FF_closure_mvis_et_tt",      
-	    "CMS_FF_closure_lpt_xtrg_et_qcd_2016",
-	    "CMS_FF_closure_lpt_xtrg_et_w_2016",
-	    "CMS_FF_closure_lpt_xtrg_et_tt_2016",
-	    "CMS_FF_closure_lpt_et_qcd_2016",
-	    "CMS_FF_closure_lpt_et_w_2016",
-	    "CMS_FF_closure_lpt_et_tt_2016",
-       	    "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
-	    "CMS_FF_closure_mt_et_w_unc1_2016",
-	    "CMS_FF_closure_mt_et_w_unc2_2016"},
-       	{"jetFakes"},
-       	&cb,
-       	1.00,
-       	TheFile,
-       	{"et_0jetlow","et_0jethigh"});
+      if (Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_0jet_unc1_2016",
+		"CMS_rawFF_et_qcd_0jet_unc2_2016",
+		"CMS_rawFF_et_w_0jet_unc1_2016",
+		"CMS_rawFF_et_w_0jet_unc2_2016",
+		"CMS_rawFF_et_qcd_1jet_unc1_2016",
+		"CMS_rawFF_et_qcd_1jet_unc2_2016",
+		"CMS_rawFF_et_w_1jet_unc1_2016",
+		"CMS_rawFF_et_w_1jet_unc2_2016",
+		"CMS_rawFF_et_qcd_2jet_unc1_2016",
+		"CMS_rawFF_et_qcd_2jet_unc2_2016",
+		"CMS_rawFF_et_w_2jet_unc1_2016",
+		"CMS_rawFF_et_w_2jet_unc2_2016",
+		"CMS_rawFF_et_tt_unc1_2016",
+		"CMS_rawFF_et_tt_unc2_2016",
+		//"CMS_FF_closure_mvis_et_qcd_0jet",
+		//"CMS_FF_closure_mvis_et_w_0jet",
+		//"CMS_FF_closure_mvis_et_qcd_1jet",
+		//"CMS_FF_closure_mvis_et_w_1jet",
+		//"CMS_FF_closure_mvis_et_qcd_2jet",
+		//"CMS_FF_closure_mvis_et_w_2jet",
+		//"CMS_FF_closure_mvis_et_tt",       
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_et_w_2016",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2016",
+		"CMS_FF_closure_lpt_et_qcd_2016",
+		"CMS_FF_closure_lpt_et_w_2016",
+		"CMS_FF_closure_lpt_et_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+		"CMS_FF_closure_mt_et_w_unc1_2016",
+		"CMS_FF_closure_mt_et_w_unc2_2016",
+		},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,CategoryArgs);
+	}
+      else
+	{
+	  //some of the uncerts are only relevant in certain categories. 
+	  //and missing in all the others
+	  //so the names have been explicitly hacked in
+	  // we need a better way to handle uncertainties that may be explicit to certain categories only
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_0jet_unc1_2016",
+		"CMS_rawFF_et_qcd_0jet_unc2_2016",
+		"CMS_rawFF_et_w_0jet_unc1_2016",
+		"CMS_rawFF_et_w_0jet_unc2_2016",
+		"CMS_rawFF_et_tt_unc1_2016",
+		"CMS_rawFF_et_tt_unc2_2016",
+		//"CMS_FF_closure_mvis_et_qcd_0jet",
+		//"CMS_FF_closure_mvis_et_w_0jet",
+		//"CMS_FF_closure_mvis_et_tt",      
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_et_w_2016",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2016",
+		"CMS_FF_closure_lpt_et_qcd_2016",
+		"CMS_FF_closure_lpt_et_w_2016",
+		"CMS_FF_closure_lpt_et_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+		"CMS_FF_closure_mt_et_w_unc1_2016",
+		"CMS_FF_closure_mt_et_w_unc2_2016"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"et_0jetlow","et_0jethigh"});
 
-      AddShapesIfNotEmpty({
-       	  "CMS_rawFF_et_qcd_1jet_unc1_2016",
-	    "CMS_rawFF_et_qcd_1jet_unc2_2016",
-       	    "CMS_rawFF_et_w_1jet_unc1_2016",
-	    "CMS_rawFF_et_w_1jet_unc2_2016",
-       	    "CMS_rawFF_et_tt_unc1_2016",
-	    "CMS_rawFF_et_tt_unc2_2016",
-       	    //"CMS_FF_closure_mvis_et_qcd_1jet",
-       	    //"CMS_FF_closure_mvis_et_w_1jet",
-	    //"CMS_FF_closure_mvis_et_tt",            
-	    "CMS_FF_closure_lpt_xtrg_et_qcd_2016",
-	    "CMS_FF_closure_lpt_xtrg_et_w_2016",
-	    "CMS_FF_closure_lpt_xtrg_et_tt_2016",
-	    "CMS_FF_closure_lpt_et_qcd_2016",
-	    "CMS_FF_closure_lpt_et_w_2016",
-	    "CMS_FF_closure_lpt_et_tt_2016",
-	    "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
-	    "CMS_FF_closure_mt_et_w_unc1_2016",
-	    "CMS_FF_closure_mt_et_w_unc2_2016"},
-       	{"jetFakes"},
-       	&cb,
-       	1.00,
-       	TheFile,
-       	{"et_boosted1"});
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_1jet_unc1_2016",
+		"CMS_rawFF_et_qcd_1jet_unc2_2016",
+		"CMS_rawFF_et_w_1jet_unc1_2016",
+		"CMS_rawFF_et_w_1jet_unc2_2016",
+		"CMS_rawFF_et_tt_unc1_2016",
+		"CMS_rawFF_et_tt_unc2_2016",
+		//"CMS_FF_closure_mvis_et_qcd_1jet",
+		//"CMS_FF_closure_mvis_et_w_1jet",
+		//"CMS_FF_closure_mvis_et_tt",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_et_w_2016",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2016",
+		"CMS_FF_closure_lpt_et_qcd_2016",
+		"CMS_FF_closure_lpt_et_w_2016",
+		"CMS_FF_closure_lpt_et_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+		"CMS_FF_closure_mt_et_w_unc1_2016",
+		"CMS_FF_closure_mt_et_w_unc2_2016"},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"et_boosted1"});
 
-      AddShapesIfNotEmpty({
-       	  "CMS_rawFF_et_qcd_2jet_unc1_2016",
-	    "CMS_rawFF_et_qcd_2jet_unc2_2016",
-       	    "CMS_rawFF_et_w_2jet_unc1_2016",
-	    "CMS_rawFF_et_w_2jet_unc2_2016",
-       	    "CMS_rawFF_et_tt_unc1_2016",
-	    "CMS_rawFF_et_tt_unc2_2016",
-       	    //"CMS_FF_closure_mvis_et_qcd_2jet",
-       	    //"CMS_FF_closure_mvis_et_w_2jet",	    
-	    //"CMS_FF_closure_mvis_et_tt",            
-	    "CMS_FF_closure_lpt_xtrg_et_qcd_2016",
-	    "CMS_FF_closure_lpt_xtrg_et_w_2016",
-	    "CMS_FF_closure_lpt_xtrg_et_tt_2016",
-	    "CMS_FF_closure_lpt_et_qcd_2016",
-	    "CMS_FF_closure_lpt_et_w_2016",
-	    "CMS_FF_closure_lpt_et_tt_2016",
-	    "CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
-	    "CMS_FF_closure_mt_et_w_unc1_2016",
-	    "CMS_FF_closure_mt_et_w_unc2_2016"
-       	    },
-	{"jetFakes"},
-	&cb,
-	1.00,
-	TheFile,
-	{"et_boosted2","et_vbflow","et_vbfhigh"});
+	  AddShapesIfNotEmpty({
+	      "CMS_rawFF_et_qcd_2jet_unc1_2016",
+		"CMS_rawFF_et_qcd_2jet_unc2_2016",
+		"CMS_rawFF_et_w_2jet_unc1_2016",
+		"CMS_rawFF_et_w_2jet_unc2_2016",
+		"CMS_rawFF_et_tt_unc1_2016",
+		"CMS_rawFF_et_tt_unc2_2016",
+		//"CMS_FF_closure_mvis_et_qcd_2jet",
+		//"CMS_FF_closure_mvis_et_w_2jet",	    
+		//"CMS_FF_closure_mvis_et_tt",            
+		"CMS_FF_closure_lpt_xtrg_et_qcd_2016",
+		"CMS_FF_closure_lpt_xtrg_et_w_2016",
+		"CMS_FF_closure_lpt_xtrg_et_tt_2016",
+		"CMS_FF_closure_lpt_et_qcd_2016",
+		"CMS_FF_closure_lpt_et_w_2016",
+		"CMS_FF_closure_lpt_et_tt_2016",
+		"CMS_FF_closure_OSSS_mvis_et_qcd_2016",            
+		"CMS_FF_closure_mt_et_w_unc1_2016",
+		"CMS_FF_closure_mt_et_w_unc2_2016"
+		},
+	    {"jetFakes"},
+	    &cb,
+	    1.00,
+	    TheFile,
+	    {"et_boosted2","et_vbflow","et_vbfhigh"});
+	}
       
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
@@ -311,36 +325,40 @@ int main(int argc, char **argv)
       //Recoil Shapes:                  
       //check which signal processes this should be applied to. If any.
       std::cout<<"Recoil shapes"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"et_0jetlow","et_0jethigh"});
+      if (Input.OptionExists("-c"))
+	{
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016",
+		"CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016",
+		"CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
+	    JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
+	    &cb,
+	    1.00,
+	    TheFile,CategoryArgs);
+	}
+      else
+	{
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016"},
+			      JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"et_0jetlow","et_0jethigh"});
       
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"et_boosted1"});
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016"},
+			      JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"et_boosted1"});
 
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
-			  JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
-			  &cb,
-			  1.00,
-			  TheFile,
-			  {"et_boosted2","et_vbflow","et_vbfhigh"});
-      /*
-      AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_0jet_2016","CMS_htt_boson_scale_met_0jet_2016",
-	    "CMS_htt_boson_reso_met_1jet_2016","CMS_htt_boson_scale_met_1jet_2016",
-	    "CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
-	JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL"}}),
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
-      */
-
+	  AddShapesIfNotEmpty({"CMS_htt_boson_reso_met_2jet_2016","CMS_htt_boson_scale_met_2jet_2016"},
+			      JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}}),
+			      &cb,
+			      1.00,
+			      TheFile,
+			      {"et_boosted2","et_vbflow","et_vbfhigh"});
+	}
+      
       //ZPT Reweighting Shapes:      
       std::cout<<"ZPT Reweighting"<<std::endl;
       AddShapesIfNotEmpty({"CMS_htt_dyShape_2016"},
@@ -474,14 +492,28 @@ int main(int argc, char **argv)
     }
   //*************************************************************                          
 
-  cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "smh2016et.root",
-      "$BIN/$PROCESS",
-      "$BIN/$PROCESS_$SYSTEMATIC");
-  cb.cp().signals().ExtractShapes(
-      aux_shapes + "smh2016et.root",
-      "$BIN/$PROCESS$MASS",
-      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+  if (Input.OptionExists("-c"))
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "et_controls_2016.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "et_controls_2016.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+  else
+    {
+      cb.cp().backgrounds().ExtractShapes(
+					  aux_shapes + "smh2016et.root",
+					  "$BIN/$PROCESS",
+					  "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+				      aux_shapes + "smh2016et.root",
+				      "$BIN/$PROCESS$MASS",
+				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
   //! [part7]
 
   //! [part8]
