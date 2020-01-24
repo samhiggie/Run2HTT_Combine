@@ -103,6 +103,10 @@ int main(int argc, char **argv)
   vector<string> sig_procs = ch::JoinStr({ggH_STXS,qqH_STXS,{"ZH_htt125","WH_htt125"}});
   
   cb.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, sig_procs, cats, true);    
+  //Okay, we need a more intelligent way to add STXS bins in to the combination, because this can be very expensive computationally.
+  //Combination recommendation is to prune anything which is say < 0.1% of the total signal contribution to a category.
+  // so let's try that.
+  std::cout<<"Pruning weak signals for computational efficiency..."<<std::endl;  
 
   //! [part4]
 
@@ -534,6 +538,28 @@ int main(int argc, char **argv)
       "$BIN/$PROCESS$MASS",
       "$BIN/$PROCESS$MASS_$SYSTEMATIC");
     }
+  
+  for (auto CategoryIt = CategoryArgs.begin(); CategoryIt != CategoryArgs.end(); ++CategoryIt)
+    {
+      string categoryName = *CategoryIt;
+      std::cout<<"Category: "<<categoryName<<std::endl;
+      float total_sig = cb.cp().bin({categoryName}).signals().GetRate();
+      std::cout<<"Total signal contribution: "<<total_sig<<std::endl;
+      for (auto SignalIt = sig_procs.begin(); SignalIt != sig_procs.end(); ++SignalIt)
+	{
+	  string signalName = *SignalIt;
+	  float proc_sig = cb.cp().bin({categoryName}).process({signalName}).GetRate();
+	  float proc_percentage = (proc_sig/total_sig) * 100;
+	  std::cout<<"Process: "<<signalName<<" Percentage: "<<proc_percentage;
+	  if(proc_percentage < 0.1)
+	    {
+	      std::cout<<" ---> TO BE PRUNED";
+	    }
+	  std::cout<<std::endl;
+	}
+    }
+  
+  cb.PrintAll();
   
   //! [part7]
 
