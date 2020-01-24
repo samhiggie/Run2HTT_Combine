@@ -63,8 +63,7 @@ int main(int argc, char **argv)
 
   vector<string> bkg_procs = {"VVT","STT","TTT","jetFakes","ZL","VVL","STL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"};
   if(Input.OptionExists("-e")) {bkg_procs.push_back("ZT");}
-  else bkg_procs.push_back("embedded");
-  cb.AddProcesses({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, bkg_procs, cats, false);
+  else bkg_procs.push_back("embedded");  
 
   vector<string> ggH_STXS;
   if (Input.OptionExists("-g")) ggH_STXS = {"ggH_htt125"};
@@ -102,11 +101,58 @@ int main(int argc, char **argv)
 
   vector<string> sig_procs = ch::JoinStr({ggH_STXS,qqH_STXS,{"ZH_htt125","WH_htt125"}});
   
-  cb.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, sig_procs, cats, true);    
-  //Okay, we need a more intelligent way to add STXS bins in to the combination, because this can be very expensive computationally.
-  //Combination recommendation is to prune anything which is say < 0.1% of the total signal contribution to a category.
-  // so let's try that.
-  std::cout<<"Pruning weak signals for computational efficiency..."<<std::endl;  
+
+  ch::CombineHarvester cb_cp = cb.deep();
+  cb_cp.AddProcesses({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, bkg_procs, cats, false);
+  cb_cp.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, sig_procs, cats, true);      
+
+  cb_cp.cp().backgrounds().ExtractShapes(
+				      aux_shapes + "smh2016mt.root",
+				      "$BIN/$PROCESS",
+				      "$BIN/$PROCESS_$SYSTEMATIC");
+  cb_cp.cp().signals().ExtractShapes(
+				  aux_shapes + "smh2016mt.root",
+				  "$BIN/$PROCESS$MASS",
+				  "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+
+  //we need a more intelligent way to add signal processes. Not all of them are relevant.
+  CatNum = 1;
+  for (auto CategoryIt = CategoryArgs.begin(); CategoryIt != CategoryArgs.end(); ++CategoryIt)
+    {
+      vector<string> acceptable_sig_procs;
+      
+      string categoryName = *CategoryIt;
+      std::cout<<"Category: "<<categoryName<<std::endl;
+      float total_sig = cb_cp.cp().bin({categoryName}).signals().GetRate();
+      std::cout<<"Total signal contribution: "<<total_sig<<std::endl;
+      for (auto SignalIt = sig_procs.begin(); SignalIt != sig_procs.end(); ++SignalIt)
+	{
+	  string signalName = *SignalIt;
+	  float proc_sig = cb_cp.cp().bin({categoryName}).process({signalName}).GetRate();
+	  float proc_percentage = (proc_sig/total_sig) * 100;
+	  std::cout<<"Process: "<<signalName<<" Percentage: "<<proc_percentage;
+	  if(proc_percentage < 0.1)
+	    {
+	      std::cout<<" ---> TO BE PRUNED";
+	    }
+	  else
+	    {
+	      std::cout<<" ---> TO BE ADDED";
+	      acceptable_sig_procs.push_back(signalName);
+	    }
+	  std::cout<<std::endl;
+	}
+      //should have a complete vector of acceptable signals,
+      // a category number
+      // a category name.
+      // let's add these in, and move on to the next
+      cb.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, acceptable_sig_procs, {{CatNum,categoryName}}, true);      
+      ++CatNum;
+    }
+  
+  cb.AddProcesses({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, bkg_procs, cats, false);
+  //cb.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, sig_procs, cats, true);      
+  //cb.PrintProcs();
 
   //! [part4]
 
@@ -537,29 +583,8 @@ int main(int argc, char **argv)
       aux_shapes + "smh2016mt.root",
       "$BIN/$PROCESS$MASS",
       "$BIN/$PROCESS$MASS_$SYSTEMATIC");
-    }
-  
-  for (auto CategoryIt = CategoryArgs.begin(); CategoryIt != CategoryArgs.end(); ++CategoryIt)
-    {
-      string categoryName = *CategoryIt;
-      std::cout<<"Category: "<<categoryName<<std::endl;
-      float total_sig = cb.cp().bin({categoryName}).signals().GetRate();
-      std::cout<<"Total signal contribution: "<<total_sig<<std::endl;
-      for (auto SignalIt = sig_procs.begin(); SignalIt != sig_procs.end(); ++SignalIt)
-	{
-	  string signalName = *SignalIt;
-	  float proc_sig = cb.cp().bin({categoryName}).process({signalName}).GetRate();
-	  float proc_percentage = (proc_sig/total_sig) * 100;
-	  std::cout<<"Process: "<<signalName<<" Percentage: "<<proc_percentage;
-	  if(proc_percentage < 0.1)
-	    {
-	      std::cout<<" ---> TO BE PRUNED";
-	    }
-	  std::cout<<std::endl;
-	}
-    }
-  
-  cb.PrintAll();
+    }  
+    
   
   //! [part7]
 
