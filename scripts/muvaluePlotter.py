@@ -170,7 +170,7 @@ print nlines
 
 f.seek(0)
 
-axis = ROOT.TH2F('axis', '', 1, 0., 10, 10, 0.01, nlines)
+axis = ROOT.TH2F('axis', '', 1, -10, 10, 10, 0.01, nlines)
 axis.GetXaxis().SetTitle("#mu")
 axis.GetYaxis().SetLabelSize(0)
 axis.GetYaxis().SetTickLength(0)
@@ -214,7 +214,7 @@ for x in f:
     elif ii==0:
       combineMu= mean; lowBnad=down; highBand=up;
 
-    myresult=str(mean)+" -"+str(down)+"/-"+str(up)
+    myresult=str(mean)+" -"+str(down)+"/+"+str(up)
 
     print mycat2,is_included(mycat2,args.type)
     if is_included(mycat2,args.type):
