@@ -6,6 +6,7 @@ import os
 import CombineHarvester.Run2HTT_Combine.PlottingModules.globalSettings as globalSettings
 import CombineHarvester.Run2HTT_Combine.PlottingModules.prefitPostfitSettings as prefitPostfitSettings
 import CombineHarvester.Run2HTT_Combine.PlottingModules.Utilities as Utils
+import CombineHarvester.Run2HTT_Combine.PlottingModules as plotModules
 
 axisLabels = {
     'mt':{'MT':"MT",
@@ -25,18 +26,18 @@ axisLabels = {
     'em':{},
     }
 tickLabels = {
-    'MT':"MT",
-          'dr':(0.0,6.0),
-          'higgspt':(0.0,120.0),
-          'met':(0.0,200.0),
-          'mjj':(0.0,500.0),
-          'mtt':(0.0,300.0),
-          'mueta':(-2.4,2.4),
-          'mupt':(20.0,80.0),
-          'mvis':(50.0,200.0),
-          'njets':(0.0,6.0),
-          'taueta':(-2.5,2.5),
-          'taupt':(30.0,80.0),
+    'MT':(20,0.0,200.0),
+          'dr':(40,0.0,6.0),
+          'higgspt':(24,0.0,120.0),
+          'met':(20,0.0,200.0),
+          'mjj':(20,0.0,500.0),
+          'mtt':(30,0.0,300.0),
+          'mueta':(48,-2.4,2.4),
+          'mupt':(30,20.0,80.0),
+          'mvis':(30,50.0,200.0),
+          'njets':(6,0.0,6.0),
+          'taueta':(45,-2.5,2.5),
+          'taupt':(25,30.0,80.0),
     }
 
 def DrawControls(tag,year,channel,DontPerformCalculation=False):
@@ -48,7 +49,7 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
         raise RuntimeError("Couldn't find the output directory. Check the tag to make sure you have the right one.")
     os.chdir(theDirectory)
 
-    fileName = "fitDiagnostics.Test.root"
+    fileName = "fitDiagnostics"+tag+"_Inclusive.root"
     if not os.path.exists(fileName):
         raise RuntimeError("Coudn't find the output file. Are you sure you have the right directory and ran the option to store plots?")
 
@@ -80,6 +81,7 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
 
     for directoryKey in datacardFile.GetListOfKeys():
         directoryName = directoryKey.GetName()
+        print directoryName
         #print(directoryName)
         dataDirectory = datacardFile.Get(directoryName)
         prefitDirectoryName = directoryName+"_"+year+"_prefit"
@@ -166,7 +168,7 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
 
         backgroundStackErrors = Utils.MakeStackErrors(backgroundStack)
         ratioPlot, ratioErrors = prefitPostfitSettings.ratioPlot.MakeRatioPlot(backgroundStack,Data)
-        
+                
         plotPad.cd()
         plotPad.SetFillColor(0)
         backgroundStack.SetMinimum(0.0)
@@ -180,16 +182,68 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
         AllHiggs.Draw("SAME HIST")
         Data.Draw("SAME e1")
 
-        ratioPad.cd()
+        plotModules.lumiText.CreateLumiText(year)
+        plotModules.CMStext.DrawCMSText()
+        
+        ratioPad.cd()        
         ratioErrors.Draw('e2')
         ratioErrors.GetXaxis().SetTitle(axisLabels[channel][directoryName])
-        ratioErrors.GetXaxis().SetTitleOffset(1.5)
-        ratioErrors.GetXaxis().SetBinLabel(1,str(tickLabels[directoryName][0]))
-        ratioErrors.GetXaxis().SetBinLabel(ratioErrors.GetNbinsX(),str(tickLabels[directoryName][1]))
-        ratioErrors.GetXaxis().SetLabelSize(0.10)
-        ratioErrors.GetXaxis().SetLabelOffset(0.02)
+        ratioErrors.GetXaxis().SetTitleOffset(1.5)        
+        #ratioErrors.GetXaxis().SetLabelSize(0.10)
+        #ratioErrors.GetXaxis().SetLabelOffset(0.02)
+        ratioErrors.SetLabelSize(0.0)
         ratioErrors.GetXaxis().SetTitleSize(0.12)
-        ratioPlot.Draw('E0P')
+        ratioPlot.Draw('E0P')        
+        #ratioErrors.GetXaxis().SetBinLabel(1,str(tickLabels[directoryName][0]))
+        #ratioErrors.GetXaxis().SetBinLabel(ratioErrors.GetNbinsX(),str(tickLabels[directoryName][1]))
+        #let's get some better tick labeling on there.
+        """
+        axisPad = ROOT.TPad("axis_"+ratioPad.GetName(),"axis_"+ratioPad.GetName(),0,0,1,1)
+        #axisPad.SetTopMargin(ratioPad.GetTopMargin())
+        #axisPad.SetBottomMargin(ratioPad.GetBottomMargin())        
+        axisPad.SetGridx()
+        axisPad.SetGridy()
+        axisPad.SetFillStyle(4100)
+        axisPad.cd()
+        axisPad.Draw()
+        axisHisto = ROOT.TH1F("Axes","Axes",tickLabels[directoryName][0],tickLabels[directoryName][1],tickLabels[directoryName][2])        
+        axisHisto = ratioErrors.Clone()
+        axisHisto.Reset()
+        axisHisto.GetYaxis().SetRangeUser(0.5,1.5)
+        axisHisto.GetYaxis().SetLabelSize(0.0)
+        axisHisto.Draw()  
+
+        axisPad.Draw()
+        """
+        theAxis=ROOT.TGaxis(ratioErrors.GetXaxis().GetXmin(),
+                            0.5,
+                            ratioErrors.GetXaxis().GetXmax(),
+                            0.5,
+                            tickLabels[directoryName][1],
+                            tickLabels[directoryName][2],
+                            510,
+                            '')
+        theAxis.SetLabelSize(0.1)
+        theAxis.SetLabelOffset(0.02)
+        theAxis.Draw()
+        
+
+        #Create a legend
+        plotPad.cd()
+        legend = ROOT.TLegend(0.68,0.68,0.95,0.95)
+        legend.AddEntry(Data,"Observed","pe")
+        legend.AddEntry(embedded,"Embedded","f")
+        legend.AddEntry(Other,"Other","f")
+        legend.AddEntry(ZL,"Z #rightarrow ee/#mu#mu","f")
+        legend.AddEntry(TT,"t#bar{t} + Jets","f")
+        legend.AddEntry(jetFakes,"Jet mis-ID",'f')
+        legend.AddEntry(ratioErrors,"Bkg. uncertainty","f")
+
+        legend.SetBorderSize(0)
+        
+        legend.Draw()
+        
+        raw_input("Press Enter to Continue...")
 
         theCanvas.SaveAs(outputDir+"/"+directoryName+".png")
         

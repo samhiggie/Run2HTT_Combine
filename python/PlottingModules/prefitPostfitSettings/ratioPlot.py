@@ -41,10 +41,10 @@ def setRatioErrors(ratio,theData):
     output = ROOT.TGraphAsymmErrors(ratio)
     for i in range(1,ratio.GetNbinsX()+1):
         try:
-            print ''
-            print("bin #"+str(i))
-            print("Data: +"+str(theData.GetBinErrorUp(i))+"/-"+str(theData.GetBinErrorLow(i)))
-            print("Ratio: "+str(ratio.GetBinContent(i))+" Error:"+str(theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))+'/-'+str(theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i)))            
+            #print ''
+            #print("bin #"+str(i))
+            #print("Data: +"+str(theData.GetBinErrorUp(i))+"/-"+str(theData.GetBinErrorLow(i)))
+            #print("Ratio: "+str(ratio.GetBinContent(i))+" Error:"+str(theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))+'/-'+str(theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i)))            
             output.SetPointEYlow(i-1,theData.GetBinErrorLow(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))
             output.SetPointEYhigh(i-1,theData.GetBinErrorUp(i)/theData.GetBinContent(i)*ratio.GetBinContent(i))
         except ZeroDivisionError:
