@@ -40,6 +40,7 @@ parser.add_argument('--RunKappaVKappaF',help="Runs kappa_V and kappa_F scan",act
 parser.add_argument('--RealData',help="Use the RealData dataset in the limit calculation - only available for kappa_V and kappa_F scan at the moment",action="store_true")
 parser.add_argument('--ControlMode',help="Run in control mode, for making accurate error control plots",action="store_true")
 parser.add_argument('--ExperimentalSpeedup',help="Run experimental acceleration options. May speed up fits at slight cost to accuracy",action = "store_true")
+parser.add_argument('--CorrelationMatrix',help="Generate correlation matrices for the STXS fits",action="store_true")
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
@@ -156,23 +157,6 @@ logging.info("Per Signal Workspace Command:")
 logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
 os.system(PerSignalWorkspaceCommand)
 
-#per category
-"""
-if not args.DisableCategoryFits:
-    print("Setting up per category command.")
-    PerCategoryName = OutputDir+"workspace_per_cat_breakdown_cmb_"+DateTag+".root"
-    PerCategoryWorkspaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
-    CategorySignalNames=[]
-    for Directory in TheFile.GetListOfKeys():
-        CategorySignalNames.append("r"+Directory.GetName()[2:])
-        PerCategoryWorkspaceCommand += "--PO 'map=.*"+Directory.GetName()+".*/.*_htt.*:"+"r"+Directory.GetName()[2:]+"[1,-25,25]' "
-    PerCategoryWorkspaceCommand+=CombinedCardName+" -o "+PerCategoryName+" -m 125"
-
-    logging.info("Per Category Workspace Command: ")
-    logging.info('\n\n'+PerCategoryWorkspaceCommand+'\n')
-    os.system(PerCategoryWorkspaceCommand)
-"""
-
 #Set up the possible STXS bins list
 if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     print("Setting up STXS commands")
@@ -274,7 +258,7 @@ logging.info('\n\n'+TextWorkspaceCommand+'\n')
 os.system(TextWorkspaceCommand)
 
 PhysModel = 'MultiDimFit'
-ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --algo=singles --cl=0.68'
+ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --algo=singles --cl=0.68 '
 if args.ComputeSignificance:
     PhysModel = 'Significance'
     ExtraCombineOptions = '--X-rtd MINIMIZER_analytic --cl=0.68'
@@ -286,7 +270,7 @@ if args.ExperimentalSpeedup:
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
-InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedWorkspaceName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1"
+InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedWorkspaceName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1 -n "+DateTag+"_Inclusive"
 if args.Timeout is True:
     InclusiveCommand = "timeout "+args.TimeoutTime+" "+InclusiveCommand
 logging.info("Inclusive combine command:")
@@ -298,10 +282,12 @@ else:
 if args.SplitInclusive:
     Splitter.SplitMeasurement(InclusiveCommand,OutputDir)
 
+os.system("mv *"+DateTag+"*.root "+OutputDir)
+
 if not args.ComputeSignificance:
     #run the signal samples
     #okay, we're no longer doing individual fits. It's redundant. We just need one command that fits everything.
-    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSignalName+" "+ExtraCombineOptions+" -t -1 --setParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1"
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSignalName+" "+ExtraCombineOptions+" -t -1 --setParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1 -n "+DateTag+"_Signal"
     if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand
     logging.info("Signal Sample Signal Command: ")
@@ -312,10 +298,13 @@ if not args.ComputeSignificance:
         os.system(CombineCommand)
     if args.SplitSignals:
         Splitter.SplitMeasurement(CombineCommand,OutputDir)    
+    
+    #we need to remember to move and save the results file to something relevant    
+    os.system("mv *"+DateTag+"*.root "+OutputDir)
 
 # run the STXS bins
 if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance):
-    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 --setParameters "
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_STXS --saveFitResult --setParameters "
     for BinName in STXSBins:
         CombineCommand+=("r_"+BinName+"=1,")
     if args.Timeout is True:
@@ -327,10 +316,20 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance
     else:            
         os.system(CombineCommand)
     if args.SplitSTXS:
-        Splitter.SplitMeasurement(CombineCommand,OutputDir)
+        Splitter.SplitMeasurement(CombineCommand,OutputDir)            
+
+    # at the moment multi dim fit methods to get covariance matrices are not working, so this will serve as stop-gap.
+    if args.CorrelationMatrix:
+        supplementaryCombineCommand = "combineTool.py -M FitDiagnostics "+PerSTXSName+" --robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --cl=0.68 --saveShapes --plots --expectSignal=1 -t -1 -n "+DateTag+"_STXS_Correlation --setParameters "
+        for BinName in STXSBins:
+            supplementaryCombineCommand += ("r_"+BinName+"=1,")
+        logging.info("Correlation matrix command:")
+        logging.info('\n\n'+supplementaryCombineCommand+'\n')
+        os.system(supplementaryCombineCommand)
+        os.system(" mv *"+DateTag+"*.root "+OutputDir)
     
     #run the merged bins
-    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 --setParameters "
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_Merged --setParameters "
     for BinName in MergedSignalNames:
             CombineCommand+=("r_"+BinName+"=1,")
     if args.Timeout is True:
@@ -341,6 +340,8 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance
         ThreadHandler.AddNewFit(CombineCommand,"MergedScheme",OutputDir)
     else:            
         os.system(CombineCommand)
+
+    os.system(" mv *"+DateTag+"*.root "+OutputDir)
 
 #run impact fitting
 if args.ComputeImpacts:
@@ -353,7 +354,7 @@ if args.ComputeImpacts:
     os.system(ImpactCommand)
         
     print("Full fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 8 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP "
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic "
     logging.info("Full Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
     os.system(ImpactCommand)
@@ -482,5 +483,12 @@ if args.RunParallel:
     ThreadHandler.BeginFits()
     ThreadHandler.WaitForAllThreadsToFinish()
 
-if args.StoreShapes:
-    os.system('mv '+os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/fitDiagnostics.Test.root "+OutputDir)
+#I think had been rendered obsolete by the general results moving commands?
+#if args.StoreShapes:
+#    os.system('mv '+os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/fitDiagnostics.Test.root "+OutputDir)
+
+print ''
+print "*********************************************"
+print("This session is run under tag: "+DateTag)
+print "*********************************************"
+print ''
