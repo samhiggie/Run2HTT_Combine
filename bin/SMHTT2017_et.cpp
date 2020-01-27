@@ -34,6 +34,7 @@ int main(int argc, char **argv)
   //keep a handle on the file, we need it to check if shapes are empty.
   TFile* TheFile;
   if(Input.OptionExists("-c")) TheFile = new TFile((aux_shapes+"et_controls_2017.root").c_str());
+  else if (Input.OptionExists("-gf")) TheFile = new TFile((aux_shapes+"smh2017et_GOF.root").c_str());
   else TheFile = new TFile((aux_shapes+"smh2017et.root").c_str());  
     
   //categories loaded from configurations
@@ -523,6 +524,17 @@ int main(int argc, char **argv)
 				      aux_shapes + "et_controls_2017.root",
 				      "$BIN/$PROCESS$MASS",
 				      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+  else if(Input.OptionExists("-gf"))
+    {
+      cb.cp().backgrounds().ExtractShapes(
+                      aux_shapes + "smh2017et_GOF.root",
+                      "$BIN/$PROCESS",
+                      "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+                      aux_shapes + "smh2017et_GOF.root",
+                      "$BIN/$PROCESS$MASS",
+                      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
     }
   else
     {
