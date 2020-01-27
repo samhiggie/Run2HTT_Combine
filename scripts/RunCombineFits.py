@@ -22,10 +22,10 @@ parser.add_argument('--RunWithBinByBin',help="Run combine model without using bi
 parser.add_argument('--RunWithoutAutoMCStats',help="Run with auto mc stats command appended to data cards",action="store_true")
 parser.add_argument('--RunInclusiveggH',help="Run using an inclusive ggH distribution (no STXS bins), using either this or the the inclusive qqH will cancel STXS bin measurements",action="store_true")
 parser.add_argument('--RunInclusiveqqH',help="Run using an inclusive qqH distribution (no STXS bins), using either this or the inclusive ggH will cancel STXS bin measurements.",action="store_true")
-parser.add_argument('--RunSTXS',help="Run using an inclusive qqH distribution (no STXS bins), using either this or the inclusive ggH will cancel STXS bin measurements.",action="store_true")
+parser.add_argument('--RunSTXS',help="Run using STXS categories 1.2.",action="store_true")
 parser.add_argument('--ComputeSignificance',help="Compute expected significances instead of expected POIs",action="store_true")
 parser.add_argument('--ComputeImpacts',help="Compute expected impacts on Inclusive POI",action="store_true")
-parser.add_argument('--ComputeGOF',help="Compute saturated GOF",action="store_true")
+parser.add_argument('--ComputeGOF',help="Compute saturated GOF use on forcefully blinded datacards",action="store_true")
 #parser.add_argument('--DisableCategoryFits',help="Disable category card creation and fits",action="store_true")
 parser.add_argument('--Timeout', help="Trigger timeout as conditions on fits (prevents infinitely running fits)", action="store_true")
 parser.add_argument('--TimeoutTime',nargs='?',help="Time allotted before a timeout (linux timeout syntax)",default="180s")
@@ -74,6 +74,9 @@ for year in args.years:
         if args.DecorrelateForMe:
             if args.ControlMode:
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/"+channel+"_controls_"+year+".root "
+            elif args.ComputeGOF:
+                print "Working on GOF with data outside signal region"
+                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root "
             else:
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/smh"+year+channel+".root "
             if channel=="et" or channel=="em":
@@ -87,6 +90,8 @@ for year in args.years:
         DataCardCreationCommand+="_"+channel+" "+OutputDir
         if args.ControlMode:
             DataCardCreationCommand+=" -c"
+        if args.ComputeGOF:
+            DataCardCreationCommand+=" -gf"
         if args.RunShapeless:
             DataCardCreationCommand+=" -s"
         if not args.RunWithBinByBin:
@@ -101,6 +106,10 @@ for year in args.years:
         DataCardCreationCommand+=" --Categories"
         if args.ControlMode:
             TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root")
+            for Directory in TheFile.GetListOfKeys():
+                DataCardCreationCommand+=" "+Directory.GetName()
+        elif args.ComputeGOF:
+            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
             for Directory in TheFile.GetListOfKeys():
                 DataCardCreationCommand+=" "+Directory.GetName()
         else:
@@ -126,7 +135,7 @@ for year in args.years:
         if args.ControlMode:
             TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root")
         elif args.ComputeGOF:
-            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root")
+            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
             print "Working on GOF with data outside signal region"
         else:
             TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
@@ -326,7 +335,7 @@ if args.RunSTXS:
 
     # at the moment multi dim fit methods to get covariance matrices are not working, so this will serve as stop-gap.
     if args.CorrelationMatrix:
-        supplementaryCombineCommand = "combineTool.py -M FitDiagnostics "+PerSTXSName+" --robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --cl=0.68 --saveShapes --plots --parallel 12 --expectSignal=1 -t -1 -n "+DateTag+"_STXS_Correlation --setParameters "
+        supplementaryCombineCommand = "combineTool.py -M FitDiagnostics "+PerSTXSName+" --robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --cl=0.68 --saveShapes --plots --expectSignal=1 -t -1 -n "+DateTag+"_STXS_Correlation --setParameters "
         for BinName in STXSBins:
             supplementaryCombineCommand += ("r_"+BinName+"=1,")
         logging.info("Correlation matrix command:")
@@ -393,14 +402,22 @@ if args.ComputeGOF:
     ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated.GoodnessOfFit.mH125.root higgsCombine.saturated.toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
     os.system(ImpactCommand)
 
-    ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated' --title-left='#mu#tau'"
+    ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated' --title-left='All GoF'"
     os.system(ImpactCommand)
 
     for year in args.years:
        for channel in args.channels:
+          if channel=="mt":
+            channelTitle = "#mu#tau"
+          if channel=="et":
+            channelTitle = "e#tau"
+          if channel=="tt":
+            channelTitle = "#tau#tau"
+          if channel=="em":
+            channelTitle = "e#mu"
           CardNum = 1
-          TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root")
-          print "Working on GOF with data outside signal region ",os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root"
+          TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
+          print "Working on GOF with data outside signal region ",os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root"
           for Directory in TheFile.GetListOfKeys():
               if Directory.GetName() in cfg.Categories[channel]:
                  ImpactCommand = "text2workspace.py -m 125 smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
@@ -415,7 +432,7 @@ if args.ComputeGOF:
                  ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".GoodnessOfFit.mH125.root higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
                  os.system(ImpactCommand)
 
-                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='#mu#tau'"
+                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='+"channelTitle"+'"
                  os.system(ImpactCommand)
 
                  CardNum+=1
