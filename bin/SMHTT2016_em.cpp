@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 			  1.00,
 			  TheFile,
 			  {"em_boosted1"});
-      AddShapesIfNotEmpty({"CMS_QCD_njet1_intercept_2016","CMS_QCD_njet1_slope_2016","CMS_QCD_antiiso_2016"},
+      AddShapesIfNotEmpty({"CMS_QCD_njet2_intercept_2016","CMS_QCD_njet2_slope_2016","CMS_QCD_antiiso_2016"},
 			  {"QCD"},
 			  &cb,
 			  1.00,
