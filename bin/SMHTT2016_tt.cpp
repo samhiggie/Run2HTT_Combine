@@ -188,7 +188,8 @@ int main(int argc, char **argv)
 		"CMS_rawFF_tt_qcd_2jet_2016",
 		"CMS_FF_closure_tau2pt_tt_qcd_0jet",
 		"CMS_FF_closure_tau2pt_tt_qcd_1jet",
-		"CMS_FF_closure_tau2pt_tt_qcd_2jet"},
+		"CMS_FF_closure_tau2pt_tt_qcd_2jet",
+		"CMS_FF_closure_tt_qcd_osss_",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
@@ -198,7 +199,8 @@ int main(int argc, char **argv)
       else
 	{
 	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2016",	    
-		"CMS_FF_closure_tau2pt_tt_qcd_0jet"},
+		"CMS_FF_closure_tau2pt_tt_qcd_0jet",
+		"CMS_FF_closure_tt_qcd_osss_",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
@@ -206,7 +208,8 @@ int main(int argc, char **argv)
 	    {"tt_0jet"});
 
 	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_1jet_2016",	    
-		"CMS_FF_closure_tau2pt_tt_qcd_1jet"},
+		"CMS_FF_closure_tau2pt_tt_qcd_1jet",
+		"CMS_FF_closure_tt_qcd_osss_",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
@@ -214,7 +217,8 @@ int main(int argc, char **argv)
 	    {"tt_boosted_onejet"});
 
 	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_2jet_2016",	    
-		"CMS_FF_closure_tau2pt_tt_qcd_2jet"},
+		"CMS_FF_closure_tau2pt_tt_qcd_2jet",
+		"CMS_FF_closure_tt_qcd_osss_",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
