@@ -240,7 +240,7 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
 
         #Create a legend
         plotPad.cd()
-        legend = ROOT.TLegend(0.68,0.68,0.95,0.95)
+        legend = ROOT.TLegend(0.68,0.65,0.95,0.92)
         legend.AddEntry(Data,"Observed","pe")
         legend.AddEntry(embedded,"Embedded","f")
         legend.AddEntry(Other,"Other","f")
@@ -253,9 +253,10 @@ def DrawControls(tag,year,channel,DontPerformCalculation=False):
         
         legend.Draw()
         
-        raw_input("Press Enter to Continue...")
+        #raw_input("Press Enter to Continue...")
 
         theCanvas.SaveAs(outputDir+"/"+directoryName+".png")
+        theCanvas.SaveAs(outputDir+"/"+directoryName+".pdf")
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = "Create control plots from a fit diagnostic output file")
