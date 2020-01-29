@@ -180,15 +180,26 @@ int main(int argc, char **argv)
                           1.00,
                           TheFile,CategoryArgs);
 
-      // QCD shape      
-      AddShapesIfNotEmpty({"CMS_QCD_njet0_intercept_2016","CMS_QCD_njet0_slope_2016",
-	    "CMS_QCD_njet1_intercept_2016","CMS_QCD_njet1_slope_2016",
-	    "CMS_QCD_njet2_intercept_2016","CMS_QCD_njet2_slope_2016",
-	    "CMS_QCD_antiiso_2016"},
-	{"QCD"},
-	&cb,
-	1.00,
-	TheFile,CategoryArgs);
+      // QCD shape            
+      AddShapesIfNotEmpty({"CMS_QCD_njet0_intercept_2016","CMS_QCD_njet0_slope_2016","CMS_QCD_antiiso_2016"},
+			  {"QCD"},
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"em_0jetlow","em_0jethigh"});
+      
+      AddShapesIfNotEmpty({"CMS_QCD_njet1_intercept_2016","CMS_QCD_njet1_slope_2016","CMS_QCD_antiiso_2016"},
+			  {"QCD"},
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"em_boosted1"});
+      AddShapesIfNotEmpty({"CMS_QCD_njet1_intercept_2016","CMS_QCD_njet1_slope_2016","CMS_QCD_antiiso_2016"},
+			  {"QCD"},
+			  &cb,
+			  1.00,
+			  TheFile,
+			  {"em_boosted2","em_vbflow","em_vbfhigh"});
 
       //MET Unclustered Energy Scale      
       std::cout<<"MET UES"<<std::endl;
