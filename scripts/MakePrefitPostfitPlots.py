@@ -17,7 +17,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
         raise RuntimeError("Couldn't find the output directory. Check the tag to make sure you have the right one.")
     os.chdir(theDirectory)
     
-    fileName = "fitDiagnostics.Test.root"
+    fileName = "fitDiagnostics"+tag+"_Inclusive.root"
     if not os.path.exists(fileName):
         raise RuntimeError("Coudn't find the output file. Are you sure you have the right directory and ran the option to store plots?")
 
