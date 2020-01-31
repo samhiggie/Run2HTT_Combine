@@ -27,7 +27,10 @@ def CreateAxisLabels(theHist,category):
     for i in range(1,nBins+1):
         theAxis.SetBinLabel(i,genericAxisLabels[(i-1)%9])
 
-    plotXAxisLabelSize = 0.3/(1.0*nSlices)
+    if nSlices == 0:
+        plotXAxisLabelSize = 0.3
+    else:
+        plotXAxisLabelSize = 0.3/(1.0*nSlices)
 
     theAxis.SetLabelSize(plotXAxisLabelSize)
 
