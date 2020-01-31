@@ -275,12 +275,14 @@ PhysModel = 'MultiDimFit'
 ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --algo=singles --cl=0.68 '
 if args.ComputeSignificance:
     PhysModel = 'Significance'
-    ExtraCombineOptions = '--X-rtd MINIMIZER_analytic --cl=0.68'
+    ExtraCombineOptions = '--X-rtd MINIMIZER_analytic --cl=0.68 '
 if args.StoreShapes:
     PhysModel = 'FitDiagnostics'
-    ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --cl=0.68 --saveShapes --plots'
+    ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --cl=0.68 --saveShapes '
 if args.ExperimentalSpeedup:
-    ExtraCombineOptions += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0'
+    ExtraCombineOptions += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
+if args.ControlMode:
+    ExtraCombineOptions += ' --cminDefaultMinimizerTolerance 100.0 ' 
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
