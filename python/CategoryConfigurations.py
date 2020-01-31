@@ -32,13 +32,13 @@ tt_boosted_categories = []
 tt_boosted_categories.append(tt_boosted_1J_category)
 tt_boosted_categories.append(tt_boosted_GE2J_category)
 tt_vbf_categories = []
-tt_vbf_categories.append(tt_vbf_high_category)
 tt_vbf_categories.append(tt_vbf_low_category)
+tt_vbf_categories.append(tt_vbf_high_category)
 tt_0jet_categories = []
 tt_0jet_categories.append(tt_0jet_category)
 
 tt_Categories = []
-tt_Categories = tt_vbf_categories + tt_boosted_categories + tt_0jet_categories
+tt_Categories = tt_0jet_categories + tt_boosted_categories + tt_vbf_categories
 
 mt_boosted_categories = []
 mt_boosted_categories.append(mt_boosted_1J_category)
