@@ -65,8 +65,9 @@ os.mkdir(OutputDir)
 logging.basicConfig(filename=OutputDir+"CombineHistory_"+DateTag+".log",filemode="w",level=logging.INFO,format='%(asctime)s %(message)s')
 
 DataCardCreationCommand = ""
-
 ChannelCards = []
+
+outputLoggingFile = "outputLog_"+DateTag+".txt"
 
 for year in args.years:    
     for channel in args.channels:
@@ -87,10 +88,10 @@ for year in args.years:
             print("Duplicating shapes for year correlations")
             logging.info("Negative bin removal command:")
             logging.info('\n\n'+NegativeBinCommand+'\n')
-            os.system(NegativeBinCommand)
+            os.system(NegativeBinCommand+" | tee -a "+outputLoggingFile)
             logging.info("Shape duplication command:")
             logging.info('\n\n'+AddShapeCommand+'\n')
-            os.system(AddShapeCommand)
+            os.system(AddShapeCommand+" | tee -a "+outputLoggingFile)
 
         DataCardCreationCommand="SMHTT"+year
         DataCardCreationCommand+="_"+channel+" "+OutputDir
@@ -124,7 +125,7 @@ for year in args.years:
         print("Creating data cards")
         logging.info("Data Card Creation Command:")
         logging.info('\n\n'+DataCardCreationCommand+'\n')
-        os.system(DataCardCreationCommand)        
+        os.system(DataCardCreationCommand+" | tee -a "+outputLoggingFile)        
         
 
 #cobmine all cards together
@@ -160,7 +161,7 @@ for year in args.years:
 CardCombiningCommand+= " > "+CombinedCardName
 logging.info("Final Card Combining Command:")
 logging.info('\n\n'+CardCombiningCommand+'\n')
-os.system(CardCombiningCommand)
+os.system(CardCombiningCommand+" | tee -a "+outputLoggingFile)
 
 #per signal card workspace set up
 print("Setting up per signal workspace")
@@ -174,7 +175,7 @@ PerSignalWorkspaceCommand+= CombinedCardName +" -o "+PerSignalName+" -m 125"
 
 logging.info("Per Signal Workspace Command:")
 logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
-os.system(PerSignalWorkspaceCommand)
+os.system(PerSignalWorkspaceCommand+" | tee -a "+outputLoggingFile)
 
 #Set up the possible STXS bins list
 #if not (args.RunInclusiveggH or args.RunInclusiveqqH):
@@ -225,7 +226,7 @@ if args.RunSTXS:
 
     logging.info("Per STXS Bins Work Space Command")
     logging.info('\n\n'+PerSTXSBinsWorkSpaceCommand+'\n')
-    os.system(PerSTXSBinsWorkSpaceCommand)
+    os.system(PerSTXSBinsWorkSpaceCommand+" | tee -a "+outputLoggingFile)
 
     #add in the merged ones
     PerMergedBinName = OutputDir+"workspace_per_Merged_breakdown_cmb_"+DateTag+".root"
@@ -270,12 +271,12 @@ if args.RunSTXS:
 
     logging.info("Per Merged Bin Work Space Command")
     logging.info('\n\n'+PerMergedBinWorkSpaceCommand+'\n')
-    os.system(PerMergedBinWorkSpaceCommand)
+    os.system(PerMergedBinWorkSpaceCommand+" | tee -a "+outputLoggingFile)
 
 TextWorkspaceCommand = "text2workspace.py "+CombinedCardName+" -m 125"
 logging.info("Text 2 Worskpace Command:")
 logging.info('\n\n'+TextWorkspaceCommand+'\n')
-os.system(TextWorkspaceCommand)
+os.system(TextWorkspaceCommand+" | tee -a "+outputLoggingFile)
 
 PhysModel = 'MultiDimFit'
 ExtraCombineOptions = '--robustFit=1 --preFitValue=1. --X-rtd MINIMIZER_analytic --algo=singles --cl=0.68 '
@@ -300,7 +301,7 @@ logging.info('\n\n'+InclusiveCommand+'\n')
 if args.RunParallel:
     ThreadHandler.AddNewFit(InclusiveCommand,"r",OutputDir)
 else:
-    os.system(InclusiveCommand)
+    os.system(InclusiveCommand+" | tee -a "+outputLoggingFile)
 if args.SplitInclusive:
     Splitter.SplitMeasurement(InclusiveCommand,OutputDir)
 
@@ -317,7 +318,7 @@ if not args.ComputeSignificance:
     if args.RunParallel:
         ThreadHandler.AddNewFit(CombineCommand,'Stage_0',OutputDir)
     else:            
-        os.system(CombineCommand)
+        os.system(CombineCommand+" | tee -a "+outputLoggingFile)
     if args.SplitSignals:
         Splitter.SplitMeasurement(CombineCommand,OutputDir)    
     
@@ -337,7 +338,7 @@ if args.RunSTXS:
     if args.RunParallel:
         ThreadHandler.AddNewFit(CombineCommand,"STXS_1p2",OutputDir)
     else:            
-        os.system(CombineCommand)
+        os.system(CombineCommand+" | tee -a "+outputLoggingFile)
     if args.SplitSTXS:
         Splitter.SplitMeasurement(CombineCommand,OutputDir)            
 
@@ -348,7 +349,7 @@ if args.RunSTXS:
             supplementaryCombineCommand += ("r_"+BinName+"=1,")
         logging.info("Correlation matrix command:")
         logging.info('\n\n'+supplementaryCombineCommand+'\n')
-        os.system(supplementaryCombineCommand)
+        os.system(supplementaryCombineCommand+" | tee -a "+outputLoggingFile)
         os.system(" mv *"+DateTag+"*.root "+OutputDir)
     
     #run the merged bins
@@ -362,7 +363,7 @@ if args.RunSTXS:
     if args.RunParallel:
         ThreadHandler.AddNewFit(CombineCommand,"MergedScheme",OutputDir)
     else:            
-        os.system(CombineCommand)
+        os.system(CombineCommand+" | tee -a "+outputLoggingFile)
 
     os.system(" mv *"+DateTag+"*.root "+OutputDir)
 
@@ -374,27 +375,27 @@ if args.ComputeImpacts:
     ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 8 "
     logging.info("Initial Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
         
     print("Full fit")
     ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic "
     logging.info("Full Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     print("json-ifying")
     ImpactJsonName = "impacts_final_"+DateTag+".json"
     ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 -o "+ImpactJsonName
     logging.info("JSON Output Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     print("final impact plot")
     FinalImpactName = "impacts_final_"+DateTag
     ImpactCommand = "plotImpacts.py -i "+ImpactJsonName+" -o "+FinalImpactName
     logging.info("Plotting Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     os.chdir("../../")
 
@@ -402,16 +403,16 @@ if args.ComputeGOF:
     os.chdir(OutputDir)
     GOFJsonName = "gof_final_"+DateTag+".json"
     ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d " + CombinedWorkspaceName+" -n '.saturated.toys'  -t 25 -s 0:19:1 --parallel 12"
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d " + CombinedWorkspaceName+" -n '.saturated'"
     os.system(ImpactCommand)
 
     ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated.GoodnessOfFit.mH125.root higgsCombine.saturated.toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated' --title-left='All GoF'"
-    os.system(ImpactCommand)
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     for year in args.years:
        for channel in args.channels:
@@ -429,19 +430,19 @@ if args.ComputeGOF:
           for Directory in TheFile.GetListOfKeys():
               if Directory.GetName() in cfg.Categories[channel]:
                  ImpactCommand = "text2workspace.py -m 125 smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
-                 os.system(ImpactCommand)
+                 os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
                  GOFJsonName = "gof_"+channel+"_"+year+"_"+str(CardNum)+"_"+DateTag+".json"
                  ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root -n '.saturated."+year+"_"+channel+"_"+str(CardNum)+".toys'  -t 25 -s 0:19:1 --parallel 12"
-                 os.system(ImpactCommand)
+                 os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root -n '.saturated."+year+"_"+channel+"_"+str(CardNum)+"'"
-                 os.system(ImpactCommand)
+                 os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".GoodnessOfFit.mH125.root higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
-                 os.system(ImpactCommand)
+                 os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+channelTitle+"'"
-                 os.system(ImpactCommand)
+                 os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  CardNum+=1
 
@@ -518,6 +519,9 @@ if args.RunParallel:
 #I think had been rendered obsolete by the general results moving commands?
 #if args.StoreShapes:
 #    os.system('mv '+os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/fitDiagnostics.Test.root "+OutputDir)
+
+#move the log file into output
+os.system('mv '+outputLoggingFile+' '+OutputDir)
 
 print ''
 print "*********************************************"
