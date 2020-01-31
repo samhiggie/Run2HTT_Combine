@@ -19,7 +19,7 @@ def CreateSliceText(category):
     sliceLatex.SetNDC()
     sliceLatex.SetTextColor(ROOT.kBlack)
     sliceLatex.SetTextAlign(sliceTextAlign)    
-    sliceLatex.SetTextSize(0.12/(1.0*nSlices))        
+    sliceLatex.SetTextSize(0.12/(1.0*(nSlices+1)))        
     
     if (category == category == catConfig.mt_vbf_high_category or 
         category == catConfig.et_vbf_high_category or 
