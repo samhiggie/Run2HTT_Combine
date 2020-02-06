@@ -35,9 +35,11 @@ Each of these models must be built before running, and all should have several c
 - `-b` will disable the use of CombineHarvester's Bin-By-Bin uncertainties (please note, this option is default in RunCombineFits.py, and has been replaced with autoMCStats)
 - `-g` will disable STXS split ggH processes and only use an inclusive ggH distribution 
 - `-q` will disable STXS split qqh processes and will only use inclusive qqH processes. 
+- `-c` will run the model in control plot mode, which looks for a different datacard full of control plots
+- `-gf` will run the model in goodness of fit mode, which looks for our dedicated blinded goodness of fit cards to run on.
 - There is also an option called `--Categories` which takes any number of options after it, and it will attempt to load these categories from the file. Non-optional for proper function of the model.
 
-Each looks for a file named "smh[year][channel(mt,tt,etc.)].root" in the shapes folder to run on.
+Each model (nominally) looks for a file named "smh[year][channel(mt,tt,etc.)].root" in the shapes folder to run on.
  
 ### interface
 
@@ -67,6 +69,8 @@ in the usual output directories.
 
 - `EmbeddedConfiguration.py`:   This contains year and channel combinations and whether the model will attempt to run using embedded distributions and uncertainties
   				or not. Please modify this if your year and channel has embedded distributions available.
+      
+- `Plotting Modules`: contains global style modules, and individual code modules used for all the various plotting scripts.
 
 ### scripts
 
@@ -75,20 +79,27 @@ overall running/main script of the repository `RunCombineFits.py` and the sorted
 
 (use `--help` to see options with these)
 
-- `MergeStats.py`: A complicated algorithm I wrote to try merging low stats bins to end up with all bin uncertainties < 30%. It affects sensitivities
-too much and so is no longer used, but contains some useful code. NO LONGER USED.
-
 - `PrepDecorrelatedCard.py`: A simple macro using regexes to try and make copies of distributions with year tags attached for use in correllating/decorrellating
-shapes in combine harvester models. Has a `--TrimYears` option for removing the years from histograms, instead of adding them if necessary
-
-- `SimpleMergeStats.py`: A seperate simpler merging algorithm. It uses regexes to match categories and distributions, and simply halves the number
-of bins the last three slices of the Zero Jet PTH 0-10 category, and in the last slice of the VBF PTH GE 200 Category. NO LONGER USED.
+shapes in combine harvester models. Has a `--TrimYears` option for removing the years from histograms, instead of adding them if necessary.
+This script is called automatically by the `--DecorrelateForMe` option of `RunCombineFits.py`
 
 - `Smooth.py`: A simple shape smoothing tool used for smoothing out bad statistics in shape uncertainties. If it finds more than half the bins
 of a slice are the same between up and nominal or down and nominal shapes, it smooths out the ncertaintiy over all bins. It takes a large number of 
 arguments to make sure it has all the right bins and slices, please run with `--help` to see all required options. NO LONGER USED.
 
 - `RunCombineFits.py`: This is the 'main' script of the repository and handles creating expected fits. See it's section for more details.
+
+- `RemoveNegativeBins.py`: a simple macro for removing any negative bin from a histogram it is called on. This is called automatically by the `--DeocrrelateForMe` option of `RunCombineFits.py`
+
+- `muvaluePlotter.py`: this is the drawing script for mu value plots created as part of combine output
+
+- `sortingSTXS.py`: a script (explain later) for easy text dumping of results.
+
+- `DrawControls.py`: the drawing script used for drawing control mode plots
+
+- `MakePrefitPostfitPlots`: the drawing script used for `RunCombineFits.py` `--StoreShapes` prefits,
+
+- `LaTeXify.py`: A quick script designed to take `sortingSTXS.py` output and redump it as a LaTeX table as used in AN-19-109
 
 ### RunCombineFits.py
 
@@ -105,9 +116,11 @@ This is the main tool used for extracting expected fits. It takes a moderate num
   - `--RunWithoutAutoMCStats` Disables autoMCStats in the data cards.
   - `--RunInclusiveggH` Uses the inclusive ggH distribution, and does not attempt to do any STXS fitting
   - `--RunInclusiveqqH` Same as the above, but for qqH
+  - `--RunSTXS` Must be called to enable STXs fits
   - `--ComputeSignificance` less used option, disables a large number of fits, and just attempts to compute the significance of the main
   inclusive workspace/fit
   - `--ComputeImpacts` Computes the impacts for the Inclusive POI
+  - `ComputeGOF` runs the GOF fits and framework, with related model calls.
   - `--Timeout` Terminate combine commands after a certain amount of time
   - `--TimeoutTime` Sets the time for the `--Timeout` command. Default: 180s.
   - `--SplitUncertainties` Creates and calls an uncertainty splitter to make sure data cards are grouped in such a way that they can
@@ -122,10 +135,16 @@ This is the main tool used for extracting expected fits. It takes a moderate num
    - `--numthreads` Dictates the number of threads that `--RunParallel` is allowed to use to conserve system resources. Default: 12.
    - `--DecorrelateForMe` Calls the decorrelation script on any input before trying to run. The card it searches for to do this is smh<year><channel>_nocorrelation.root.
      			  This is the new recommended default way of decorrelating files when starting from new cards. Output will be saved so this option does not need to be used twice.
+   -  `--StoreShapes` Calls fit diagnostics instead of multi-dim fit and uses the `saveResults` options.
+   -  `--RunKappaVKappaF` calls the kappa v kappa f frameworks and fits instead
+   -  `--ControlMode` calls the control mode fits for models and options instead. Should be used with inclusive ggH and qqH, as well as shape storing
+   - `ExperimentalSpeedup` contains a number of combine options designed for faster fits at a slight hit to accuracy.
+   - `CorrealtionMatrix` calls a quick supplementary fit on STXS fits designed to output a correlation matrix of all parameters
   
    To try and keep output seperate, and archived, and the main directory clean, each time this script is run, it will generate 
   a tag with the date, and a random string assigned to it. All output of the script can be found in HTT_Output (it will make this directory
-  if it is not already present) in a directory called Output_[Date]_[String Tag]. This string tag will be printed at the top of the output whenever the script is run.
+  if it is not already present) in a directory called Output_[Date]_[String Tag]. This string tag will be printed at the top and bottom of the output whenever the script is run.
+  All commands will receive their own log, and all output should be put in a seperate log in the output directory.
 
   The way RunCombineFits.py handles categories, or Monte Carlo vs Embedded distributions is handled by python configuration files described in the python section.
 
@@ -148,33 +167,6 @@ For example, https://github.com/aloeliger/Run2HTT_Combine/blob/master/images/Sor
   - Extract limits lines only. `awk '/%/' outputTxtFile.txt > limitExtracted.txt`
   - To run the script, `python sortingSTXS.py limitExtracted.txt`
 
-
-### Prefit plot code (now no longer used?)
-
-- This is contained in 2 files: plotterFinal.py and varCfgPlotter.py.
-
-- You only need to edit the FileMap in varCfgPlotter.py for running the code in your own workspaces. FileMap has the default locations where the code will look for input.
-
-How to run :
-
- - Main Options
-  - `--years` accepts 2016, 2017 and/or 2018.
-  
-  - `--channels` currently accepts mt (mu tau), et (e tau), em (e mu) or tt (tau tau)  
-  
-  -  `--inputFile` the path to the input root file that contains the hisograms. 
-
- 
- - Other Options
-  - `higgsSF` provides the Scale Factor for the SM-Higgs signals.  1 is default
-  - `--prefix` provides prefix for TDirectory holding histograms such as 'prefit_' or postfin_'.  Default is ''
-  - `--isLog`  1=TRUE, 0=FALSE. Do we want a log plot?
- 
-Example on how to run it: 
-
-python plotterFinal.py --channel mt --year 2017 
-
-(You will have to change the default address of the files stored in varCfgPlotter.py for above command to work. You may choose to provede `--inputFile` option in addition in which case you need not worry about varCfgPlotter.py)
 
 ## Troubleshooting
 ### RunCombineFits broke and all my fits tell me that the workspace has problems and probably wasn't closed...
