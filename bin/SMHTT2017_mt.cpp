@@ -312,7 +312,7 @@ int main(int argc, char **argv)
 		"CMS_FF_closure_lpt_xtrg_mt_tt_2017",
 		"CMS_FF_closure_lpt_mt_qcd",
 		"CMS_FF_closure_lpt_mt_w",
-		"CMS_FF_closure_lpt_mt_tt ",
+		"CMS_FF_closure_lpt_mt_tt",
 		"CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 		"CMS_FF_closure_mt_mt_w_unc1_2017",
 		"CMS_FF_closure_mt_mt_w_unc2_2017"},
