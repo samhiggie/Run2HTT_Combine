@@ -146,7 +146,8 @@ int main(int argc, char **argv) {
   cb.cp().process({"ZT","ZL"}).AddSyst(cb,"CMS_htt_zjXsec", "lnN", SystMap<>::init(1.02));
 
   //Electron Fake Rate Uncertainty
-  cb.cp().process({"ZL","STL","TTL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2018", "lnN",SystMap<>::init(1.15));    
+  //cb.cp().process({"ZL","STL","TTL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2018", "lnN",SystMap<>::init(1.15));    
+  cb.cp().process({"STL","TTL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2018", "lnN",SystMap<>::init(1.15));    
   
   //Luminosity Uncertainty
   cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}})).AddSyst(cb, "lumi_Run2018", "lnN", SystMap<>::init(1.015));
@@ -178,7 +179,26 @@ int main(int argc, char **argv) {
                           TheFile,CategoryArgs);
 
       // e to tau energy fake scale            
+      /*
       AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_2018","CMS_scale_efaket_1prong1pizero_2018"},
+			  {"ZL"},
+			  &cb,
+			  1.00,
+			  TheFile,CategoryArgs);
+      */
+      std::cout<<"ZLShapes"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_barrel_2018",
+	    "CMS_scale_efaket_1prong1pizero_barrel_2018",
+	    "CMS_scale_efaket_1prong_endcap_2018",
+	    "CMS_scale_efaket_1prong1pizero_endcap_2018"},
+			  {"ZL"},
+			  &cb,
+			  1.00,
+			  TheFile,CategoryArgs);
+
+      AddShapesIfNotEmpty({"CMS_norm_efaket_slice1_2018",
+	    "CMS_norm_efaket_slice2_2018",
+	    "CMS_norm_efaket_slice3_2018"},
 			  {"ZL"},
 			  &cb,
 			  1.00,

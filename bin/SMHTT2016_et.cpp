@@ -149,7 +149,8 @@ int main(int argc, char **argv)
   cb.cp().process({"ZT","ZL"}).AddSyst(cb,"CMS_htt_zjXsec", "lnN", SystMap<>::init(1.02));
 
   //Electron Fake Rate Uncertainty
-  cb.cp().process({"ZL","VVL","TTL","STL"}).AddSyst(cb, "CMS_eFakeTau_2016 ", "lnN",SystMap<>::init(1.15));    
+  //cb.cp().process({"ZL","VVL","TTL","STL"}).AddSyst(cb, "CMS_eFakeTau_2016 ", "lnN",SystMap<>::init(1.15));  
+  cb.cp().process({"VVL","TTL","STL"}).AddSyst(cb, "CMS_eFakeTau_2016 ", "lnN",SystMap<>::init(1.15));    
   
   //Luminosity Uncertainty
   cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}})).AddSyst(cb, "lumi_Run2016", "lnN", SystMap<>::init(1.022));
@@ -182,13 +183,31 @@ int main(int argc, char **argv)
                           TheFile,CategoryArgs);
 
       //E to tau fake energy scale and e to tau energy fake scale            
-      std::cout<<"ZLShapes"<<std::endl;
+      /*
+	std::cout<<"ZLShapes"<<std::endl;
       AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_2016","CMS_scale_efaket_1prong1pizero_2016"},
+      {"ZL"},
+			  &cb,
+			  1.00,
+			  TheFile,CategoryArgs);
+      */
+      std::cout<<"ZLShapes"<<std::endl;
+      AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_barrel_2016",
+	    "CMS_scale_efaket_1prong1pizero_barrel_2016",
+	    "CMS_scale_efaket_1prong_endcap_2016",
+	    "CMS_scale_efaket_1prong1pizero_endcap_2016"},
 			  {"ZL"},
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
-      
+
+      AddShapesIfNotEmpty({"CMS_norm_efaket_slice1_2016",
+	    "CMS_norm_efaket_slice2_2016",
+	    "CMS_norm_efaket_slice3_2016"},
+			  {"ZL"},
+			  &cb,
+			  1.00,
+			  TheFile,CategoryArgs);
       //Fake Factors
       /*
 	std::cout<<"Fake Factors"<<std::endl;	
@@ -390,30 +409,7 @@ int main(int argc, char **argv)
 	JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}}),
 	&cb,
 	1.000,
-	TheFile,CategoryArgs);
-      /*
-      std::cout<<"JES"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_JetEta3to5_2016","CMS_JetEta0to5_2016","CMS_JetRelativeBal_2016",
-	    "CMS_JetEta0to3_2016"},
-	    JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
-	&cb,
-	0.707,
-	TheFile,CategoryArgs);            
-
-      AddShapesIfNotEmpty({"CMS_JetEta3to5","CMS_JetEta0to5","CMS_JetRelativeBal",
-            "CMS_JetEta0to3"},
-        JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
-        &cb,
-        0.707,
-        TheFile,CategoryArgs);
-
-	      std::cout<<"JES"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_JetEC2_2016"},
-        JoinStr({ggH_STXS,qqH_STXS,{"ZT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","TTT","VVT","STT"}}),
-        &cb,
-        1.000,
-        TheFile,CategoryArgs);
-      */
+	TheFile,CategoryArgs);      
 
       //JER
       std::cout<<"JER"<<std::endl;
