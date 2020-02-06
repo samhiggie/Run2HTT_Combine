@@ -156,6 +156,9 @@ int main(int argc, char **argv)
   cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}})).AddSyst(cb, "lumi_beamCurrentCalibration", "lnN", SystMap<>::init(1.003));
   cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}})).AddSyst(cb, "lumi_ghostsAndSatellites", "lnN", SystMap<>::init(1.001));
 
+  cb.cp().process({"jetFakes"}).bin({"et_0jetlow"}).AddSyst(cb,"CMS_jetFakesNorm_0jetlow_et_2017","lnN",SystMap<>::init(1.05));
+  cb.cp().process({"jetFakes"}).bin({"et_0jethigh"}).AddSyst(cb,"CMS_jetFakesNorm_0jethigh_et_2017","lnN",SystMap<>::init(1.05));
+
   //**********************************************************
   //shape uncertainties
   //**********************************************************

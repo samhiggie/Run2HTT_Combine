@@ -153,6 +153,9 @@ int main(int argc, char **argv)
   cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZT","ZL","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}})).AddSyst(cb, "lumi_beamCurrentCalibration", "lnN", SystMap<>::init(1.003));
   cb.cp().process(JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZT","ZL","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}})).AddSyst(cb, "lumi_ghostsAndSatellites", "lnN", SystMap<>::init(1.001));
 
+  cb.cp().process({"jetFakes"}).bin({"mt_0jet_PTH_0_10"}).AddSyst(cb,"CMS_jetFakesNorm_0jetlow_mt_2017","lnN",SystMap<>::init(1.05));
+  cb.cp().process({"jetFakes"}).bin({"mt_0jet_PTH_GE10"}).AddSyst(cb,"CMS_jetFakesNorm_0jethigh_mt_2017","lnN",SystMap<>::init(1.05));
+
   //*********************************************** 
   //shape uncertainties
   //***********************************************
@@ -309,7 +312,7 @@ int main(int argc, char **argv)
 		"CMS_FF_closure_lpt_xtrg_mt_tt_2017",
 		"CMS_FF_closure_lpt_mt_qcd",
 		"CMS_FF_closure_lpt_mt_w",
-		"CMS_FF_closure_lpt_mt_tt",
+		"CMS_FF_closure_lpt_mt_tt ",
 		"CMS_FF_closure_OSSS_mvis_mt_qcd_2017",            
 		"CMS_FF_closure_mt_mt_w_unc1_2017",
 		"CMS_FF_closure_mt_mt_w_unc2_2017"},
