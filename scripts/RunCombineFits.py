@@ -328,19 +328,22 @@ if not args.ComputeSignificance:
 # run the STXS bins
 #if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance):
 if args.RunSTXS:
-    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_STXS --saveFitResult --setParameters "
-    for BinName in STXSBins:
-        CombineCommand+=("r_"+BinName+"=1,")
-    if args.Timeout is True:
+    for STXSBin in STXSBins:
+        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_"+STXSBin+"_STXS --saveFitResult --setParameters "
+        for BinName in STXSBins:
+            CombineCommand+=("r_"+BinName+"=1,")
+        if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" "+ CombineCommand
-    logging.info("STXS Combine Command:")
-    logging.info('\n\n'+CombineCommand+'\n')    
-    if args.RunParallel:
-        ThreadHandler.AddNewFit(CombineCommand,"STXS_1p2",OutputDir)
-    else:            
-        os.system(CombineCommand+" | tee -a "+outputLoggingFile)
-    if args.SplitSTXS:
-        Splitter.SplitMeasurement(CombineCommand,OutputDir)            
+        CombineCommand += " -P r_"+STXSBin+" --floatOtherPOIs=1"
+        logging.info("STXS Combine Command:")
+        logging.info('\n\n'+CombineCommand+'\n')    
+        if args.RunParallel:
+            ThreadHandler.AddNewFit(CombineCommand,"STXS_"+STXSBin,OutputDir)
+        else:            
+            os.system(CombineCommand+" | tee -a "+outputLoggingFile)
+            os.system(" mv *"+DateTag+"*.root "+OutputDir)
+        if args.SplitSTXS:
+            Splitter.SplitMeasurement(CombineCommand,OutputDir)            
 
     # at the moment multi dim fit methods to get covariance matrices are not working, so this will serve as stop-gap.
     if args.CorrelationMatrix:
@@ -353,19 +356,20 @@ if args.RunSTXS:
         os.system(" mv *"+DateTag+"*.root "+OutputDir)
     
     #run the merged bins
-    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_Merged --setParameters "
-    for BinName in MergedSignalNames:
+    for MergedBin in MergedSignalNames:
+        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_"+MergedBin+"_Merged --setParameters "
+        for BinName in MergedSignalNames:
             CombineCommand+=("r_"+BinName+"=1,")
-    if args.Timeout is True:
+        if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand        
-    logging.info("Merged Bin Combine Command:")
-    logging.info('\n\n'+CombineCommand+'\n')
-    if args.RunParallel:
-        ThreadHandler.AddNewFit(CombineCommand,"MergedScheme",OutputDir)
-    else:            
-        os.system(CombineCommand+" | tee -a "+outputLoggingFile)
-
-    os.system(" mv *"+DateTag+"*.root "+OutputDir)
+        CombineCommand += " -P r_"+MergedBin+" --floatOtherPOIs=1"
+        logging.info("Merged Bin Combine Command:")
+        logging.info('\n\n'+CombineCommand+'\n')
+        if args.RunParallel:
+            ThreadHandler.AddNewFit(CombineCommand,"MergedScheme_"+MergedBin,OutputDir)
+        else:            
+            os.system(CombineCommand+" | tee -a "+outputLoggingFile)
+            os.system(" mv *"+DateTag+"*.root "+OutputDir)
 
 #run impact fitting
 if args.ComputeImpacts:
@@ -522,6 +526,7 @@ if args.RunParallel:
 
 #move the log file into output
 os.system('mv '+outputLoggingFile+' '+OutputDir)
+os.system(" mv *"+DateTag+"* "+OutputDir)
 
 print ''
 print "*********************************************"
