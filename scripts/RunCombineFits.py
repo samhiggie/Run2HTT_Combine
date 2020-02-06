@@ -372,7 +372,7 @@ if args.ComputeImpacts:
     os.chdir(OutputDir)
     print("\nCalculating Impacts, this may take a while...\n")
     print("Initial fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 8 "
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic"
     logging.info("Initial Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
     os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
