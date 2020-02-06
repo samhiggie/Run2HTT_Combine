@@ -78,7 +78,7 @@ for year in args.years:
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/"+channel+"_controls_"+year+".root "
             elif args.ComputeGOF:
                 print "Working on GOF with data outside signal region"
-                NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/"+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root"
+                NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root"
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root "
             else:
                 NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root"
@@ -376,13 +376,17 @@ if args.ComputeImpacts:
     os.chdir(OutputDir)
     print("\nCalculating Impacts, this may take a while...\n")
     print("Initial fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic"
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 20 --X-rtd MINIMIZER_analytic"
+    if args.ExperimentalSpeedup:
+        ImpactCommand += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
     logging.info("Initial Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
     os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
         
     print("Full fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic "
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 20 --X-rtd MINIMIZER_analytic "
+    if args.ExperimentalSpeedup:
+        ImpactCommand += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
     logging.info("Full Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
     os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
@@ -526,6 +530,7 @@ if args.RunParallel:
 
 #move the log file into output
 os.system('mv '+outputLoggingFile+' '+OutputDir)
+#move anything we may have made in parallel, or that may be left over to the output
 os.system(" mv *"+DateTag+"* "+OutputDir)
 
 print ''
