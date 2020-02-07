@@ -5,7 +5,7 @@ from rebinning import GetNSlices
 sliceTextFont = 52
 sliceTextAlign = 11
 
-boosted_latex = ["p_{t}^{H} #leq 60","60 #leq p_{t}^{H} #leq 120","120 #leq p_{t}^{H} #leq 200","200 #leq p_{t}^{H} #leq 250","250 #leq p_{t}^{H} #leq 300","300 #leq p_{t}^{H}"]
+boosted_latex = ["p_{t}^{H} #leq 60","60 #leq p_{t}^{H} #leq 120","120 #leq p_{t}^{H} #leq 200","200 #leq p_{t}^{H} #leq 250","250 #leq p_{t}^{H}"]
 
 semileptonic_vbf_high_latex = ["350 #leq m_{jj} #leq 700","700 #leq m_{jj} #leq 1200","1200 #leq m_{jj}"]
 vbf_low_latex = ["350 #leq m_{jj} #leq 700","700 #leq m_{jj} #leq 1000","1000 #leq m_{jj} #leq 1500","1500 #leq m_{jj} #leq 1800","1800 #leq m_{jj}"]
