@@ -10,6 +10,7 @@ import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as cfg
 from CombineHarvester.Run2HTT_Combine.EmbeddedConfiguration import EmbeddedConfiguration as embedded_cfg
 from CombineHarvester.Run2HTT_Combine.SplitUncertainty import UncertaintySplitter
 from CombineHarvester.Run2HTT_Combine.ThreadManager import ThreadManager
+import CombineHarvester.Run2HTT_Combine.outputArea as outputArea
 
 def RandomStringTag(size=6,chars=string.ascii_uppercase+string.ascii_lowercase+string.digits):
     return ''.join(random.choice(chars) for x in range(size))
@@ -48,19 +49,22 @@ args = parser.parse_args()
 if (args.SplitInclusive or args.SplitSignals or args.SplitSTXS) and not (args.SplitUncertainties):
     parser.error("Tried to split a measurement without calling --SplitUncertainties!")
 
-DateTag = datetime.datetime.now().strftime("%d%m%y_")+RandomStringTag()
-print ''
-print "*********************************************"
-print("This session is run under tag: "+DateTag)
-print "*********************************************"
-print ''
-#check if we have an output directory
 if args.RunParallel:
     ThreadHandler = ThreadManager(args.numthreads)
-if not os.path.isdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output"):
-    os.mkdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output")
-OutputDir = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+DateTag+"/"
-os.mkdir(OutputDir)
+
+#DateTag = datetime.datetime.now().strftime("%d%m%y_")+RandomStringTag()
+#print ''
+#print "*********************************************"
+#print("This session is run under tag: "+DateTag)
+#print "*********************************************"
+#print ''
+#check if we have an output directory
+#if not os.path.isdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output"):
+#    os.mkdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output")
+#OutputDir = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+DateTag+"/"
+#os.mkdir(OutputDir)
+
+DateTag,OutputDir = outputArea.PrepareNewOutputArea()
 
 logging.basicConfig(filename=OutputDir+"CombineHistory_"+DateTag+".log",filemode="w",level=logging.INFO,format='%(asctime)s %(message)s')
 
@@ -533,8 +537,4 @@ os.system('mv '+outputLoggingFile+' '+OutputDir)
 #move anything we may have made in parallel, or that may be left over to the output
 os.system(" mv *"+DateTag+"* "+OutputDir)
 
-print ''
-print "*********************************************"
-print("This session is run under tag: "+DateTag)
-print "*********************************************"
-print ''
+outputArea.PrintSessionInfo(DateTag)
