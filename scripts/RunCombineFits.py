@@ -168,7 +168,7 @@ os.system(CardCombiningCommand+" | tee -a "+outputLoggingFile)
 #per signal card workspace set up
 print("Setting up per signal workspace")
 PerSignalName = OutputDir+"Workspace_per_signal_breakdown_cmb_"+DateTag+".root"
-PerSignalWorkspaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12"
+PerSignalWorkspaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12 "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
@@ -219,7 +219,7 @@ if args.RunSTXS:
 
     STXSBins = unMergedSTXSBins + mergedSTXSBins
     PerSTXSName = OutputDir+"workspace_per_STXS_breakdown_cmb_"+DateTag+".root"
-    PerSTXSBinsWorkSpaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12"
+    PerSTXSBinsWorkSpaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12 "
     STXSSignalNames=[]
     for Bin in STXSBins:
         STXSSignalNames.append("r_"+Bin)
