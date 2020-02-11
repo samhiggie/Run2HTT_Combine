@@ -275,7 +275,7 @@ if args.RunSTXS:
     logging.info('\n\n'+PerMergedBinWorkSpaceCommand+'\n')
     os.system(PerMergedBinWorkSpaceCommand+" | tee -a "+outputLoggingFile)
 
-TextWorkspaceCommand = "combineTool.py -M T2W --parallel 12 "+"-i"+OutputDir+"smh*_*_*_13TeV_.txt"+"-o"+CombinedCardName+".root -m 125"
+TextWorkspaceCommand = "combineTool.py -M T2W --parallel 12 "+"-i"+OutputDir+"smh*_*_*_13TeV_.txt"+"-o "+CombinedCardName+".root -m 125"
 logging.info("Text 2 Worskpace Command:")
 logging.info('\n\n'+TextWorkspaceCommand+'\n')
 os.system(TextWorkspaceCommand+" | tee -a "+outputLoggingFile)
