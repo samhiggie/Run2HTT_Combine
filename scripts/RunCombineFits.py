@@ -7,6 +7,7 @@ import datetime
 import string
 import random
 import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as cfg
+import CombineHarvester.Run2HTT_Combine.CategoryMaps as CategoryMaps
 from CombineHarvester.Run2HTT_Combine.EmbeddedConfiguration import EmbeddedConfiguration as embedded_cfg
 from CombineHarvester.Run2HTT_Combine.SplitUncertainty import UncertaintySplitter
 from CombineHarvester.Run2HTT_Combine.ThreadManager import ThreadManager
@@ -73,7 +74,7 @@ ChannelCards = []
 
 outputLoggingFile = "outputLog_"+DateTag+".txt"
 
-for year in args.years:    
+for year in args.years:        
     for channel in args.channels:
 
         if args.DecorrelateForMe:
@@ -453,7 +454,7 @@ if args.ComputeGOF:
                  ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".GoodnessOfFit.mH125.root higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+channelTitle+"'"
+                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+year+" "+channelTitle+"' --title-right='"+CategoryMaps.mapTDir[Directory.GetName()]+"'"
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  CardNum+=1
