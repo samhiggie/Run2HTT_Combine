@@ -135,6 +135,7 @@ for year in args.years:
 #messes with paths somewhere
 #we have to do this in one fell swoop.
 CombinedCardName = OutputDir+"FinalCard_"+DateTag+".txt"
+CombinedCardRootName = OutputDir+"FinalCard_"+DateTag+".root"
 CardCombiningCommand = "combineCards.py"
 if args.SplitUncertainties:
     Splitter = UncertaintySplitter()
@@ -173,7 +174,7 @@ PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/ZH_htt125.*:r_ZH[1,-25,25]' "
-PerSignalWorkspaceCommand+= "-i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSignalName+" -m 125"
+PerSignalWorkspaceCommand+= " -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSignalName+" -m 125"
 
 logging.info("Per Signal Workspace Command:")
 logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
@@ -224,7 +225,7 @@ if args.RunSTXS:
     for Bin in STXSBins:
         STXSSignalNames.append("r_"+Bin)
         PerSTXSBinsWorkSpaceCommand += "--PO 'map=.*/"+Bin+":"+"r_"+Bin+"[1,-25,25]' "
-    PerSTXSBinsWorkSpaceCommand += +"-i"+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSTXSName+" -m 125"
+    PerSTXSBinsWorkSpaceCommand += +" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSTXSName+" -m 125"
 
     logging.info("Per STXS Bins Work Space Command")
     logging.info('\n\n'+PerSTXSBinsWorkSpaceCommand+'\n')
@@ -269,13 +270,13 @@ if args.RunSTXS:
         MergedSignalNames.append(Bin)
         PerMergedBinWorkSpaceCommand += "--PO 'map=.*/"+Bin+":r_"+Bin+"[1,-25,25]' "
 
-    PerMergedBinWorkSpaceCommand += CombinedCardName+" -o "+PerMergedBinName+" -m 125"
+    PerMergedBinWorkSpaceCommand += " -i "+OutputDir+"smh*_*_*_13TeV_.txt -o "+PerMergedBinName+" -m 125"
 
     logging.info("Per Merged Bin Work Space Command")
     logging.info('\n\n'+PerMergedBinWorkSpaceCommand+'\n')
     os.system(PerMergedBinWorkSpaceCommand+" | tee -a "+outputLoggingFile)
 
-TextWorkspaceCommand = "combineTool.py -M T2W --parallel 12 "+"-i"+OutputDir+"smh*_*_*_13TeV_.txt"+"-o "+CombinedCardName+".root -m 125"
+TextWorkspaceCommand = "combineTool.py -M T2W --parallel 12 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+CombinedCardRootName+" -m 125"
 logging.info("Text 2 Worskpace Command:")
 logging.info('\n\n'+TextWorkspaceCommand+'\n')
 os.system(TextWorkspaceCommand+" | tee -a "+outputLoggingFile)
@@ -295,7 +296,7 @@ if args.ControlMode:
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
-InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedWorkspaceName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1 -n "+DateTag+"_Inclusive"
+InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedCardRootName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1 -n "+DateTag+"_Inclusive"
 if args.Timeout is True:
     InclusiveCommand = "timeout "+args.TimeoutTime+" "+InclusiveCommand
 logging.info("Inclusive combine command:")
@@ -458,7 +459,7 @@ if (args.RunKappaVKappaF and not args.RealData):
     os.chdir(OutputDir)
 
     #Create Workspace
-    KappaVKappaFcmd = "combineTool.py -M T2W  --parallel 12 -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+"-i"+OutputDir+"smh*_*_*_13TeV_.txt"+"-o comb_htt_kvkf.root"
+    KappaVKappaFcmd = "combineTool.py -M T2W  --parallel 12 -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o comb_htt_kvkf.root"
     logging.info("Text to workspace kappaV kappaF:")
     logging.info('\n\n'+KappaVKappaFcmd+'\n')
     os.system(KappaVKappaFcmd)
@@ -490,7 +491,7 @@ if (args.RunKappaVKappaF and args.RealData):
     os.chdir(OutputDir)
 
     #Create Workspace
-    KappaVKappaFcmd = "combineTool.py -M T2W  --parallel 12 -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+"-i"+OutputDir+"smh*_*_*_13TeV_.txt"+"-o comb_htt_kvkf.root"
+    KappaVKappaFcmd = "combineTool.py -M T2W  --parallel 12 -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o comb_htt_kvkf.root"
     logging.info("Text to workspace kappaV kappaF:")
     logging.info('\n\n'+KappaVKappaFcmd+'\n')
     os.system(KappaVKappaFcmd)
