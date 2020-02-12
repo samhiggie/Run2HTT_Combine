@@ -225,7 +225,7 @@ if args.RunSTXS:
     for Bin in STXSBins:
         STXSSignalNames.append("r_"+Bin)
         PerSTXSBinsWorkSpaceCommand += "--PO 'map=.*/"+Bin+":"+"r_"+Bin+"[1,-25,25]' "
-    PerSTXSBinsWorkSpaceCommand += +" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSTXSName+" -m 125"
+    PerSTXSBinsWorkSpaceCommand += " -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSTXSName+" -m 125"
 
     logging.info("Per STXS Bins Work Space Command")
     logging.info('\n\n'+PerSTXSBinsWorkSpaceCommand+'\n')

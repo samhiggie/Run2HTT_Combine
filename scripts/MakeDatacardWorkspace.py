@@ -96,6 +96,7 @@ for year in args.years:
 #we have to do this in one fell swoop.
 if not args.NoDatacards:
     CombinedCardName = OutputDir+"FinalCard_"+DateTag+".txt"
+    CombinedCardRootName = OutputDir+"FinalCard_"+DateTag+".root"
     CardCombiningCommand = "combineCards.py"
     if args.SplitUncertainties:
         Splitter = UncertaintySplitter()
@@ -124,11 +125,12 @@ if args.MakeStage0:
     #per signal card workspace set up
     print("Setting up per signal workspace")
     PerSignalName = OutputDir+"Workspace_per_signal_breakdown_cmb_"+DateTag+".root"
-    PerSignalWorkspaceCommand = " combineTool.py -M T2W -o "+OutputDir+"workspace_"+DateTag+"_stage0.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
+    PerSignalWorkspaceCommand = " combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12"
     PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
     PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
     PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
     PerSignalWorkspaceCommand+= "--PO 'map=.*/ZH_htt125.*:r_ZH[1,-25,25]' "
+    PerSignalWorkspaceCommand+= " -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSignalName+" -m 125"
 
     logging.info("Per Signal Workspace Command:")
     logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
@@ -183,20 +185,21 @@ if (args.MakeStage12):
                 "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125",
                 "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
                 "qqH_FWDH_htt125"]
-    PerSTXSBinsWorkspaceCommand = " combineTool.py -M T2W -o workspace_"+DateTag+"_stage1.2.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
+    PerSTXSBinsWorkSpaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12 "
     STXSSignalNames=[]
     for Bin in STXSBins:
         STXSSignalNames.append("r_"+Bin)
         PerSTXSBinsWorkSpaceCommand += "--PO 'map=.*/"+Bin+":"+"r_"+Bin+"[1,-25,25]' "
+    PerSTXSBinsWorkSpaceCommand += " -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSTXSName+" -m 125"
 
     logging.info("Per STXS Bins Work Space Command")
     logging.info('\n\n'+PerSTXSBinsWorkSpaceCommand+'\n')
-    os.system(PerSTXSBinsWorkSpaceCommand)
+    os.system(PerSTXSBinsWorkSpaceCommand+" | tee -a "+outputLoggingFile)
 
 if (args.MakeStage12Merged):
     #add in the merged ones
     PerMergedBinName = OutputDir+"workspace_per_Merged_breakdown_cmb_"+DateTag+".root"
-    PerMergedBinWorkspaceCommand = " combineTool.py -M T2W -o workspace_"+DateTag+"_stage1.2_merged.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 8 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
+    PerMergedBinWorkspaceCommand = " combineTool.py -M T2W -o workspace_"+DateTag+"_stage1.2_merged.root -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" --parallel 12 -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -m 125"
     MergedSignalNames=[]
     #qqH, less than 2 Jets
     MergedSignalNames.append("qqH_LT2J")
@@ -233,3 +236,7 @@ if (args.MakeStage12Merged):
     logging.info('\n\n'+PerMergedBinWorkSpaceCommand+'\n')
     os.system(PerMergedBinWorkSpaceCommand)
 
+TextWorkspaceCommand = "combineTool.py -M T2W --parallel 12 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+CombinedCardRootName+" -m 125"
+logging.info("Text 2 Worskpace Command:")
+logging.info('\n\n'+TextWorkspaceCommand+'\n')
+os.system(TextWorkspaceCommand+" | tee -a "+outputLoggingFile)
