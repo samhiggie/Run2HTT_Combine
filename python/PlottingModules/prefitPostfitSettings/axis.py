@@ -2,7 +2,7 @@ import ROOT
 from rebinning import GetNSlices
 
 #axisLabels = ['-----','','#uparrow','50.0-170.0','#downarrow','-----','170.0-210.0','210.0-250.0','250.0+']
-genericAxisLabels = ['50-70','70-90','90-110','110-130','130-150','150-170','170-210','210-250','250+']
+genericAxisLabels = ['50-70','70-90','90-110','110-130','130-150','150-170','170-210','210-250','250-290']
 
 plotXAxisTitleSize = 0.12
 plotXAxisTitleOffset = 1.7

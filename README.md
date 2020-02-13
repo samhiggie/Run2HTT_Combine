@@ -159,9 +159,6 @@ This is kind of plug-in of RunCombineFits.py.
 
 If you save printed output of RunCombineFits.py as a file, `sortingSTXS.py` help you to print out limits in orgarnized table form.
 
-For example, https://github.com/aloeliger/Run2HTT_Combine/blob/master/images/SortedOutput.png
-![Sorted Output](https://github.com/aloeliger/Run2HTT_Combine/blob/master/images/SortedOutput.png)
-
 - How to run
   - Run `RunCombineFits.py` as usual but add `> outputTxtFile.txt` to save print. 
   - Extract limits lines only. `awk '/%/' outputTxtFile.txt > limitExtracted.txt`

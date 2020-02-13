@@ -2,18 +2,11 @@ import ROOT
 import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as catConfig
 from array import array
 
-standardSliceSetup = [0,1,2,3,4,5,6,8,10,11]
+standardSliceSetup = [0,1,2,3,4,5,6,8,10,12]
 
 def GetNSlices(category):
     if (category == catConfig.tt_boosted_1J_category
-        or category == catConfig.tt_boosted_GE2J_category
-        or category == catConfig.mt_boosted_1J_category
-        or category == catConfig.mt_boosted_GE2J_category
-        or category == catConfig.et_boosted_1J_category
-        or category == catConfig.et_boosted_GE2J_category
-        or category == catConfig.em_boosted_1J_category
-        or category == catConfig.em_boosted_GE2J_category
-        
+        or category == catConfig.tt_boosted_GE2J_category                        
         ):
             nSlices = 6
     elif (category == catConfig.mt_vbf_low_category                    
@@ -21,6 +14,12 @@ def GetNSlices(category):
           or category == catConfig.et_vbf_low_category
           or category == catConfig.tt_vbf_high_category
           or category == catConfig.tt_vbf_low_category
+          or category == catConfig.mt_boosted_1J_category
+          or category == catConfig.mt_boosted_GE2J_category
+          or category == catConfig.et_boosted_1J_category
+          or category == catConfig.et_boosted_GE2J_category
+          or category == catConfig.em_boosted_1J_category
+          or category == catConfig.em_boosted_GE2J_category
           ):        
         nSlices = 5
     #elif (

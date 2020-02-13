@@ -7,9 +7,11 @@ import datetime
 import string
 import random
 import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as cfg
+import CombineHarvester.Run2HTT_Combine.CategoryMaps as CategoryMaps
 from CombineHarvester.Run2HTT_Combine.EmbeddedConfiguration import EmbeddedConfiguration as embedded_cfg
 from CombineHarvester.Run2HTT_Combine.SplitUncertainty import UncertaintySplitter
 from CombineHarvester.Run2HTT_Combine.ThreadManager import ThreadManager
+import CombineHarvester.Run2HTT_Combine.outputArea as outputArea
 
 def RandomStringTag(size=6,chars=string.ascii_uppercase+string.ascii_lowercase+string.digits):
     return ''.join(random.choice(chars) for x in range(size))
@@ -50,19 +52,22 @@ args = parser.parse_args()
 if (args.SplitInclusive or args.SplitSignals or args.SplitSTXS) and not (args.SplitUncertainties):
     parser.error("Tried to split a measurement without calling --SplitUncertainties!")
 
-DateTag = datetime.datetime.now().strftime("%d%m%y_")+RandomStringTag()
-print ''
-print "*********************************************"
-print("This session is run under tag: "+DateTag)
-print "*********************************************"
-print ''
-#check if we have an output directory
 if args.RunParallel:
     ThreadHandler = ThreadManager(args.numthreads)
-if not os.path.isdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output"):
-    os.mkdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output")
-OutputDir = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+DateTag+"/"
-os.mkdir(OutputDir)
+
+#DateTag = datetime.datetime.now().strftime("%d%m%y_")+RandomStringTag()
+#print ''
+#print "*********************************************"
+#print("This session is run under tag: "+DateTag)
+#print "*********************************************"
+#print ''
+#check if we have an output directory
+#if not os.path.isdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output"):
+#    os.mkdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output")
+#OutputDir = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+DateTag+"/"
+#os.mkdir(OutputDir)
+
+DateTag,OutputDir = outputArea.PrepareNewOutputArea()
 
 logging.basicConfig(filename=OutputDir+"CombineHistory_"+DateTag+".log",filemode="w",level=logging.INFO,format='%(asctime)s %(message)s')
 
@@ -71,7 +76,7 @@ ChannelCards = []
 
 outputLoggingFile = "outputLog_"+DateTag+".txt"
 
-for year in args.years:    
+for year in args.years:        
     for channel in args.channels:
 
         if args.DecorrelateForMe:
@@ -379,13 +384,17 @@ if args.ComputeImpacts:
     os.chdir(OutputDir)
     print("\nCalculating Impacts, this may take a while...\n")
     print("Initial fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic"
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 20 --X-rtd MINIMIZER_analytic"
+    if args.ExperimentalSpeedup:
+        ImpactCommand += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
     logging.info("Initial Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
     os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
         
     print("Full fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 8 --X-rtd MINIMIZER_analytic "
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 20 --X-rtd MINIMIZER_analytic "
+    if args.ExperimentalSpeedup:
+        ImpactCommand += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
     logging.info("Full Fit Impact Command:")
     logging.info('\n\n'+ImpactCommand+'\n')
     os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
@@ -448,7 +457,8 @@ if args.ComputeGOF:
                  ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine."+args.GOFAlgo+"."+year+"_"+channel+"_"+str(CardNum)+".GoodnessOfFit.mH125.root higgsCombine."+args.GOFAlgo+"."+year+"_"+channel+"_"+str(CardNum)+".toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic "+args.GOFAlgo+" --mass 125.0 "+GOFJsonName+" --title-right='' --output='"+args.GOFAlgo+"_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+channelTitle+"'"
+                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic "+args.GOFAlgo+" --mass 125.0 "+GOFJsonName+" --title-right='' --output='"+args.GOFAlgo+"_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+year+" "+channelTitle+"' --title-right='"+CategoryMaps.mapTDir[Directory.GetName()]+"'"
+
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  CardNum+=1
@@ -529,10 +539,7 @@ if args.RunParallel:
 
 #move the log file into output
 os.system('mv '+outputLoggingFile+' '+OutputDir)
+#move anything we may have made in parallel, or that may be left over to the output
 os.system(" mv *"+DateTag+"* "+OutputDir)
 
-print ''
-print "*********************************************"
-print("This session is run under tag: "+DateTag)
-print "*********************************************"
-print ''
+outputArea.PrintSessionInfo(DateTag)
