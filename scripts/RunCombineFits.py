@@ -27,9 +27,7 @@ parser.add_argument('--RunInclusiveqqH',help="Run using an inclusive qqH distrib
 parser.add_argument('--RunSTXS',help="Run using STXS categories 1.2.",action="store_true")
 parser.add_argument('--ComputeSignificance',help="Compute expected significances instead of expected POIs",action="store_true")
 parser.add_argument('--ComputeImpacts',help="Compute expected impacts on Inclusive POI",action="store_true")
-parser.add_argument('--ComputeGOF',help="Compute GOF use on forcefully blinded datacards",action="store_true")
-parser.add_argument('--GOFAlgo',help="GOF algorithm to use, saturated(default), ks (Kolmogorov-Smirnov), or ad (Anderson-Darling)",default="saturated")
-parser.add_argument('--Cat',help="specify a category to run alone on",default="")
+parser.add_argument('--ComputeGOF',help="Compute saturated GOF use on forcefully blinded datacards",action="store_true")
 #parser.add_argument('--DisableCategoryFits',help="Disable category card creation and fits",action="store_true")
 parser.add_argument('--Timeout', help="Trigger timeout as conditions on fits (prevents infinitely running fits)", action="store_true")
 parser.add_argument('--TimeoutTime',nargs='?',help="Time allotted before a timeout (linux timeout syntax)",default="180s")
@@ -81,8 +79,8 @@ for year in args.years:
 
         if args.DecorrelateForMe:
             if args.ControlMode:
-                NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root"
-                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root "
+                NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root"
+                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/"+channel+"_controls_"+year+".root "
             elif args.ComputeGOF:
                 print "Working on GOF with data outside signal region"
                 NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root"
@@ -140,7 +138,6 @@ for year in args.years:
 #messes with paths somewhere
 #we have to do this in one fell swoop.
 CombinedCardName = OutputDir+"FinalCard_"+DateTag+".txt"
-CombinedCardRootName = OutputDir+"FinalCard_"+DateTag+".root"
 CardCombiningCommand = "combineCards.py"
 if args.SplitUncertainties:
     Splitter = UncertaintySplitter()
@@ -174,12 +171,12 @@ os.system(CardCombiningCommand+" | tee -a "+outputLoggingFile)
 #per signal card workspace set up
 print("Setting up per signal workspace")
 PerSignalName = OutputDir+"Workspace_per_signal_breakdown_cmb_"+DateTag+".root"
-PerSignalWorkspaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12 "
+PerSignalWorkspaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/ggH.*htt125.*:r_ggH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/qqH.*htt125.*:r_qqH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/WH_htt125.*:r_WH[1,-25,25]' "
 PerSignalWorkspaceCommand+= "--PO 'map=.*/ZH_htt125.*:r_ZH[1,-25,25]' "
-PerSignalWorkspaceCommand+= " -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSignalName+" -m 125"
+PerSignalWorkspaceCommand+= CombinedCardName +" -o "+PerSignalName+" -m 125"
 
 logging.info("Per Signal Workspace Command:")
 logging.info('\n\n'+PerSignalWorkspaceCommand+'\n')
@@ -225,12 +222,12 @@ if args.RunSTXS:
 
     STXSBins = unMergedSTXSBins + mergedSTXSBins
     PerSTXSName = OutputDir+"workspace_per_STXS_breakdown_cmb_"+DateTag+".root"
-    PerSTXSBinsWorkSpaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --parallel 12 "
+    PerSTXSBinsWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
     STXSSignalNames=[]
     for Bin in STXSBins:
         STXSSignalNames.append("r_"+Bin)
         PerSTXSBinsWorkSpaceCommand += "--PO 'map=.*/"+Bin+":"+"r_"+Bin+"[1,-25,25]' "
-    PerSTXSBinsWorkSpaceCommand += " -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+PerSTXSName+" -m 125"
+    PerSTXSBinsWorkSpaceCommand += CombinedCardName+" -o "+PerSTXSName+" -m 125"
 
     logging.info("Per STXS Bins Work Space Command")
     logging.info('\n\n'+PerSTXSBinsWorkSpaceCommand+'\n')
@@ -238,7 +235,7 @@ if args.RunSTXS:
 
     #add in the merged ones
     PerMergedBinName = OutputDir+"workspace_per_Merged_breakdown_cmb_"+DateTag+".root"
-    PerMergedBinWorkSpaceCommand = "combineTool.py -M T2W -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
+    PerMergedBinWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
     MergedSignalNames=[]
     #qqH, less than 2 Jets
     MergedSignalNames.append("qqH_LT2J")
@@ -275,13 +272,13 @@ if args.RunSTXS:
         MergedSignalNames.append(Bin)
         PerMergedBinWorkSpaceCommand += "--PO 'map=.*/"+Bin+":r_"+Bin+"[1,-25,25]' "
 
-    PerMergedBinWorkSpaceCommand += " -i "+OutputDir+"smh*_*_*_13TeV_.txt -o "+PerMergedBinName+" -m 125"
+    PerMergedBinWorkSpaceCommand += CombinedCardName+" -o "+PerMergedBinName+" -m 125"
 
     logging.info("Per Merged Bin Work Space Command")
     logging.info('\n\n'+PerMergedBinWorkSpaceCommand+'\n')
     os.system(PerMergedBinWorkSpaceCommand+" | tee -a "+outputLoggingFile)
 
-TextWorkspaceCommand = "combineTool.py -M T2W --parallel 12 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o "+CombinedCardRootName+" -m 125"
+TextWorkspaceCommand = "text2workspace.py "+CombinedCardName+" -m 125"
 logging.info("Text 2 Worskpace Command:")
 logging.info('\n\n'+TextWorkspaceCommand+'\n')
 os.system(TextWorkspaceCommand+" | tee -a "+outputLoggingFile)
@@ -301,7 +298,7 @@ if args.ControlMode:
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
-InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedCardRootName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1 -n "+DateTag+"_Inclusive"
+InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedWorkspaceName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1 -n "+DateTag+"_Inclusive"
 if args.Timeout is True:
     InclusiveCommand = "timeout "+args.TimeoutTime+" "+InclusiveCommand
 logging.info("Inclusive combine command:")
@@ -417,18 +414,18 @@ if args.ComputeImpacts:
 
 if args.ComputeGOF:
     os.chdir(OutputDir)
-    #GOFJsonName = "gof_final_"+DateTag+".json"
-    #ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d " + CombinedWorkspaceName+" -n '.saturated.toys'  -t 25 -s 0:19:1 --parallel 12"
-    #os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
+    GOFJsonName = "gof_final_"+DateTag+".json"
+    ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d " + CombinedWorkspaceName+" -n '.saturated.toys'  -t 25 -s 0:19:1 --parallel 12"
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-    #ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d " + CombinedWorkspaceName+" -n '.saturated'"
-    #os.system(ImpactCommand)
+    ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d " + CombinedWorkspaceName+" -n '.saturated'"
+    os.system(ImpactCommand)
 
-    #ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated.GoodnessOfFit.mH125.root higgsCombine.saturated.toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
-    #os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
+    ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated.GoodnessOfFit.mH125.root higgsCombine.saturated.toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-    #ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated' --title-left='All GoF'"
-    #os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
+    ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated' --title-left='All GoF'"
+    os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
     for year in args.years:
        for channel in args.channels:
@@ -445,20 +442,19 @@ if args.ComputeGOF:
           print "Working on GOF with data outside signal region ",os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root"
           for Directory in TheFile.GetListOfKeys():
               if Directory.GetName() in cfg.Categories[channel]:
-                 ImpactCommand = "combineTool.py -M T2W --parallel 12 -m 125 -i smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt -o smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root "
+                 ImpactCommand = "text2workspace.py -m 125 smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.txt "
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
                  GOFJsonName = "gof_"+channel+"_"+year+"_"+str(CardNum)+"_"+DateTag+".json"
-                 ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm "+args.GOFAlgo+" -m 125 --there -d smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root -n '."+args.GOFAlgo+"."+year+"_"+channel+"_"+str(CardNum)+".toys'  -t 25 -s 0:19:1 --parallel 12"
+                 ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root -n '.saturated."+year+"_"+channel+"_"+str(CardNum)+".toys'  -t 25 -s 0:19:1 --parallel 12"
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-                 ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm "+args.GOFAlgo+" -m 125 --there -d smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root -n '."+args.GOFAlgo+"."+year+"_"+channel+"_"+str(CardNum)+"'"
+                 ImpactCommand = "combineTool.py -M GoodnessOfFit --algorithm saturated -m 125 --there -d smh"+year+"_"+channel+"_"+str(CardNum)+"_13TeV_.root -n '.saturated."+year+"_"+channel+"_"+str(CardNum)+"'"
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-                 ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine."+args.GOFAlgo+"."+year+"_"+channel+"_"+str(CardNum)+".GoodnessOfFit.mH125.root higgsCombine."+args.GOFAlgo+"."+year+"_"+channel+"_"+str(CardNum)+".toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
+                 ImpactCommand = "combineTool.py -M CollectGoodnessOfFit --input higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".GoodnessOfFit.mH125.root higgsCombine.saturated."+year+"_"+channel+"_"+str(CardNum)+".toys.GoodnessOfFit.mH125.*.root -o "+GOFJsonName
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
-                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic "+args.GOFAlgo+" --mass 125.0 "+GOFJsonName+" --title-right='' --output='"+args.GOFAlgo+"_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+year+" "+channelTitle+"' --title-right='"+CategoryMaps.mapTDir[Directory.GetName()]+"'"
-
+                 ImpactCommand = "python ../../../CombineTools/scripts/plotGof.py --statistic saturated --mass 125.0 "+GOFJsonName+" --title-right='' --output='saturated_"+year+"_"+channel+"_"+str(CardNum)+"' --title-left='"+year+" "+channelTitle+"' --title-right='"+CategoryMaps.mapTDir[Directory.GetName()]+"'"
                  os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
 
                  CardNum+=1
@@ -469,7 +465,7 @@ if (args.RunKappaVKappaF and not args.RealData):
     os.chdir(OutputDir)
 
     #Create Workspace
-    KappaVKappaFcmd = "combineTool.py -M T2W  --parallel 12 -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o comb_htt_kvkf.root"
+    KappaVKappaFcmd = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+OutputDir+"FinalCard_"+DateTag+".txt"+"-o comb_htt_kvkf.root"
     logging.info("Text to workspace kappaV kappaF:")
     logging.info('\n\n'+KappaVKappaFcmd+'\n')
     os.system(KappaVKappaFcmd)
@@ -501,7 +497,7 @@ if (args.RunKappaVKappaF and args.RealData):
     os.chdir(OutputDir)
 
     #Create Workspace
-    KappaVKappaFcmd = "combineTool.py -M T2W  --parallel 12 -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+" -i "+OutputDir+"smh*_*_*_13TeV_.txt"+" -o comb_htt_kvkf.root"
+    KappaVKappaFcmd = "text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcF --PO BRU=0 "+OutputDir+"FinalCard_"+DateTag+".txt"+"-o comb_htt_kvkf.root"
     logging.info("Text to workspace kappaV kappaF:")
     logging.info('\n\n'+KappaVKappaFcmd+'\n')
     os.system(KappaVKappaFcmd)
