@@ -1,6 +1,7 @@
 import ROOT
 import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as catConfig
 from rebinning import GetNSlices
+from rebinning import standardSliceSetup
 
 binsPerSlice = 12
 

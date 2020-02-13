@@ -79,24 +79,24 @@ for year in args.years:
 
         if args.DecorrelateForMe:
             if args.ControlMode:
-                NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root"
-                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/"+channel+"_controls_"+year+".root "
+                NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root"
+                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root "
             elif args.ComputeGOF:
                 print "Working on GOF with data outside signal region"
-                NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root"
+                NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root"
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root "
             else:
-                NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root"
+                NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/smh"+year+channel+".root"
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/smh"+year+channel+".root "
             if channel=="et" or channel=="em":
                 AddShapeCommand+="--TrimYears "
             print("Duplicating shapes for year correlations")
-            logging.info("Negative bin removal command:")
-            logging.info('\n\n'+NegativeBinCommand+'\n')
-            os.system(NegativeBinCommand+" | tee -a "+outputLoggingFile)
             logging.info("Shape duplication command:")
             logging.info('\n\n'+AddShapeCommand+'\n')
             os.system(AddShapeCommand+" | tee -a "+outputLoggingFile)
+            logging.info("Negative bin removal command:")
+            logging.info('\n\n'+NegativeBinCommand+'\n')
+            os.system(NegativeBinCommand+" | tee -a "+outputLoggingFile)            
 
         DataCardCreationCommand="SMHTT"+year
         DataCardCreationCommand+="_"+channel+" "+OutputDir
