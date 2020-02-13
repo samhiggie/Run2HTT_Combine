@@ -132,8 +132,8 @@ int main(int argc, char **argv)
   cb.cp().process({"ZT","ZL"}).AddSyst(cb,"CMS_htt_zjXsec", "lnN", SystMap<>::init(1.02));
 
   //Electron Fake Rate Uncertainty
-  //cb.cp().process({"ZL","TTL","STL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2017", "lnN",SystMap<>::init(1.15));    
-  cb.cp().process({"TTL","STL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2017", "lnN",SystMap<>::init(1.15));    
+  cb.cp().process({"ZL","TTL","STL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2017", "lnN",SystMap<>::init(1.15));    
+  //cb.cp().process({"TTL","STL","VVL"}).AddSyst(cb, "CMS_eFakeTau_2017", "lnN",SystMap<>::init(1.15));    
 
   //theory uncerts
   cb.cp().process(sig_procs).AddSyst(cb, "BR_htt_PU_alphas", "lnN", SystMap<>::init(1.0062));
@@ -209,6 +209,7 @@ int main(int argc, char **argv)
 			  1.00,
 			  TheFile,CategoryArgs);
 
+      /*
       AddShapesIfNotEmpty({"CMS_norm_efaket_slice1_2017",
 	    "CMS_norm_efaket_slice2_2017",
 	    "CMS_norm_efaket_slice3_2017"},
@@ -216,6 +217,7 @@ int main(int argc, char **argv)
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
+      */
 
       // Fake factors
       /*
