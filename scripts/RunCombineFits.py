@@ -94,9 +94,9 @@ for year in args.years:
             logging.info("Shape duplication command:")
             logging.info('\n\n'+AddShapeCommand+'\n')
             os.system(AddShapeCommand+" | tee -a "+outputLoggingFile)
-            logging.info("Negative bin removal command:")
-            logging.info('\n\n'+NegativeBinCommand+'\n')
-            os.system(NegativeBinCommand+" | tee -a "+outputLoggingFile)            
+            #logging.info("Negative bin removal command:")
+            #logging.info('\n\n'+NegativeBinCommand+'\n')
+            #os.system(NegativeBinCommand+" | tee -a "+outputLoggingFile)            
 
         DataCardCreationCommand="SMHTT"+year
         DataCardCreationCommand+="_"+channel+" "+OutputDir
