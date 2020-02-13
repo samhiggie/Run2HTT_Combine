@@ -177,6 +177,13 @@ if not args.DisableCategoryFits:
 if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     print("Setting up STXS commands")
     
+    #Reading the signal acceptance file from the txt creation step 
+    sigaccept = "smh"+year+"_"+channel+"_acceptSig.txt"  
+    possibleSTXS = []
+
+    with open(sigaccept) as sig:
+        possibleSTXS.append(sig.readline())
+
     unMergedSTXSBins = [
         "ggH_PTH_0_200_0J_PTH_10_200_htt125",
         "ggH_PTH_0_200_0J_PTH_0_10_htt125",
@@ -214,7 +221,7 @@ if not (args.RunInclusiveggH or args.RunInclusiveqqH):
     PerSTXSName = OutputDir+"workspace_per_STXS_breakdown_cmb_"+DateTag+".root"
     PerSTXSBinsWorkSpaceCommand = "text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel "
     STXSSignalNames=[]
-    for Bin in STXSBins:
+    for Bin in possibleSTXS:
         STXSSignalNames.append("r_"+Bin)
         PerSTXSBinsWorkSpaceCommand += "--PO 'map=.*/"+Bin+":"+"r_"+Bin+"[1,-25,25]' "
     PerSTXSBinsWorkSpaceCommand += CombinedCardName+" -o "+PerSTXSName+" -m 125"

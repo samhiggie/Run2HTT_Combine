@@ -10,6 +10,7 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include <fstream>  
 #include <utility>
 #include <vector>
 #include <cstdlib>
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
 
   vector<string> masses = {""};
   //! [part3]
-  cb.AddObservations({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, cats);
+  //cb.AddObservations({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, cats);
 
   vector<string> bkg_procs = {"VVT","STT","TTT","jetFakes","ZL","VVL","STL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"};
   if(Input.OptionExists("-e")) {bkg_procs.push_back("ZT");}
@@ -102,7 +103,14 @@ int main(int argc, char **argv)
   vector<string> sig_procs = ch::JoinStr({ggH_STXS,qqH_STXS,{"ZH_htt125","WH_htt125"}});
   
 
-  ch::CombineHarvester cb_cp = cb.deep();
+  //ch::CombineHarvester cb_cp = cb.deep();
+  //create another combine harvester object for signal pruning!
+  //and... a text file to keep track of the signals that are accepted at the next step
+
+  ch::CombineHarvester cb_cp;
+
+  std::ofstream outfile ("smh2016_mt_acceptSig.txt");
+
   cb_cp.AddProcesses({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, bkg_procs, cats, false);
   cb_cp.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, sig_procs, cats, true);      
 
@@ -139,6 +147,7 @@ int main(int argc, char **argv)
 	    {
 	      std::cout<<" ---> TO BE ADDED";
 	      acceptable_sig_procs.push_back(signalName);
+          outfile <<signalName<< std::endl;
 	    }
 	  std::cout<<std::endl;
 	}
@@ -323,7 +332,7 @@ int main(int argc, char **argv)
       else
 	{
 	  AddShapesIfNotEmpty({
-	      "CMS_rawFF_mt_qcd_0jet_unc1_2016",
+	     "CMS_rawFF_mt_qcd_0jet_unc1_2016",
 		"CMS_rawFF_mt_qcd_0jet_unc2_2016",
 		"CMS_rawFF_mt_w_0jet_unc1_2016",
 		"CMS_rawFF_mt_w_0jet_unc2_2016",
@@ -629,6 +638,7 @@ int main(int argc, char **argv)
 
   // We create the output root file that will contain all the shapes.
   TFile output((Input.ReturnToken(0)+"/"+"smh2016_mt.input.root").c_str(), "RECREATE");
+  outfile.close();
 
   // Finally we iterate through each bin,mass combination and write a
   // datacard.
