@@ -7,6 +7,8 @@ sliceTextAlign = 11
 
 boosted_latex = ["p_{t}^{H} #leq 60","60 #leq p_{t}^{H} #leq 120","120 #leq p_{t}^{H} #leq 200","200 #leq p_{t}^{H} #leq 250","250 #leq p_{t}^{H}"]
 
+tautau_boosted_latex = ["p_{t}^{H} #leq 60","60 #leq p_{t}^{H} #leq 120","120 #leq p_{t}^{H} #leq 200","200 #leq p_{t}^{H} #leq 250","250 #leq p_{t}^{H}","250 #leq p_{t}^{H} #leq 300"]
+
 semileptonic_vbf_high_latex = ["350 #leq m_{jj} #leq 700","700 #leq m_{jj} #leq 1200","1200 #leq m_{jj}"]
 vbf_low_latex = ["350 #leq m_{jj} #leq 700","700 #leq m_{jj} #leq 1000","1000 #leq m_{jj} #leq 1500","1500 #leq m_{jj} #leq 1800","1800 #leq m_{jj}"]
 
@@ -36,8 +38,10 @@ def CreateSliceText(category):
         labels = vbf_low_latex
 
     elif (category == catConfig.tt_boosted_1J_category or 
-          category == catConfig.tt_boosted_GE2J_category or 
-          category == catConfig.mt_boosted_1J_category or 
+          category == catConfig.tt_boosted_GE2J_category):
+        labels = tautau_boosted_latex
+
+    elif (category == catConfig.mt_boosted_1J_category or 
           category == catConfig.mt_boosted_GE2J_category or 
           category == catConfig.et_boosted_1J_category or 
           category == catConfig.et_boosted_GE2J_category or 

@@ -3,7 +3,7 @@ import CombineHarvester.Run2HTT_Combine.CategoryConfigurations as catConfig
 from rebinning import GetNSlices
 from rebinning import standardSliceSetup
 
-binsPerSlice = 12
+binsPerSlice = standardSliceSetup[len(standardSliceSetup)-1]
 
 def CreateSliceLines(category,originalHistogram,pad):    
     nSlices = GetNSlices(category)

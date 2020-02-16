@@ -47,7 +47,7 @@ def CreateStandardSliceBinBoundaryArray(nSlices):
     for i in range(nSlices):
         binBoundariesToAdd = standardSliceSetup[:]
         for j in range(len(standardSliceSetup)):
-            binBoundariesToAdd[j] += 11*(i+1)
+            binBoundariesToAdd[j] += standardSliceSetup[len(standardSliceSetup)-1]*(i+1)
         binBoundariesToAdd.pop(0)
         binBoundaryArray  += binBoundariesToAdd                
     return binBoundaryArray

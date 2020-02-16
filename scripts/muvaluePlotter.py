@@ -91,8 +91,8 @@ def translate_categ(i):
    elif "qqH_GE2J_MJJ_60_120_htt125" in i: return "qqH-2j/mJJ[60,120]"
    elif "qqH_GE2J_MJJ_120_350_htt125" in i: return "qqH-2j/mJJ[120,350]"
    elif "qqH_GE2J_MJJ_0_350" in i: return "qqH-2j/mJJ<350"
-   elif "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125" in i: return "ggH-2j/mJJ[350,700]/pTHJJ<25"
-   elif "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125" in i: return "ggH-2j/mJJ[350,700]/pTHJJ>25"
+   elif "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_0_25_htt125" in i: return "qqH-2j/mJJ[350,700]/pTHJJ<25"
+   elif "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_350_700_PTHJJ_GE25_htt125" in i: return "qqH-2j/mJJ[350,700]/pTHJJ>25"
    elif "qqH_GE2J_MJJ_350_700_PTH_0_200" in i: return "qqH-2j/350<mJJ<700"
    elif "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25_htt125" in i: return "qqH-2j/mJJ>700/pTHJJ<25"
    elif "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_GE25_htt125" in i: return "qqH-2j/mJJ>700/ptHJJ>25"
@@ -104,7 +104,7 @@ def translate_categ(i):
    elif "qqH" in i: return "qqH"
    else: return ""
 
-def is_included(mycat,type):
+def is_included(mycat,type, upUncertainty,downUncertainty):
     included=0
     if type=="stage0" and (translate_categ(mycat)=="WH" 
                            or translate_categ(mycat)=="ZH" 
@@ -116,24 +116,57 @@ def is_included(mycat,type):
                                    or translate_categ(mycat)=="qqH" 
                                    or translate_categ(mycat)=="ggH"):
        included=1
-    if type=="stage1-select" and (not (translate_categ(mycat)=="WH" 
-                                      or translate_categ(mycat)=="ZH" 
-                                      or translate_categ(mycat)=="qqH" 
-                                      or translate_categ(mycat)=="ggH") 
-                                  and ("PTH_0_10" in mycat
-                                       or "PTH_10_200" in mycat
-                                       or "PTH_0_60" in mycat
-                                       or "PTH_60_120" in mycat
-                                       or "PTH_120_200" in mycat
-                                       or "ggH_PTH_0_200_GE2J_MJJ_GE350" in mycat
-                                       or "PTH_200_300" in mycat
-                                       or "PTH_300_450" in mycat
-                                       or "PTH_GE200" in mycat
-                                       or "LT2J" in mycat
-                                       or "MJJ_0_350" in mycat
-                                       or "MJJ_350_700_PTH_0_200" in mycat
-                                       or "qqH_GE2J_MJJ_GE350_PTH_0_200_MJJ_GE700_PTHJJ_0_25" in mycat
-                                       or "MJJ_GE700_PTH_0_200" in mycat)):
+    if type == "stage1-stxs" and (translate_categ(mycat)=="ggH/FWD"
+                                  or translate_categ(mycat)=="ggH-0j/pT[0,10]"
+                                  or translate_categ(mycat)=="ggH-0j/pT[10-200]"
+                                  or translate_categ(mycat)=="ggH-1j/pT[60-120]"
+                                  or translate_categ(mycat)=="ggH-1j/pT[0-60]"
+                                  or translate_categ(mycat)=="ggH-1j/pT[120-200]"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ<350/pT[60,120]"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ<350/pT[0,60]"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ<350/pT[120,200]"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ[350,700]/pTHJJ[0,25]"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ[350,700]/pTHJJ>25"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ>700/pTHJJ[0,25]"
+                                  or translate_categ(mycat)=="ggH-2j/mJJ>700/pTHJJ>25"
+                                  or translate_categ(mycat)=="ggH/pT[200,300]"
+                                  or translate_categ(mycat)=="ggH/pT[300,450]"
+                                  or translate_categ(mycat)=="ggH/pT[450,650]"
+                                  or translate_categ(mycat)=="ggH/pT>650"
+                                  or translate_categ(mycat)=="qqH/FWD"
+                                  or translate_categ(mycat)=="qqH/0j"
+                                  or translate_categ(mycat)=="qqH/1j"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ[0,60]"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ[60,120]"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ[120,350]"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ[350,700]/pTHJJ<25"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ[350,700]/pTHJJ>25"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ>700/pTHJJ<25"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ>700/ptHJJ>25"
+                                  or translate_categ(mycat)=="qqH-2j/mJJ>350/pT>200"):
+        included=1
+    if type == "stage1-merged" and (translate_categ(mycat)=="ggH/FWD"
+                                    or translate_categ(mycat)=="ggH-0j/pT[0,10]"
+                                    or translate_categ(mycat)=="ggH-0j/pT[10-200]"
+                                    or translate_categ(mycat)=="ggH-1j/pT[60-120]"
+                                    or translate_categ(mycat)=="ggH-1j/pT[0-60]"
+                                    or translate_categ(mycat)=="ggH-1j/pT[120-200]"
+                                    or translate_categ(mycat)=="ggH-2j/mJJ<350/pT[60,120]"
+                                    or translate_categ(mycat)=="ggH-2j/mJJ<350/pT[0,60]"
+                                    or translate_categ(mycat)=="ggH-2j/mJJ<350/pT[120,200]"
+                                    or translate_categ(mycat)=="ggH-2j/mJJ>350"
+                                    or translate_categ(mycat)=="ggH/pT>200"
+                                    or translate_categ(mycat)=="qqH/FWD"
+                                    or translate_categ(mycat)=="qqH/<2j"                                    
+                                    or translate_categ(mycat)=="qqH-2j/mJJ<350"
+                                    or translate_categ(mycat)=="qqH-2j/350<mJJ<700"
+                                    or translate_categ(mycat)=="qqH-2j/mJJ>700"
+                                    or translate_categ(mycat)=="qqH-2j/mJJ>350/pT>200"):
+        included=1                
+    if type=="stage1-select" and (upUncertainty < 3.0 and downUncertainty < 3.0) and (not (translate_categ(mycat)=="WH" 
+                                                                                           or translate_categ(mycat)=="ZH" 
+                                                                                           or translate_categ(mycat)=="qqH" 
+                                                                                           or translate_categ(mycat)=="ggH")):
        included=1
     return included
 
@@ -142,7 +175,7 @@ parser.add_argument('--input', '-i', default=None, help='Output name')
 parser.add_argument('--channel', '-c', default=None, help='Output name')
 parser.add_argument('--year', '-y', default=None, help='Output name')
 parser.add_argument('--output', '-o', default=None, help='Output name')
-parser.add_argument('--type', '-t', default="stage0", help='stage0, stage1-select, stage1-all')
+parser.add_argument('--type', '-t', default="stage0", help='stage0, stage1-select, stage1-all, stage1-stxs,stage1-merged')
 
 args = parser.parse_args()
 
@@ -158,11 +191,18 @@ nlines=0
 k=0
 for x in f:
   if ":" in x:
+    mean=round(1.0, 2)
+    if "N/A" in x:
+        up=24.0
+        down=26.0
+    else:
+        up= round(float(x.split("+")[1][:5]),2)
+        down=round(float(x.split("-")[1].split("/")[0]),2)
     mycat=""
     if k>0:
        mycat=x.split("r_")[1].split(" ")[0]
-    print mycat,is_included(mycat,args.type)
-    if is_included(mycat,args.type):
+    print mycat,is_included(mycat,args.type,up,down)    
+    if is_included(mycat,args.type,up,down):
        nlines=nlines+1
     k=k+1
 
@@ -207,7 +247,7 @@ for x in f:
        mycat=translate_categ(x.split("r_")[1].split(" ")[0])
        mycat2=x.split("r_")[1].split(" ")[0]
 
-    if ii>0 and is_included(mycat2,args.type):
+    if ii>0 and is_included(mycat2,args.type,up,down):
       gr.SetPoint(i, mean, y_pos)
       gr.SetPointError(i,down ,up, 0, 0)
 
@@ -216,8 +256,8 @@ for x in f:
 
     myresult=str(mean)+" -"+str(down)+"/+"+str(up)
 
-    print mycat2,is_included(mycat2,args.type)
-    if is_included(mycat2,args.type):
+    print mycat2,is_included(mycat2,args.type,up,down)
+    if is_included(mycat2,args.type,up,down):
 
       if args.type=="stage0":
          categ.append( ROOT.TPaveText(0.01, 0.90-(i+1)*(0.905-0.105)/nlines+0.5*(0.905-0.105)/nlines, 0.25, 0.90+0.01-(i+1)*(0.905-0.105)/nlines+0.5*(0.905-0.105)/nlines, "NDC"))
@@ -257,6 +297,7 @@ for x in f:
 
 gr.Draw('P')
 
+
 theory_band = ROOT.TBox(combineMu-lowBnad,0,combineMu+highBand,nlines-0.1)
 theory_band.SetFillColor(ROOT.kYellow)
 theory_band.Draw('same')
@@ -266,6 +307,7 @@ l.SetLineColor(ROOT.kOrange)
 l.Draw('sameL')
 
 gr.Draw('SAMEP')
+
 
 lumi1=add_lumi(args.year)
 lumi2=add_CMS()

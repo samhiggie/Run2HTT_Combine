@@ -145,21 +145,47 @@ for i in range(len(Lines_2016)):
         if ("Forward Higgs" in category):
             print ''
         tableLine = category 
-        if upUncert_2016 >= 24.0 or downUncert_2016 <= -26.0:
-            tableLine += " & Not Sensitive"            
+        #Let's make the up and down contribution strings before hand
+        #2016
+        if upUncert_2016 >= 24.0:
+            upUncertString_2016 = "\\geq 25.000"
         else:
-            tableLine += " & "+(" $1.0^{+%.3f}_{%.3f}$"%(upUncert_2016, downUncert_2016))
-        if upUncert_2017 >= 24.0 or downUncert_2017 <= -26.0:
-            tableLine += " & Not Sensitive"            
+            upUncertString_2016 = "%.3f"%upUncert_2016
+        if downUncert_2016 <= -26.0:
+            downUncertString_2016 = "\\leq -25.000"
         else:
-            tableLine += " & "+(" $1.0^{+%.3f}_{%.3f}$"%(upUncert_2017, downUncert_2017))
-        if upUncert_2018 >= 24.0 or downUncert_2018 <= -26.0:
-            tableLine += " & Not Sensitive"            
+            downUncertString_2016 = "%.3f"%downUncert_2016
+        #2017
+        if upUncert_2017 >= 24.0:
+            upUncertString_2017 = "\\geq 25.000"
         else:
-            tableLine += " & "+(" $1.0^{+%.3f}_{%.3f}$"%(upUncert_2018, downUncert_2018))
-        if Run2upUncert >= 24.0 or Run2downUncert <= -26.0:
-            tableLine += " & Not Sensitive"            
+            upUncertString_2017 = "%.3f"%upUncert_2017
+        if downUncert_2017 <= -26.0:
+            downUncertString_2017 = "\\leq -25.000"
         else:
-            tableLine += " & "+(" $1.0^{+%.3f}_{%.3f}$"%(Run2upUncert, Run2downUncert))
+            downUncertString_2017 = "%.3f"%downUncert_2017
+        #2018
+        if upUncert_2018 >= 24.0:
+            upUncertString_2018 = "\\geq 25.000"
+        else:
+            upUncertString_2018 = "%.3f"%upUncert_2018
+        if downUncert_2018 <= -26.0:
+            downUncertString_2018 = "\\leq -25.000"
+        else:
+            downUncertString_2018 = "%.3f"%downUncert_2018
+        #Run 2
+        if Run2upUncert >= 24.0:
+            upUncertString_Run2 = "\\geq 25.000"
+        else:
+            upUncertString_Run2 = "%.3f"%Run2upUncert
+        if Run2downUncert <= -26.0:
+            downUncertString_Run2 = "\\leq -25.000"
+        else:
+            downUncertString_Run2 = "%.3f"%Run2downUncert
+        #construct the string
+        tableLine += " & "+" $1.0^{"+upUncertString_2016+"}_{"+downUncertString_2016+"}$"
+        tableLine += " & "+" $1.0^{"+upUncertString_2017+"}_{"+downUncertString_2017+"}$"
+        tableLine += " & "+" $1.0^{"+upUncertString_2018+"}_{"+downUncertString_2018+"}$"
+        tableLine += " & "+" $1.0^{"+upUncertString_Run2+"}_{"+downUncertString_Run2+"}$"        
         tableLine += "\\\\"
         print(tableLine)
