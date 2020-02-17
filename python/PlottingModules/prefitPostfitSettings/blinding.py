@@ -5,8 +5,8 @@ from CombineHarvester.Run2HTT_Combine.PlottingModules.prefitPostfitSettings.rebi
 #this function will blind our datapoints,
 #current blinding scheme is to just blind mtt range 90-150
 #this corresponds to bins 3,4 and 5, in each slices.
-def BlindDataPoints(DataDictionary,category):
-    nSlices = GetNSlices(category)    
+def BlindDataPoints(DataDictionary,category,year):
+    nSlices = GetNSlices(category,year)    
     for i in range(nSlices):
         #backgroundContentAtPoint = CalculateB(i,FullDictionary)
         #signalContentAtPoint = SignalDictionary['Higgs'].GetBinContent(i)        

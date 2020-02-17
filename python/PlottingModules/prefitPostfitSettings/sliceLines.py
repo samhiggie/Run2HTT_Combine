@@ -5,8 +5,8 @@ from rebinning import standardSliceSetup
 
 binsPerSlice = standardSliceSetup[len(standardSliceSetup)-1]
 
-def CreateSliceLines(category,originalHistogram,pad):    
-    nSlices = GetNSlices(category)
+def CreateSliceLines(category,originalHistogram,pad,year):    
+    nSlices = GetNSlices(category,year)
 
     originalHistogram.GetXaxis().SetNdivisions(-100*binsPerSlice-nSlices)
     

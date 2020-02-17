@@ -17,18 +17,20 @@ plotYAxisLabelSize = 0.075
 #approximately 0.0305 per bin at 3 slices.
 #approximate left bound at 0.16?
 
-def CreateAxisLabels(theHist,category):
+def CreateAxisLabels(theHist,category,year):
     theAxis = theHist.GetXaxis()
     theAxis.SetTitle('m_{#tau#tau} (GeV)')
     theAxis.SetTitleSize(plotXAxisTitleSize)
     theAxis.SetTitleOffset(plotXAxisTitleOffset)
-    nSlices = GetNSlices(category)
+    nSlices = GetNSlices(category,year)
     nBins = 9 * nSlices    
+    if nSlices == 0:
+        nBins = 9
     for i in range(1,nBins+1):
         theAxis.SetBinLabel(i,genericAxisLabels[(i-1)%9])
 
     if nSlices == 0:
-        plotXAxisLabelSize = 0.3
+        plotXAxisLabelSize = 0.1
     else:
         plotXAxisLabelSize = 0.3/(1.0*nSlices)
 

@@ -76,7 +76,8 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     print("blinding...")
                     prefitPostfitSettings.blinding.BlindDataPoints(                        
                         histograms[channel][year][category][prefitOrPostfit]['Data'],
-                        category
+                        category,
+                        year
                     )                    
 
                     #Create the canvas and pads needed
@@ -119,7 +120,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     #prefitPostfitSettings.axis.CreateAxisLabels(ratioPlot)
                     prefitPostfitSettings.axis.SetPlotYAxis(backgroundStack.GetHistogram()) 
                     #slice lines
-                    plotSlicePad,plotSlices = prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram(),plotPad)
+                    plotSlicePad,plotSlices = prefitPostfitSettings.sliceLines.CreateSliceLines(category,backgroundStack.GetHistogram(),plotPad,year)
                     plotSlicePad.Draw()
                     plotSlicePad.cd()
                     plotSlices.Draw()
@@ -134,7 +135,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     prefitPostfitSettings.channelText.DrawChannelName(channel)
 
                     #slice text
-                    prefitPostfitSettings.sliceLabels.CreateSliceText(category)
+                    prefitPostfitSettings.sliceLabels.CreateSliceText(category,year)
                     #ratio plot
                     ratioPad.cd()
                     #ratioPlot.Draw("AP")
@@ -144,7 +145,7 @@ def MakePrefitPlots(tag,years,channels,DontPerformCalculation = False):
                     ratioPlot.Draw('E0P')
 
                     #Axis junk
-                    prefitPostfitSettings.axis.CreateAxisLabels(ratioErrors,category)                    
+                    prefitPostfitSettings.axis.CreateAxisLabels(ratioErrors,category,year)                    
                     
                     ratioPlotSlicePad,ratioPlotSlices = prefitPostfitSettings.sliceLines.CreateRatioSliceLines(plotSlices,ratioPad)
                     ratioPlotSlicePad.Draw()

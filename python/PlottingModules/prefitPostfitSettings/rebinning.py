@@ -4,16 +4,24 @@ from array import array
 
 standardSliceSetup = [0,1,2,3,4,5,6,8,10,12]
 
-def GetNSlices(category):
+def GetNSlices(category,year):
     if (category == catConfig.tt_boosted_1J_category
-        or category == catConfig.tt_boosted_GE2J_category                        
+        or category == catConfig.tt_boosted_GE2J_category               
         ):
             nSlices = 6
-    elif (category == catConfig.mt_vbf_low_category                    
+    elif (category == catConfig.tt_vbf_low_category):
+        if year == "2016":
+            nSlices = 5
+        else:
+            nSlices = 6
+    elif (category == catConfig.tt_vbf_high_category):
+        if year == "2016":
+            nSlices = 3
+        else:
+            nSlices = 4
+    elif (category == catConfig.mt_vbf_low_category
           or category == catConfig.em_vbf_low_category          
-          or category == catConfig.et_vbf_low_category
-          or category == catConfig.tt_vbf_high_category
-          or category == catConfig.tt_vbf_low_category
+          or category == catConfig.et_vbf_low_category 
           or category == catConfig.mt_boosted_1J_category
           or category == catConfig.mt_boosted_GE2J_category
           or category == catConfig.et_boosted_1J_category
@@ -27,7 +35,7 @@ def GetNSlices(category):
     #    nSlices = 4
     elif (category == catConfig.mt_vbf_high_category
           or category == catConfig.et_vbf_high_category
-          or category == catConfig.em_vbf_high_category
+          or category == catConfig.em_vbf_high_category          
           or category == catConfig.mt_0jet_high_category
           or category == catConfig.mt_0jet_low_category
           or category == catConfig.et_0jet_high_category
@@ -53,9 +61,9 @@ def CreateStandardSliceBinBoundaryArray(nSlices):
     return binBoundaryArray
     
 
-def RebinDictionary(dictionary,channel,category):
+def RebinDictionary(dictionary,channel,category,year):
     binBoundaries = []
-    nSlices = GetNSlices(category)
+    nSlices = GetNSlices(category,year)
     binBoundaries = array('f',CreateStandardSliceBinBoundaryArray(nSlices))
     #print(binBoundaries)    
     
@@ -86,4 +94,4 @@ def RebinCollection(collection):
             for category in collection[channel][year]:
                 for prefitOrPostfit in ['prefit','postfit']:
                     for dictType in collection[channel][year][category][prefitOrPostfit]:
-                        RebinDictionary(collection[channel][year][category][prefitOrPostfit][dictType],channel,category)
+                        RebinDictionary(collection[channel][year][category][prefitOrPostfit][dictType],channel,category,year)
