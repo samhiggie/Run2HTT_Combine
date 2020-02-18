@@ -13,9 +13,6 @@ from CombineHarvester.Run2HTT_Combine.SplitUncertainty import UncertaintySplitte
 from CombineHarvester.Run2HTT_Combine.ThreadManager import ThreadManager
 import CombineHarvester.Run2HTT_Combine.outputArea as outputArea
 
-def RandomStringTag(size=6,chars=string.ascii_uppercase+string.ascii_lowercase+string.digits):
-    return ''.join(random.choice(chars) for x in range(size))
-
 parser = argparse.ArgumentParser(description="Centralized script for running combine fits on dynamically changing analysis categories.")
 parser.add_argument('--years',nargs="+",choices=['2016','2017','2018'],help="Specify the year(s) to run the fit for",required=True)
 parser.add_argument('--channels',nargs="+",choices=['mt','et','tt','em'],help="specify the channels to create data cards for",required=True)
@@ -53,24 +50,11 @@ if (args.SplitInclusive or args.SplitSignals or args.SplitSTXS) and not (args.Sp
 if args.RunParallel:
     ThreadHandler = ThreadManager(args.numthreads)
 
-#DateTag = datetime.datetime.now().strftime("%d%m%y_")+RandomStringTag()
-#print ''
-#print "*********************************************"
-#print("This session is run under tag: "+DateTag)
-#print "*********************************************"
-#print ''
-#check if we have an output directory
-#if not os.path.isdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output"):
-#    os.mkdir(os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output")
-#OutputDir = os.environ['CMSSW_BASE']+"/src/CombineHarvester/Run2HTT_Combine/HTT_Output/Output_"+DateTag+"/"
-#os.mkdir(OutputDir)
-
 DateTag,OutputDir = outputArea.PrepareNewOutputArea()
 
 logging.basicConfig(filename=OutputDir+"CombineHistory_"+DateTag+".log",filemode="w",level=logging.INFO,format='%(asctime)s %(message)s')
 
 DataCardCreationCommand = ""
-ChannelCards = []
 
 outputLoggingFile = "outputLog_"+DateTag+".txt"
 
@@ -93,10 +77,7 @@ for year in args.years:
             print("Duplicating shapes for year correlations")
             logging.info("Shape duplication command:")
             logging.info('\n\n'+AddShapeCommand+'\n')
-            os.system(AddShapeCommand+" | tee -a "+outputLoggingFile)
-            #logging.info("Negative bin removal command:")
-            #logging.info('\n\n'+NegativeBinCommand+'\n')
-            #os.system(NegativeBinCommand+" | tee -a "+outputLoggingFile)            
+            os.system(AddShapeCommand+" | tee -a "+outputLoggingFile)            
 
         DataCardCreationCommand="SMHTT"+year
         DataCardCreationCommand+="_"+channel+" "+OutputDir
@@ -107,8 +88,7 @@ for year in args.years:
         if args.RunShapeless:
             DataCardCreationCommand+=" -s"
         if not args.RunWithBinByBin:
-            DataCardCreationCommand+=" -b"
-        #if args.RunEmbeddedLess:
+            DataCardCreationCommand+=" -b"            
         if not embedded_cfg[str(year)+str(channel)]: #load from config. If false, run embedded less
             DataCardCreationCommand+=" -e"
         if args.RunInclusiveggH:
