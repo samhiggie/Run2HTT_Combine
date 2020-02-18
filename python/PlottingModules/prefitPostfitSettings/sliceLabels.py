@@ -43,6 +43,13 @@ def CreateSliceText(category,year):
         else:
             labels = tautau_vbf_low_latex
     
+    elif(category == catConfig.et_boosted_1J_category or 
+          category == catConfig.et_boosted_GE2J_category):
+        if year == "2016":
+            labels = tautau_boosted_latex
+        else:
+            labels = boosted_latex
+
     elif (category ==  catConfig.mt_vbf_high_category or 
         category == catConfig.et_vbf_high_category or 
         category == catConfig.em_vbf_high_category):        
@@ -58,9 +65,7 @@ def CreateSliceText(category,year):
         labels = tautau_boosted_latex
 
     elif (category == catConfig.mt_boosted_1J_category or 
-          category == catConfig.mt_boosted_GE2J_category or 
-          category == catConfig.et_boosted_1J_category or 
-          category == catConfig.et_boosted_GE2J_category or 
+          category == catConfig.mt_boosted_GE2J_category or           
           category == catConfig.em_boosted_1J_category or 
           category == catConfig.em_boosted_GE2J_category):
         labels = boosted_latex
