@@ -41,6 +41,7 @@ parser.add_argument('--RealData',help="Use the RealData dataset in the limit cal
 parser.add_argument('--ControlMode',help="Run in control mode, for making accurate error control plots",action="store_true")
 parser.add_argument('--ExperimentalSpeedup',help="Run experimental acceleration options. May speed up fits at slight cost to accuracy",action = "store_true")
 parser.add_argument('--CorrelationMatrix',help="Generate correlation matrices for the STXS fits",action="store_true")
+parser.add_argument('--Unblind',help="Unblind the analysis, and do it for real. BE SURE ABOUT THIS.",action="store_true")
 print("Parsing command line arguments.")
 args = parser.parse_args() 
 
@@ -67,8 +68,12 @@ for year in args.years:
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+"_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root "
             elif args.ComputeGOF:
                 print "Working on GOF with data outside signal region"
-                NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root"
-                AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root "
+                if not args.Unblind:
+                    NegativeBinCommand="python scripts/RemoveNegativeBins.py "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root"
+                    AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF_nocorrelation.root --OutputFileName "+os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root "
+                else:
+                    NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/smh"+year+channel+".root"
+                    AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/smh"+year+channel+".root "
             else:
                 NegativeBinCommand="python scripts/RemoveNegativeBins.py ../../auxiliaries/shapes/smh"+year+channel+".root"
                 AddShapeCommand="python scripts/PrepDecorrelatedCard.py --year "+year+" --DataCard ../../auxiliaries/shapes/smh"+year+channel+"_nocorrelation.root --OutputFileName ../../auxiliaries/shapes/smh"+year+channel+".root "
@@ -83,7 +88,7 @@ for year in args.years:
         DataCardCreationCommand+="_"+channel+" "+OutputDir
         if args.ControlMode:
             DataCardCreationCommand+=" -c"
-        if args.ComputeGOF:
+        if args.ComputeGOF and not args.Unblind:
             DataCardCreationCommand+=" -gf"
         if args.RunShapeless:
             DataCardCreationCommand+=" -s"
@@ -101,9 +106,13 @@ for year in args.years:
             for Directory in TheFile.GetListOfKeys():
                 DataCardCreationCommand+=" "+Directory.GetName()
         elif args.ComputeGOF:
-            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
-            for Directory in TheFile.GetListOfKeys():
-                DataCardCreationCommand+=" "+Directory.GetName()
+            if not args.Unblind:
+                TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
+                for Directory in TheFile.GetListOfKeys():
+                    DataCardCreationCommand+=" "+Directory.GetName()
+            else:
+                for Category in cfg.Categories[channel]:
+                    DataCardCreationCommand+=" "+Category
         else:
             for Category in cfg.Categories[channel]:
                 DataCardCreationCommand+=" "+Category
@@ -127,8 +136,11 @@ for year in args.years:
         if args.ControlMode:
             TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/"+channel+"_controls_"+year+".root")
         elif args.ComputeGOF:
-            TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
-            print "Working on GOF with data outside signal region"
+            if not args.Unblind:
+                TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+"_GOF.root")
+                print "Working on GOF with data outside signal region"
+            else:
+                TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
         else:
             TheFile = ROOT.TFile(os.environ['CMSSW_BASE']+"/src/auxiliaries/shapes/smh"+year+channel+".root")
 
@@ -278,7 +290,11 @@ if args.ControlMode:
     
 #run the inclusive
 CombinedWorkspaceName = CombinedCardName[:len(CombinedCardName)-3]+"root"
-InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedWorkspaceName+" "+ExtraCombineOptions+" --expectSignal=1 -t -1 -n "+DateTag+"_Inclusive"
+InclusiveCommand="combineTool.py -M "+PhysModel+" "+CombinedWorkspaceName+" "+ExtraCombineOptions+" --expectSignal=1 " 
+if not args.Unblind:
+    InclusiveCommand+="-t -1 "
+InclusiveCommand+="-n "+DateTag+"_Inclusive"
+    
 if args.Timeout is True:
     InclusiveCommand = "timeout "+args.TimeoutTime+" "+InclusiveCommand
 logging.info("Inclusive combine command:")
@@ -295,7 +311,11 @@ os.system("mv *"+DateTag+"*.root "+OutputDir)
 if not args.ComputeSignificance:
     #run the signal samples
     #okay, we're no longer doing individual fits. It's redundant. We just need one command that fits everything.
-    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSignalName+" "+ExtraCombineOptions+" -t -1 --setParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1 -n "+DateTag+"_Signal"
+    CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSignalName+" "+ExtraCombineOptions
+    if not args.Unblind:
+        CombineCommand+=" -t -1"
+    CombineCommand+=" --setParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1 -n "+DateTag+"_Signal"
+
     if args.Timeout is True:
             CombineCommand = "timeout "+args.TimeoutTime+" " + CombineCommand
     logging.info("Signal Sample Signal Command: ")
@@ -314,7 +334,11 @@ if not args.ComputeSignificance:
 #if not (args.RunInclusiveggH or args.RunInclusiveqqH or args.ComputeSignificance):
 if args.RunSTXS:
     for STXSBin in STXSBins:
-        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_"+STXSBin+"_STXS --saveFitResult --setParameters "
+        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerSTXSName+" "+ExtraCombineOptions
+        if not args.Unblind:
+            CombineCommand+=" -t -1"
+        CombineCommand+=" -n "+DateTag+"_"+STXSBin+"_STXS --saveFitResult --setParameters "
+
         for BinName in STXSBins:
             CombineCommand+=("r_"+BinName+"=1,")
         if args.Timeout is True:
@@ -342,7 +366,11 @@ if args.RunSTXS:
     
     #run the merged bins
     for MergedBin in MergedSignalNames:
-        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions+" -t -1 -n "+DateTag+"_"+MergedBin+"_Merged --setParameters "
+        CombineCommand = "combineTool.py -M "+PhysModel+" "+PerMergedBinName+" "+ExtraCombineOptions
+        if not args.Unblind:
+            CombineCommand+=" -t -1"
+        CombineCommand+=" -n "+DateTag+"_"+MergedBin+"_Merged --setParameters "
+        
         for BinName in MergedSignalNames:
             CombineCommand+=("r_"+BinName+"=1,")
         if args.Timeout is True:
@@ -361,7 +389,11 @@ if args.ComputeImpacts:
     os.chdir(OutputDir)
     print("\nCalculating Impacts, this may take a while...\n")
     print("Initial fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1 -t -1 --parallel 20 --X-rtd MINIMIZER_analytic"
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --doInitialFit --robustFit 1 --expectSignal=1" 
+    if not args.Unblind:
+        ImpactCommand+=" -t -1"
+    ImpactCommand+= " --parallel 8 --X-rtd MINIMIZER_analytic"
+
     if args.ExperimentalSpeedup:
         ImpactCommand += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
     logging.info("Initial Fit Impact Command:")
@@ -369,7 +401,11 @@ if args.ComputeImpacts:
     os.system(ImpactCommand+" | tee -a "+outputLoggingFile)
         
     print("Full fit")
-    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1 -t -1 --parallel 20 --X-rtd MINIMIZER_analytic "
+    ImpactCommand = "combineTool.py -M Impacts -d "+CombinedWorkspaceName+" -m 125 --robustFit 1 --doFits --expectSignal=1"
+    if not args.Unblind:
+        ImpactCommand += " -t -1"
+    ImpactCommand+=" --parallel 8 --X-rtd MINIMIZER_analytic "
+
     if args.ExperimentalSpeedup:
         ImpactCommand += ' --X-rtd FAST_VERTICAL_MORPH --cminDefaultMinimizerStrategy 0 '
     logging.info("Full Fit Impact Command:")
