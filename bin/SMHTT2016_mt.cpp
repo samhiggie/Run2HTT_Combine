@@ -65,10 +65,53 @@ int main(int argc, char **argv)
   vector<string> bkg_procs = {"VVT","STT","TTT","jetFakes","ZL","VVL","STL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"};
   if(Input.OptionExists("-e")) {bkg_procs.push_back("ZT");}
   else bkg_procs.push_back("embedded");
+  if (Input.OptionExists("-dp") || Input.OptionExists("-dn") || Input.OptionExists("-dm"))
+    {
+      bkg_procs.push_back("ggH_nonfid_htt125");
+      bkg_procs.push_back("qqH_nonfid_htt125");
+      bkg_procs.push_back("WH_nonfid_htt125");
+      bkg_procs.push_back("ZH_nonfid_htt125");
+    }
+  else
+    {
+      bkg_procs.push_back("ggH_hww125");
+      bkg_procs.push_back("qqH_hww125");
+      bkg_procs.push_back("WH_hww125");
+      bkg_procs.push_back("ZH_hww125");
+    }
   cb.AddProcesses({"*"}, {"smh2016"}, {"13TeV"}, {"mt"}, bkg_procs, cats, false);
 
   vector<string> ggH_STXS;
   if (Input.OptionExists("-g")) ggH_STXS = {"ggH_htt125"};
+  //PTH differential option
+  else if (Input.OptionExists("-dp")) ggH_STXS = {
+      "ggH_PTH_0_20_htt125",
+      "ggH_PTH_20_45_htt125",
+      "ggH_PTH_45_80_htt125",
+      "ggH_PTH_80_120_htt125",
+      "ggH_PTH_120_200_htt125",
+      "ggH_PTH_200_350_htt125",
+      "ggH_PTH_350_600_htt125",
+      "ggH_PTH_GE600_htt125",
+    };
+  //NJets differential Option
+  else if (Input.OptionExists("-dn")) ggH_STXS = {
+      "ggH_NJETS_0_htt125",
+      "ggH_NJETS_1_htt125",
+      "ggH_NJETS_2_htt125",
+      "ggH_NJETS_GE3_htt125",
+    };
+  //mjj differential option
+  else if (Input.OptionExists("-dm")) ggH_STXS = {
+      "ggH_MJJ_0_150_htt125",
+      "ggH_150_300_htt125",
+      "ggH_300_450_htt125",
+      "ggH_450_600_htt125",
+      "ggH_600_1000_htt125",
+      "ggH_1000_1400_htt125",
+      "ggH_1400_1800_htt125",
+      "ggH_GE1800_htt125",
+    };
   else ggH_STXS = {"ggH_PTH_0_200_0J_PTH_10_200_htt125",
 		   "ggH_PTH_0_200_0J_PTH_0_10_htt125",
 		   "ggH_PTH_0_200_1J_PTH_0_60_htt125",
@@ -89,6 +132,34 @@ int main(int argc, char **argv)
   
   vector<string> qqH_STXS; 
   if(Input.OptionExists("-q")) qqH_STXS = {"qqH_htt125"};
+  else if (Input.OptionExists("-dp")) qqH_STXS = {
+      "qqH_PTH_0_20_htt125",
+      "qqH_PTH_20_45_htt125",
+      "qqH_PTH_45_80_htt125",
+      "qqH_PTH_80_120_htt125",
+      "qqH_PTH_120_200_htt125",
+      "qqH_PTH_200_350_htt125",
+      "qqH_PTH_350_600_htt125",
+      "qqH_PTH_GE600_htt125",
+    };
+  //NJets differential Option
+  else if (Input.OptionExists("-dn")) qqH_STXS = {
+      "qqH_NJETS_0_htt125",
+      "qqH_NJETS_1_htt125",
+      "qqH_NJETS_2_htt125",
+      "qqH_NJETS_GE3_htt125",
+    };
+  //mjj differential option
+  else if (Input.OptionExists("-dm")) qqH_STXS = {
+      "qqH_MJJ_0_150_htt125",
+      "qqH_150_300_htt125",
+      "qqH_300_450_htt125",
+      "qqH_450_600_htt125",
+      "qqH_600_1000_htt125",
+      "qqH_1000_1400_htt125",
+      "qqH_1400_1800_htt125",
+      "qqH_GE1800_htt125",
+    };
   else qqH_STXS = {"qqH_0J_htt125",
 		   "qqH_1J_htt125",
 		   "qqH_GE2J_MJJ_0_60_htt125",
@@ -101,7 +172,67 @@ int main(int argc, char **argv)
 		   "qqH_GE2J_MJJ_GE350_PTH_GE200_htt125",
 		   "qqH_FWDH_htt125"};
 
-  vector<string> sig_procs = ch::JoinStr({ggH_STXS,qqH_STXS,{"ZH_htt125","WH_htt125"}});
+  vector<string> WH_STXS = {"WH_htt125"};
+  if (Input.OptionExists("-dp")) WH_STXS = {
+      "WH_PTH_0_20_htt125",
+      "WH_PTH_20_45_htt125",
+      "WH_PTH_45_80_htt125",
+      "WH_PTH_80_120_htt125",
+      "WH_PTH_120_200_htt125",
+      "WH_PTH_200_350_htt125",
+      "WH_PTH_350_600_htt125",
+      "WH_PTH_GE600_htt125",
+    };
+  //NJets differential Option
+  else if (Input.OptionExists("-dn")) WH_STXS = {
+      "WH_NJETS_0_htt125",
+      "WH_NJETS_1_htt125",
+      "WH_NJETS_2_htt125",
+      "WH_NJETS_GE3_htt125",
+    };
+  //mjj differential option
+  else if (Input.OptionExists("-dm")) WH_STXS = {
+      "WH_MJJ_0_150_htt125",
+      "WH_150_300_htt125",
+      "WH_300_450_htt125",
+      "WH_450_600_htt125",
+      "WH_600_1000_htt125",
+      "WH_1000_1400_htt125",
+      "WH_1400_1800_htt125",
+      "WH_GE1800_htt125",
+    };
+
+  vector<string> ZH_STXS = {"ZH_htt125"};
+  if (Input.OptionExists("-dp")) ZH_STXS = {
+      "ZH_PTH_0_20_htt125",
+      "ZH_PTH_20_45_htt125",
+      "ZH_PTH_45_80_htt125",
+      "ZH_PTH_80_120_htt125",
+      "ZH_PTH_120_200_htt125",
+      "ZH_PTH_200_350_htt125",
+      "ZH_PTH_350_600_htt125",
+      "ZH_PTH_GE600_htt125",
+    };
+  //NJets differential Option
+  else if (Input.OptionExists("-dn")) ZH_STXS = {
+      "ZH_NJETS_0_htt125",
+      "ZH_NJETS_1_htt125",
+      "ZH_NJETS_2_htt125",
+      "ZH_NJETS_GE3_htt125",
+    };
+  //mjj differential option
+  else if (Input.OptionExists("-dm")) ZH_STXS = {
+      "ZH_MJJ_0_150_htt125",
+      "ZH_150_300_htt125",
+      "ZH_300_450_htt125",
+      "ZH_450_600_htt125",
+      "ZH_600_1000_htt125",
+      "ZH_1000_1400_htt125",
+      "ZH_1400_1800_htt125",
+      "ZH_GE1800_htt125",
+    };
+  
+  vector<string> sig_procs = ch::JoinStr({ggH_STXS,qqH_STXS,WH_STXS,ZH_STXS});
   
   cb.AddProcesses(masses, {"smh2016"}, {"13TeV"}, {"mt"}, sig_procs, cats, true);    
 
@@ -120,11 +251,11 @@ int main(int argc, char **argv)
   cb.cp().process(sig_procs).AddSyst(cb, "BR_htt_PU_alphas", "lnN", SystMap<>::init(1.0062));
   cb.cp().process(sig_procs).AddSyst(cb, "BR_htt_PU_mq", "lnN", SystMap<>::init(1.0099));
   cb.cp().process(sig_procs).AddSyst(cb, "BR_htt_THU", "lnN", SystMap<>::init(1.017));  
-  cb.cp().process({"WH_htt125","WH_hww125"}).AddSyst(cb, "QCDScale_VH", "lnN", SystMap<>::init(1.008));
-  cb.cp().process({"ZH_htt125","ZH_hww125"}).AddSyst(cb, "QCDScale_VH", "lnN", SystMap<>::init(1.009));
+  cb.cp().process(JoinStr({WH_STXS,{"WH_hww125"}})).AddSyst(cb, "QCDScale_VH", "lnN", SystMap<>::init(1.008));
+  cb.cp().process(JoinStr({ZH_STXS,{"ZH_hww125"}})).AddSyst(cb, "QCDScale_VH", "lnN", SystMap<>::init(1.009));
   //cb.cp().process(JoinStr({qqH_STXS,{"qqH_hww125"}})).AddSyst(cb, "QCDScale_qqH", "lnN", SystMap<>::init(1.005));
-  cb.cp().process({"WH_htt125","WH_hww125"}).AddSyst(cb, "pdf_Higgs_VH", "lnN", SystMap<>::init(1.018));
-  cb.cp().process({"ZH_htt125","ZH_hww125"}).AddSyst(cb, "pdf_Higgs_VH", "lnN", SystMap<>::init(1.013));
+  cb.cp().process(JoinStr({WH_STXS,{"WH_hww125"}})).AddSyst(cb, "pdf_Higgs_VH", "lnN", SystMap<>::init(1.018));
+  cb.cp().process(JoinStr({ZH_STXS,{"ZH_hww125"}})).AddSyst(cb, "pdf_Higgs_VH", "lnN", SystMap<>::init(1.013));
   cb.cp().process(JoinStr({ggH_STXS,{"ggH_hww125"}})).AddSyst(cb, "pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
   cb.cp().process(JoinStr({qqH_STXS,{"qqH_hww125"}})).AddSyst(cb, "pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
   
@@ -181,23 +312,23 @@ int main(int argc, char **argv)
 	{	  
 	  RecoilVector = JoinStr({ggH_STXS,qqH_STXS,{"ZT","ZL","ggH_hww125","qqH_hww125"}});
 	  ZPTVector = {"ZT","ZL"};	  
-	  TESVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  JESVector = JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","WH_htt125","ZH_htt125","VVL","STL","ZL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  MuESVector = JoinStr({ggH_STXS,qqH_STXS,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  TESVector = JoinStr({sig_procs,{"VVT","STT","ZT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  JESVector = JoinStr({sig_procs,{"ZT","VVT","STT","TTT","VVL","STL","ZL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  MuESVector = JoinStr({sig_procs,{"ZT","VVT","STT","TTT","ZL","VVL","STL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
 	  PrefiringVector = JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","ZT","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  TauIDVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  TriggerVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","ZT","TTT","VVL","STL","TTL","ZL","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  TauIDVector = JoinStr({sig_procs,{"VVT","STT","ZT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  TriggerVector = JoinStr({sig_procs,{"VVT","STT","ZT","TTT","VVL","STL","TTL","ZL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
 	}
       else
 	{	  
 	  RecoilVector = JoinStr({ggH_STXS,qqH_STXS,{"ZL","ggH_hww125","qqH_hww125"}});
 	  ZPTVector = {"ZL"};	  
-	  TESVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","TTT","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  JESVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","TTT","WH_htt125","ZH_htt125","VVL","ZL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  MuESVector = JoinStr({ggH_STXS,qqH_STXS,{"ZL","VVT","TTT","VVL","TTL","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});	  
+	  TESVector = JoinStr({sig_procs,{"VVT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  JESVector = JoinStr({sig_procs,{"VVT","TTT","VVL","ZL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  MuESVector = JoinStr({sig_procs,{"ZL","VVT","TTT","VVL","TTL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});	  
 	  PrefiringVector = JoinStr({sig_procs,{"VVL","VVT","STT","STL","ZL","TTL","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  TauIDVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","TTT","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
-	  TriggerVector = JoinStr({ggH_STXS,qqH_STXS,{"VVT","STT","TTT","VVL","STL","TTL","ZL","WH_htt125","ZH_htt125","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  TauIDVector = JoinStr({sig_procs,{"VVT","STT","TTT","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
+	  TriggerVector = JoinStr({sig_procs,{"VVT","STT","TTT","VVL","STL","TTL","ZL","ggH_hww125","qqH_hww125","WH_hww125","ZH_hww125"}});
 	}
       
 
@@ -535,6 +666,17 @@ int main(int argc, char **argv)
       "$BIN/$PROCESS_$SYSTEMATIC");
       cb.cp().signals().ExtractShapes(
       aux_shapes + "smh2016mt_GOF.root",
+      "$BIN/$PROCESS$MASS",
+      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+  else if(Input.OptionExists("-dp")||Input.OptionExists("-dn")||Input.OptionExists("-dm"))
+    {
+      cb.cp().backgrounds().ExtractShapes(
+      aux_shapes + "smh2016mt_Differential.root",
+      "$BIN/$PROCESS",
+      "$BIN/$PROCESS_$SYSTEMATIC");
+      cb.cp().signals().ExtractShapes(
+      aux_shapes + "smh2016mt_Differential.root",
       "$BIN/$PROCESS$MASS",
       "$BIN/$PROCESS$MASS_$SYSTEMATIC");
     }
