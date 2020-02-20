@@ -46,7 +46,7 @@ singleSTXSBin_ggH = [
 ]
 mergedSTXSBin_ggH = [
   'r_ggH_PTH_0_200_GE2J_MJJ_GE350',
-  'r_ggH_PTH_GE200'
+  'r_ggH_PTH_GE300'
 ]
 singleSTXSBin_qqH = [
   "r_qqH_FWDH_htt125",
@@ -116,7 +116,7 @@ for poi in singleSTXSBin_ggH:
   if poi == 'r_ggH_PTH_0_200_GE2J_MJJ_GE700_PTHJJ_GE25_htt125':
     mergedPOI = 'r_ggH_PTH_0_200_GE2J_MJJ_GE350'
   if poi == "r_ggH_PTH_GE650_htt125":
-    mergedPOI = 'r_ggH_PTH_GE200'
+    mergedPOI = 'r_ggH_PTH_GE300'
   if mergedPOI != "":
     colorCode = '\33[1;37;44m'
     print (colorCode + mergedPOI + '\33[0m \t:\t' + UncertaintiesDic[mergedPOI] + gap)

@@ -50,8 +50,8 @@ def LaTeXifyCategory(category):
         return "\\multicolumn{3}{c|}{$p_{t}^{H}[450,650]$} "
     if category == "r_ggH_PTH_GE650_htt125":
         return "\\multicolumn{3}{c|}{$p_{t}^{H}\\ge 650$} "
-    if category == "r_ggH_PTH_GE200":
-        return "merged: \\multicolumn{3}{c|}{$p_{t}^{H}[200,\\infty]$} "
+    if category == "r_ggH_PTH_GE300":
+        return "merged: \\multicolumn{3}{c|}{$p_{t}^{H}[300,\\infty]$} "
     if category == "r_qqH_FWDH_htt125":
         return "\\multicolumn{3}{c|}{$qqH$, Forward Higgs}"
     if category == "r_qqH_0J_htt125":
