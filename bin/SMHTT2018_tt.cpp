@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 	{
 	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_0jet_2018",	    
 		"CMS_FF_closure_tau2pt_tt_qcd_0jet",
-		"CMS_FF_closure_tt_qcd_osss_",},
+		"CMS_FF_closure_tt_qcd_osss_2018",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 
 	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_1jet_2018",	    
 		"CMS_FF_closure_tau2pt_tt_qcd_1jet",
-		"CMS_FF_closure_tt_qcd_osss_",},
+		"CMS_FF_closure_tt_qcd_osss_2018",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 
 	  AddShapesIfNotEmpty({"CMS_rawFF_tt_qcd_2jet_2018",	    
 		"CMS_FF_closure_tau2pt_tt_qcd_2jet",
-		"CMS_FF_closure_tt_qcd_osss_",},
+		"CMS_FF_closure_tt_qcd_osss_2018",},
 	    {"jetFakes"},
 	    &cb,
 	    1.00,
