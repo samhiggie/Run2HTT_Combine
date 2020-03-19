@@ -183,26 +183,26 @@ int main(int argc, char **argv) {
 
       // e to tau energy fake scale            
       /*
-      AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_2018","CMS_scale_efaket_1prong1pizero_2018"},
+      AddShapesIfNotEmpty({"CMS_scale_fake_e_1prong_2018","CMS_scale_fake_e_1prong1pizero_2018"},
 			  {"ZL"},
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
       */
       std::cout<<"ZLShapes"<<std::endl;
-      AddShapesIfNotEmpty({"CMS_scale_efaket_1prong_barrel_2018",
-	    "CMS_scale_efaket_1prong1pizero_barrel_2018",
-	    "CMS_scale_efaket_1prong_endcap_2018",
-	    "CMS_scale_efaket_1prong1pizero_endcap_2018"},
+      AddShapesIfNotEmpty({"CMS_scale_fake_e_1prong_barrel_2018",
+	    "CMS_scale_fake_e_1prong1pizero_barrel_2018",
+	    "CMS_scale_fake_e_1prong_endcap_2018",
+	    "CMS_scale_fake_e_1prong1pizero_endcap_2018"},
 			  {"ZL"},
 			  &cb,
 			  1.00,
 			  TheFile,CategoryArgs);
 
       
-      AddShapesIfNotEmpty({"CMS_norm_efaket_slice1_2018",
-	    "CMS_norm_efaket_slice2_2018",
-	    "CMS_norm_efaket_slice3_2018"},
+      AddShapesIfNotEmpty({"CMS_norm_fake_e_slice1_2018",
+	    "CMS_norm_fake_e_slice2_2018",
+	    "CMS_norm_fake_e_slice3_2018"},
 			  {"ZL"},
 			  &cb,
 			  1.00,
